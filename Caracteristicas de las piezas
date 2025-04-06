@@ -1,0 +1,11 @@
+/*
+
+Sobre la posicion de las piezas:
+  * Se debe crear una clase vector de dos dimensiones, al que se pueda recurrir en todas las piezas.
+  * Parecido al Vector2D de las prácticas de laboratorio, nos servirá tanto para localizar la posición de las piezas como para determinar su origen.
+  * en mi opinion en lugar de dar valores enteros a x e y deberiamos utilizar la nomenclatura del propio juego.
+
+
+
+
+*/
