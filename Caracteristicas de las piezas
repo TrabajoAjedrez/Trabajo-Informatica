@@ -5,7 +5,24 @@ Sobre la posicion de las piezas:
   * Parecido al Vector2D de las prácticas de laboratorio, nos servirá tanto para localizar la posición de las piezas como para determinar su origen.
   * en mi opinion en lugar de dar valores enteros a x e y deberiamos utilizar la nomenclatura del propio juego.
 
+Funciones Generales:
+  * comer (elimina la pieza comida)
+  * colision (comprueba si hay dos piezas en un mismo espacio)
+  * low_sound (reproduce sonido de poca vida cuando le quedan menos de x fichas)
+  * low_visual (mancha la pantalla del jugador con pocas fichas)
+  * menu (menú para escoger modo de juego, música de fondo, consultar puntuaciones?)
+  * jaque (comprueba si hay jaque)
+  * mate (comprueba si es jaque mate)
+  * rotar_camara (cuando haya animación especial rota la cámara)
+  * inicializar_Tablero
+  * imprimir_Tablero
+  * cambio_turno
+  * Final_partida (termina la partida)
 
 
+Peón:
+  * mover_peon (movimiento del peón)
+  * promocion (transforma el peón en otra pieza)
+  * upgrade (efecto de sonido al promocionar peón a reina)
 
 */
