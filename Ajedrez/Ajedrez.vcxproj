@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="Ajedrez.cpp" />
     <ClCompile Include="ClassReina.cpp" />
+    <ClCompile Include="ClassRey.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassReina.h" />
+    <ClInclude Include="ClassRey.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

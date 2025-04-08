@@ -21,9 +21,15 @@
     <ClCompile Include="ClassReina.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="ClassRey.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClassReina.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassRey.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
