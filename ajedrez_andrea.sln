@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ajedrez_andrea", "ajedrez_andrea\ajedrez_andrea.vcxproj", "{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "solucion", "E:\tema2inicial_VS22x64\Pang.vcxproj", "{E575FADE-B6EB-4154-A1ED-8067A12EAE98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Debug|x64.ActiveCfg = Debug|x64
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Debug|x64.Build.0 = Debug|x64
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Debug|x86.ActiveCfg = Debug|Win32
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Debug|x86.Build.0 = Debug|Win32
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Release|x64.ActiveCfg = Release|x64
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Release|x64.Build.0 = Release|x64
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Release|x86.ActiveCfg = Release|Win32
-		{1ECD0CF5-A303-4AD7-AEB0-1EF64C764A9A}.Release|x86.Build.0 = Release|Win32
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Debug|x64.ActiveCfg = Debug|x64
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Debug|x64.Build.0 = Debug|x64
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Debug|x86.ActiveCfg = Debug|Win32
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Debug|x86.Build.0 = Debug|Win32
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Release|x64.ActiveCfg = Release|x64
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Release|x64.Build.0 = Release|x64
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Release|x86.ActiveCfg = Release|Win32
+		{E575FADE-B6EB-4154-A1ED-8067A12EAE98}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
