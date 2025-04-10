@@ -7,4 +7,3 @@ class ClassReina
 public:
 	void dibuja();
 };
-

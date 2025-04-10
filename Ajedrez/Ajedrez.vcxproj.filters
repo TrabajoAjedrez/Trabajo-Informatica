@@ -18,18 +18,18 @@
     <ClCompile Include="Ajedrez.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="ClassReina.cpp">
+    <ClCompile Include="src\classreina.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="ClassRey.cpp">
+    <ClCompile Include="src\classrey.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ClassReina.h">
+    <ClInclude Include="src\classreina.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="ClassRey.h">
+    <ClInclude Include="src\classrey.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

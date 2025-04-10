@@ -1,6 +1,11 @@
 #pragma once
+#include"vector2d.h"
 class ClassRey
 {
-	//Rey blbla
+	Vector2D posicion{};
+	double radio = 0.5;
+public:
+
 };
+
 
