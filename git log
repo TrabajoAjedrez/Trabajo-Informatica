@@ -1,0 +1,80 @@
+[33mcommit 761da5c0b6c58d8279b16b6186bf727832e07572[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/TableroRaton[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mTableroRaton[m[33m)[m
+Author: HUGO SIERRA BLAZQUEZ <hugo.sierra@alumnos.upm.es>
+Date:   Sun Apr 13 19:27:18 2025 +0200
+
+    Merge de TableroRaton a main, cree el tablero
+
+[33mcommit 400167133b2fd8c177fba48ae528d242fb1fb71f[m
+Author: Victor Casanova <victorhcb10@gmail.com>
+Date:   Sat Apr 12 16:17:27 2025 +0200
+
+    ...
+
+[33mcommit 49c2e05a87721dc47695034aca7a074c52065e61[m[33m ([m[1;31morigin/vetor2DKin[m[33m, [m[1;32mvetor2DKin[m[33m)[m
+Author: HUGO SIERRA BLAZQUEZ <hugo.sierra@alumnos.upm.es>
+Date:   Thu Apr 10 20:32:04 2025 +0200
+
+    Merge main into vetor2DKin
+
+[33mcommit ad2c95a845b427d54df60326d8ad6897137f600e[m[33m ([m[1;31morigin/sourcefolder[m[33m, [m[1;32msourcefolder[m[33m)[m
+Author: HUGO SIERRA BLAZQUEZ <hugo.sierra@alumnos.upm.es>
+Date:   Thu Apr 10 18:44:44 2025 +0200
+
+    He añadido la carperta src
+
+[33mcommit 8398eff7a561a8814f982dd78cf041486d386e66[m
+Author: HUGO SIERRA BLAZQUEZ <hugo.sierra@alumnos.upm.es>
+Date:   Thu Apr 10 18:26:01 2025 +0200
+
+    He añadido freeglut
+
+[33mcommit ed80515935b663b5f4a949073036389608ede570[m
+Author: Andrea-Castelli <andrea.castelli@alumnos.upm.es>
+Date:   Wed Apr 9 19:54:03 2025 +0200
+
+    Update README.md
+
+[33mcommit 2db98de3cd30dfb4f26068cd7ef734b9e380681d[m
+Author: HUGO SIERRA BLAZQUEZ <hugo.sierra@alumnos.upm.es>
+Date:   Tue Apr 8 17:13:00 2025 +0200
+
+    Añadi class rey
+
+[33mcommit 355342c5da25ebcecf4f83998784864531b94fe5[m
+Author: Victor Casanova <129666003+Victorinox05@users.noreply.github.com>
+Date:   Tue Apr 8 16:21:35 2025 +0200
+
+    README.md
+
+[33mcommit 72f6dc3f0b5f13cda366dc795fa8a636d72fef7a[m
+Merge: caea6a3 76358fa
+Author: Victor Casanova <129666003+Victorinox05@users.noreply.github.com>
+Date:   Mon Apr 7 21:00:57 2025 +0200
+
+    Merge pull request #2 from Andrea-Castelli/Prueba1
+    
+    Probando...
+
+[33mcommit 76358fa1442ca930b1fb489a4734965de90d6b3a[m[33m ([m[1;31morigin/Prueba1[m[33m)[m
+Author: Victor Casanova <victorhcb10@gmail.com>
+Date:   Mon Apr 7 20:57:58 2025 +0200
+
+    Probando...
+
+[33mcommit caea6a3d44e880f44e331a956389f315cc7a03cf[m
+Author: Victor Casanova <victorhcb10@gmail.com>
+Date:   Mon Apr 7 20:47:45 2025 +0200
+
+    Clase reina creada (Probanod para vincular)
+
+[33mcommit 0be827d2b010e5a9de9829832a9dc5584ac0caf2[m
+Author: Victor Casanova <victorhcb10@gmail.com>
+Date:   Mon Apr 7 10:55:20 2025 +0200
+
+    Agregar archivos de proyecto.
+
+[33mcommit a53bb5e038f609917479cae24ba8f955b680d419[m
+Author: Victor Casanova <victorhcb10@gmail.com>
+Date:   Mon Apr 7 10:55:17 2025 +0200
+
+    Agregar .gitattributes y .gitignore.

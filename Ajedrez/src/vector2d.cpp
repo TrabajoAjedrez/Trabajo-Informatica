@@ -1,2 +1,2 @@
-#include "vector2d"
+#include "vector2d.h"
 #include "freeglut.h"

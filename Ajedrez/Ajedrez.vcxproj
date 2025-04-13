@@ -141,6 +141,7 @@
     <ClCompile Include="src\pieza.cpp" />
     <ClCompile Include="src\tablero.cpp" />
     <ClCompile Include="src\tablerogl.cpp" />
+    <ClCompile Include="src\vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\classreina.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="src\pieza.h" />
     <ClInclude Include="src\tablero.h" />
     <ClInclude Include="src\tablerogl.h" />
+    <ClInclude Include="src\vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
