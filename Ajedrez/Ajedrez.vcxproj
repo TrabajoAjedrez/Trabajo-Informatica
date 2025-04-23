@@ -138,16 +138,10 @@
     <ClCompile Include="Ajedrez.cpp" />
     <ClCompile Include="src\classreina.cpp" />
     <ClCompile Include="src\classrey.cpp" />
-    <ClCompile Include="src\pieza.cpp" />
-    <ClCompile Include="src\tablero.cpp" />
-    <ClCompile Include="src\tablerogl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\classreina.h" />
     <ClInclude Include="src\classrey.h" />
-    <ClInclude Include="src\pieza.h" />
-    <ClInclude Include="src\tablero.h" />
-    <ClInclude Include="src\tablerogl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

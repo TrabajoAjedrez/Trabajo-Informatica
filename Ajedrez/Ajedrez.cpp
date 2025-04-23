@@ -1,7 +1,5 @@
 #include "freeglut.h"
-#include "tablero.h"
 
-Tablero tablero;
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
@@ -32,7 +30,7 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 
-	tablero.inicializa();
+
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
 
@@ -46,14 +44,15 @@ void OnDraw(void)
 
 	//Para definir el punto de vista
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity(); 
+	glLoadIdentity();
+	gluLookAt(0, 20, 10, // posicion del ojo
+		0.0, 0, 0.0,      // hacia que punto mira  (0,0,0) 
+		0.0, 1.0, 0.0);      // definimos hacia arriba (eje Y)   
 	//no borrar esta linea ni poner nada despues
-	tablero.dibuja();
 	glutSwapBuffers();
 }
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
-	tablero.tecla(key);
 	//poner aqui el código de teclado
 
 	glutPostRedisplay();
@@ -62,7 +61,6 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 void OnTimer(int value)
 {
 	//poner aqui el código de animacion
-	tablero.mueve();
 	//no borrar estas lineas
 	glutTimerFunc(25, OnTimer, 0);
 	glutPostRedisplay();
