@@ -2,9 +2,37 @@
 #include "classrey.h"
 #include"classreina.h"
 #include"tablerogl.h"
+//
+
+
 class Tablero {
+private:
+	int** tablero; //matriz de punteros a enteros
+	int filas_;
+	int columnas_;
 public:
-	TableroGL tablero;
+	//constructor
+	Tablero(int filas, int columnas) :
+		filas_{filas}, columnas_{columnas}
+	{	//ahora dependiendo de la variación ahbrá unas filas y unas columnas
+		tablero = new int* [filas];
+		for (int i = 0; i < filas; i++) {
+			tablero[i] = new int[columnas];
+		}
+
+		//tambien inicializo tablerogl
+		//tablerogl = new TableroGL;
+	}
+
+	//destructor
+	~Tablero() {
+		for (int i = 0; i < filas_; i++) {
+			delete[] tablero[i];
+		}
+		delete[] tablero;
+	}
+
+
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
 	void inicializa();

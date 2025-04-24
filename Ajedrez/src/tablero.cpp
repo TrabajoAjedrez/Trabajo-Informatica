@@ -1,6 +1,8 @@
 #include "tablero.h"
 #include "freeglut.h"
 
+TableroGL tablerogl;
+
 void Tablero::tecla(unsigned char key) {
 
 }
@@ -25,6 +27,6 @@ void Tablero::dibuja() {
 
 	glPushMatrix();
 	glTranslatef(-4.0f, 0.0f, -4.0f);  // Ajusta si tu tablero va de (0,0) a (8,8)
-	tablero.dibuja();                   // Llama al método de dibujo del tablero
+	tablerogl.dibuja(filas_, columnas_);                   // Llama al método de dibujo del tablero
 	glPopMatrix();
 }
