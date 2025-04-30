@@ -1,8 +1,7 @@
 #include "freeglut.h"
 #include "tablero.h"
 
-Tablero* tablero;
-
+Tablero tablero(8,4);
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
@@ -13,18 +12,6 @@ void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecl
 
 int main(int argc, char* argv[])
 {
-	int opcion;
-	std::cout << "Introduce 1 (4x5) o 2 (8x4): ";
-	std::cin >> opcion;
-
-	int filas, columnas;
-	switch (opcion) {
-	case 1: filas = 5; columnas = 4; break;
-	case 2: filas = 8; columnas = 4; break;
-	default: std::cout << "Opción no válida. Usando 8x4.\n"; filas = 8; columnas = 4; break;
-	}
-
-	tablero = new Tablero(filas, columnas);
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
 	glutInit(&argc, argv);
@@ -44,9 +31,8 @@ int main(int argc, char* argv[])
 	glutDisplayFunc(OnDraw);
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
-	
-	tablero->inicializa();//al tener ya filas y columnas, se puede inicializar
 
+	tablero.inicializa();
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
 
@@ -62,12 +48,12 @@ void OnDraw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); 
 	//no borrar esta linea ni poner nada despues
-	tablero->dibuja();
+	tablero.dibuja();
 	glutSwapBuffers();
 }
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
-	tablero->tecla(key);
+	tablero.tecla(key);
 	//poner aqui el código de teclado
 
 	glutPostRedisplay();
@@ -76,8 +62,7 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 void OnTimer(int value)
 {
 	//poner aqui el código de animacion
-	tablero->mueve();
-	//tablero->rotarOjo();
+	tablero.mueve();
 	//no borrar estas lineas
 	glutTimerFunc(25, OnTimer, 0);
 	glutPostRedisplay();

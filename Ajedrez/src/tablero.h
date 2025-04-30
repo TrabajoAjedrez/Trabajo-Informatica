@@ -12,6 +12,9 @@ private:
 	Pieza pieza;
 public:
 	int** tablero; //matriz de punteros a enteros
+
+	//designar filas y columnas
+
 	//constructor
 	Tablero(int filas, int columnas) :
 		filas_{filas}, columnas_{columnas}
@@ -19,10 +22,11 @@ public:
 		tablero = new int* [filas];
 		for (int i = 0; i < filas; i++) {
 			tablero[i] = new int[columnas];
+			for (int j = 0; j < columnas; j++) {
+				tablero[i][j] = 0;
+			}
 		}
 
-		//tambien inicializo tablerogl
-		//tablerogl = new TableroGL;
 	}
 
 	//destructor
@@ -45,4 +49,5 @@ public:
 	double x_ojo;
 	double y_ojo;
 	double z_ojo;
+	friend class Pieza;
 };

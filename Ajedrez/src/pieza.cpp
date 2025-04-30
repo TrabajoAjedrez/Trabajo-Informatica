@@ -12,33 +12,47 @@ void Pieza::print( int** tablero,int f, int c)  {
 	}
 }
 void Pieza::coloca(int** tablero, int f, int c) {
+	int a = 1, b = 0;
+	if (f == 8)
+		b = 6;
+	else if (f == 5)
+		b = 3;
+
 	for (int i = 0; i < f; i++) {
 		for (int j = 0; j < c; j++) {
-			if (i == 1) tablero[i][j] = -1;
-			else if (i == 6) tablero[i][j] = 1;
+			if (i == a) tablero[i][j] = -1;
+			else if (i == b) tablero[i][j] = 1;
 		}
 	}
 }
 void Pieza::ubica( int** tablero, int f, int c) {
 
-	int p;
 	for (int i = 0; i < f; i++) {
+
 		for (int j = 0; j < c; j++) {
-			if (tablero[i][j] == 1) {
-				p = 1;
-				float x = j * 1.0f-3;
-				float z = i *0.5f;
-				dibuja(p, x, z);
-			}
+			float x = j + 0.5;
+			float z = i + 0.5;
+				dibuja(tablero[i][j], x, z);
+	
+			
 		}
+
 	}
 }
 void Pieza::dibuja(int p, float x, float z) {
 	glPushMatrix();
-	glTranslated(x, 0.00000001, z);
+	glTranslated(x, 1, z);
+	if (p == 1) {
 		if (sprite.getState() == 0)
 			sprite.setState(0, false);
 		sprite.draw();
+	}
+	if (p == -1) {
+		if (sprite2.getState() == 0)
+			sprite2.setState(0, false);
+		sprite2.draw();
+	}
 	//fin del codigo incluido
 	glPopMatrix();
+
 }
