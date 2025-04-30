@@ -1,7 +1,7 @@
 #include "freeglut.h"
 #include "tablero.h"
 
-Tablero tablero(4,8);
+Tablero tablero(8,4);
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos

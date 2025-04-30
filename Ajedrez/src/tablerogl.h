@@ -1,7 +1,7 @@
 #pragma once
 #include "freeglut.h"
 #include "tablero.h"
-
+#include "pieza.h"
 class TableroGL {
 private:
 
@@ -11,6 +11,7 @@ private:
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
     GLfloat colorOscuro[3];
+    Pieza pieza;
 
     // Dibuja una casilla individual
     void dibujarCasilla(float x, float z, bool esClara);
@@ -33,7 +34,7 @@ public:
 
     // Obtiene el tamaño total del tablero
     float getTamanoTotal() const;
-
+    friend class Tablero;
 
 };
 

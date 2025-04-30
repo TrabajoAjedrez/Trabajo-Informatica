@@ -2,15 +2,16 @@
 #include "classrey.h"
 #include"classreina.h"
 #include"tablerogl.h"
-//
+#include"pieza.h"
 
 
 class Tablero {
 private:
-	int** tablero; //matriz de punteros a enteros
-	int filas_;
+	int filas_ ;
 	int columnas_;
+	Pieza pieza;
 public:
+	int** tablero; //matriz de punteros a enteros
 	//constructor
 	Tablero(int filas, int columnas) :
 		filas_{filas}, columnas_{columnas}
@@ -39,6 +40,7 @@ public:
 	void rotarOjo();
 	void mueve();
 	void dibuja();
+	void matriz();
 
 	double x_ojo;
 	double y_ojo;
