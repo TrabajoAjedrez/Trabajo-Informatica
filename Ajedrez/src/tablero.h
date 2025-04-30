@@ -2,15 +2,18 @@
 #include "classrey.h"
 #include"classreina.h"
 #include"tablerogl.h"
-//
 
 
 class Tablero {
 private:
-	int** tablero; //matriz de punteros a enteros
+	int** tablero; //matriz dinamica de enteros
 	int filas_;
 	int columnas_;
 public:
+
+	//designar filas y columnas
+	void tablero_tamanio();//esto habra que cambiarlo a algo mas elaborado
+
 	//constructor
 	Tablero(int filas, int columnas) :
 		filas_{filas}, columnas_{columnas}
@@ -20,8 +23,6 @@ public:
 			tablero[i] = new int[columnas];
 		}
 
-		//tambien inicializo tablerogl
-		//tablerogl = new TableroGL;
 	}
 
 	//destructor

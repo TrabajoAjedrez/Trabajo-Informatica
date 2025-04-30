@@ -1,7 +1,7 @@
 #include "freeglut.h"
 #include "tablero.h"
 
-Tablero tablero(4,8);
+Tablero tablero(0,0);//no se si hay una forma mas limpia de hacerlo
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
@@ -32,7 +32,10 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 
-	tablero.inicializa();
+	tablero.tablero_tamanio();//primero hace falta una funcion para denotar el tamaño
+	
+	tablero.inicializa();//al tener ya filas y columnas, se puede inicializar
+
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
 

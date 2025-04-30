@@ -1,7 +1,32 @@
+#include <iostream>
 #include "tablero.h"
 #include "freeglut.h"
 
+
 TableroGL tablerogl;
+using namespace std;
+
+void Tablero::tablero_tamanio() {
+
+	int tecla;
+	cout << "introduce 1 o 2" << endl;
+	cin >> tecla;
+
+	switch (tecla) {
+	case 1://caso Silverman 4x5
+		filas_ = 5;
+		columnas_ = 4;
+		break;
+	case 2:
+		filas_ = 8;
+		columnas_ = 4;
+		break;
+	default:
+		cout << "error en el switch" << endl;
+		break;
+	}
+
+}
 
 void Tablero::tecla(unsigned char key) {
 
