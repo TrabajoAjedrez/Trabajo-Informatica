@@ -3,6 +3,19 @@
 #include"ETSIDI.h"
 #include"freeglut.h"
 using namespace std;
+// Constructor
+Pieza::Pieza(Pieza_t t, Color c, Vector2D p) : tipo(t), color(c), pos(p) {}
+
+// Métodos para consultar las propiedades privadas
+Pieza::Pieza_t Pieza::getTipo() const { return tipo; }
+Pieza::Color Pieza::getColor() const { return color; }
+Vector2D Pieza::getPos() const { return pos; }
+
+// Métodos para modificar las propiedades privadas
+void Pieza::setTipo(Pieza_t t) { tipo = t; }
+void Pieza::setColor(Color c) { color = c; }
+void Pieza::setPos(Vector2D p) { pos = p; }
+
 void Pieza::print( int** tablero,int f, int c)  {
 	for (int i = 0; i < f; i++) {
 		for (int j = 0; j < c; j++) {
