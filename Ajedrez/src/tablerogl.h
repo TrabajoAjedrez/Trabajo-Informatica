@@ -2,11 +2,15 @@
 #include "freeglut.h"
 #include "tablero.h"
 #include "pieza.h"
+
 class TableroGL {
 private:
 
     float tamCasilla;       // Tamaño de cada casilla
     float posX, posY, posZ; // Posición del tablero
+
+	// De momtno es una variables donde se guardan las piezas
+    Pieza* casillas[8][8];
 
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
@@ -34,5 +38,7 @@ public:
     // Obtiene el tamaño total del tablero
     float getTamanoTotal() const;
 
+	// Metodo para comprobar si una casilla está ocupada
+    bool estaOcupada(int fila, int columna) const;
 };
 

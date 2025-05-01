@@ -57,9 +57,9 @@ void Pieza::dibuja(int p, float x, float z) {
 	//fin del codigo incluido
 	glPopMatrix();
 }
-vector<Vector2D> Pieza::obtenerMovimientosPosibles(const vector<vector<int>>& tablero){
-	vector<Vector2D> movimientos; //Variable donde guardaremos los movimientos posibles y la que devuelve la funcion
-	int filaActual = posicion.y;
-	int columnaActual = posicion.x;
-
-}
+//vector<Vector2D> Pieza::obtenerMovimientosPosibles(const vector<vector<int>>& tablero){
+//	vector<Vector2D> movimientos; //Variable donde guardaremos los movimientos posibles y la que devuelve la funcion
+//	int filaActual = posicion.y;
+//	int columnaActual = posicion.x;
+//
+//}

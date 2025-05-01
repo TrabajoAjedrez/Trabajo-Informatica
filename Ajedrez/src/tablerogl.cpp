@@ -65,6 +65,6 @@ void TableroGL::setPosicion(float x, float y, float z) {
     posZ = z;
 }
 
-//float TableroGL::getTamanoTotal() const {
-//    return filas_*columnas_ * tamCasilla;
-//}
+bool TableroGL::estaOcupada(int fila, int columna) const {
+    return casillas[fila][columna] != nullptr;
+}

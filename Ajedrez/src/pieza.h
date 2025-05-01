@@ -4,15 +4,14 @@
 #include"ETSIDI.h"
 #include"vector2d.h"
 
-enum Color { BLANCO, NEGRO }; //Provisional para saber de que bando es la pieza
-
 using namespace std;
 
 class Pieza {
 	enum  Pieza_t { Peon=1,Caballo, Torre,Alfil, Reina,Rey };
+	enum Color { BLANCO, NEGRO }; //Provisional para saber de que bando es la pieza
 	Vector2D posicion; //Variable donde guardar la posicion de la pieza
 	Color color;
-
+	
 	ETSIDI::SpriteSequence sprite{ "Imagenes/soldier1.png",4 };
 	ETSIDI::SpriteSequence sprite2{ "Imagenes/peonRojo.png",4 };
 
@@ -31,8 +30,8 @@ public:
 	void dibuja(int p, float x, float i);
 	//
 
-	Vector2D obtenerPosicion() const { return posicion; }
-	Color obtenerColor() const { return color; }
+	//Vector2D obtenerPosicion() const { return posicion; }
+	//Color obtenerColor() const { return color; }
 
-	vector<Vector2D> obtenerMovimientosPosibles(const vector<vector<int>>& tablero); //Funcion que devuelve un vector el cual contendra todos los movimientos posibles
+	//vector<Vector2D> obtenerMovimientosPosibles(const vector<vector<int>>& tablero); //Funcion que devuelve un vector el cual contendra todos los movimientos posibles
 };
