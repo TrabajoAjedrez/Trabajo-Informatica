@@ -2,7 +2,9 @@
 #include"vector2d.h"
 #include"ETSIDI.h"
 #include"freeglut.h"
+
 using namespace std;
+
 void Pieza::print( int** tablero,int f, int c)  {
 	for (int i = 0; i < f; i++) {
 		for (int j = 0; j < c; j++) {
@@ -54,5 +56,10 @@ void Pieza::dibuja(int p, float x, float z) {
 	}
 	//fin del codigo incluido
 	glPopMatrix();
+}
+vector<Vector2D> Pieza::obtenerMovimientosPosibles(const vector<vector<int>>& tablero){
+	vector<Vector2D> movimientos; //Variable donde guardaremos los movimientos posibles y la que devuelve la funcion
+	int filaActual = posicion.y;
+	int columnaActual = posicion.x;
 
 }
