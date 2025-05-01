@@ -2,15 +2,19 @@
 #include "classrey.h"
 #include"classreina.h"
 #include"tablerogl.h"
-//
+#include"pieza.h"
 
 
 class Tablero {
 private:
-	int** tablero; //matriz de punteros a enteros
-	int filas_;
+	int filas_ ;
 	int columnas_;
+	Pieza pieza;
 public:
+	int** tablero; //matriz de punteros a enteros
+
+	//designar filas y columnas
+
 	//constructor
 	Tablero(int filas, int columnas) :
 		filas_{filas}, columnas_{columnas}
@@ -18,10 +22,11 @@ public:
 		tablero = new int* [filas];
 		for (int i = 0; i < filas; i++) {
 			tablero[i] = new int[columnas];
+			for (int j = 0; j < columnas; j++) {
+				tablero[i][j] = 0;
+			}
 		}
 
-		//tambien inicializo tablerogl
-		//tablerogl = new TableroGL;
 	}
 
 	//destructor
@@ -39,8 +44,10 @@ public:
 	void rotarOjo();
 	void mueve();
 	void dibuja();
+	void matriz();
 
 	double x_ojo;
 	double y_ojo;
 	double z_ojo;
+	friend class Pieza;
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include "freeglut.h"
 #include "tablero.h"
-
+#include "pieza.h"
 class TableroGL {
 private:
 
@@ -33,7 +33,6 @@ public:
 
     // Obtiene el tamaño total del tablero
     float getTamanoTotal() const;
-
 
 };
 
