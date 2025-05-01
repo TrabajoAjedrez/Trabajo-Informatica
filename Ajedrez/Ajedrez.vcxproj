@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ajedrez.cpp" />
+    <ClCompile Include="Peon.cpp" />
     <ClCompile Include="src\classreina.cpp" />
     <ClCompile Include="src\classrey.cpp" />
     <ClCompile Include="src\pieza.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="src\vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Peon.h" />
     <ClInclude Include="src\classreina.h" />
     <ClInclude Include="src\classrey.h" />
     <ClInclude Include="src\pieza.h" />

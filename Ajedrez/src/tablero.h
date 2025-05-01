@@ -13,7 +13,7 @@ private:
 public:
 	int** tablero; //matriz de punteros a enteros
 
-	//designar filas y columnas
+	
 
 	//constructor
 	Tablero(int filas, int columnas) :
