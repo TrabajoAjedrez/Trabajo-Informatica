@@ -1,7 +1,7 @@
 #include "freeglut.h"
-#include "tablero.h"
+#include "Mundo.h"
 
-Tablero* tablero;
+Mundo* tablero;
 
 
 //los callback, funciones que seran llamadas automaticamente por la glut
@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 	default: std::cout << "Opción no válida. Usando 8x4.\n"; filas = 8; columnas = 4; break;
 	}
 
-	tablero = new Tablero(filas, columnas);
+	tablero = new Mundo(filas, columnas);
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
 	glutInit(&argc, argv);

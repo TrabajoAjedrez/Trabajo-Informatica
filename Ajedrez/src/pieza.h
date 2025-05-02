@@ -49,5 +49,5 @@ public:
 	void muevePeon() { sprite.loop(); sprite2.loop();}
 	void dibuja(int p, float x, float i);
 
-	//bool esPosicionValida(const Vector2D& posicion, int **tablero ) const;
+	bool esPosicionValida(int **tablero ) const;
 };

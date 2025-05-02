@@ -1,8 +1,8 @@
 #pragma once
 #include "freeglut.h"
-#include "tablero.h"
+#include "Mundo.h"
 #include "pieza.h"
-class TableroGL {
+class Tablero {
 private:
 
     float tamCasilla;       // Tamaño de cada casilla
@@ -16,7 +16,7 @@ private:
     void dibujarCasilla(float x, float z, bool esClara);
 public:
     // Constructor: tamaño del tablero (normalmente 8x8) y tamaño de cada casilla
-    TableroGL(float tamCasilla = 1.0f):
+    Tablero(float tamCasilla = 1.0f) :
         tamCasilla(tamCasilla), posX(0), posY(0), posZ(0)
     {
         colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;

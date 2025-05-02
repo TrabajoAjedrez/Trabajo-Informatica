@@ -68,11 +68,4 @@ void Pieza::dibuja(int p, float x, float y) {
 	//fin del codigo incluido
 	glPopMatrix();
 }
-//
-//bool Pieza::esPosicionValida(Vector2D posicion, int **tablero) const {
-//
-//	Pieza::Pieza_t tipo = getTipo();
-//
-//	
-//
-//}
+

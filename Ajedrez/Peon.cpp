@@ -4,7 +4,7 @@ Peon::Peon(Color color, Vector2D posicion)
 	: Pieza(Pieza_t::Peon, color, posicion) 
 {}
 
-vector<Vector2D> Peon::obtenerMovimientosPosibles(const TableroGL& tablero) const {
+vector<Vector2D> Peon::obtenerMovimientosPosibles(const Tablero& tablero) const {
 	
 	vector<Vector2D> movimientos;
 	int direccion;

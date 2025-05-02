@@ -1,11 +1,11 @@
 #pragma once
 #include "classrey.h"
 #include"classreina.h"
-#include"tablerogl.h"
+#include"ClassTablero.h"
 #include"pieza.h"
 
 
-class Tablero {
+class Mundo {
 private:
 	int filas_ ;
 	int columnas_;
@@ -14,7 +14,7 @@ public:
 	int** tablero; //matriz de punteros a enteros
 
 	//constructor
-	Tablero(int filas, int columnas) :
+	Mundo(int filas, int columnas) :
 		filas_{filas}, columnas_{columnas}
 	{	//ahora dependiendo de la variación ahbrá unas filas y unas columnas
 		tablero = new int* [filas];
@@ -28,7 +28,7 @@ public:
 	}
 
 	//destructor
-	~Tablero() {
+	~Mundo() {
 		for (int i = 0; i < filas_; i++) {
 			delete[] tablero[i];
 		}
@@ -47,5 +47,6 @@ public:
 	double x_ojo;
 	double y_ojo;
 	double z_ojo;
+
 	friend class Pieza;
 };
