@@ -34,5 +34,9 @@ public:
     // Obtiene el tamaño total del tablero
     float getTamanoTotal() const;
 
+    /////
+    bool esPosicionValida(const Vector2D& posicion) const;
+
+	bool estaOcupada(const Vector2D& posicion) const;
 };
 

@@ -4,11 +4,8 @@
 #include"pieza.h"
 #include"tablerogl.h"
 
-
 TableroGL tablerogl;
 using namespace std;
-
-
 
 void Tablero::tecla(unsigned char key) {
 
@@ -17,9 +14,9 @@ void Tablero::tecla_especial(unsigned char key) {
 
 }
 void Tablero::inicializa() {
-	x_ojo = 0;
-	y_ojo =8;
-	z_ojo = 18;
+	x_ojo = filas_/2;
+	y_ojo =columnas_/2;
+	z_ojo = filas_*2;
 	
 	pieza.coloca( tablero,  filas_,  columnas_ );
 	pieza.print(tablero, filas_, columnas_);
@@ -36,7 +33,7 @@ void Tablero::mueve() {
 }
 void Tablero::dibuja() {
 	gluLookAt(x_ojo, y_ojo, z_ojo,
-		filas_/2, 0, columnas_/2, //NOTESE QUE HEMOS CAMBIADO ESTO
+		filas_/2, columnas_/2, 0, //NOTESE QUE HEMOS CAMBIADO ESTO
 		0.0, 1.0, 0.0); //PARA MIRAR AL CENTRO DE LA ESCENA
 
 	glPushMatrix();

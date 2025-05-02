@@ -43,8 +43,8 @@ void Pieza::ubica( int** tablero, int f, int c) {
 	for (int i = 0; i < f; i++) {
 
 		for (int j = 0; j < c; j++) {
-			float x = j + 0.5;
-			float z = i + 0.5;
+			float x = j + 0.8;
+			float z = i + 0.9;
 				dibuja(tablero[i][j], x, z);
 	
 			
@@ -52,9 +52,9 @@ void Pieza::ubica( int** tablero, int f, int c) {
 
 	}
 }
-void Pieza::dibuja(int p, float x, float z) {
+void Pieza::dibuja(int p, float x, float y) {
 	glPushMatrix();
-	glTranslated(x, 1, z);
+	glTranslated(x, y, 0.1);
 	if (p == 1) {
 		if (sprite.getState() == 0)
 			sprite.setState(0, false);
@@ -67,5 +67,12 @@ void Pieza::dibuja(int p, float x, float z) {
 	}
 	//fin del codigo incluido
 	glPopMatrix();
-
 }
+//
+//bool Pieza::esPosicionValida(Vector2D posicion, int **tablero) const {
+//
+//	Pieza::Pieza_t tipo = getTipo();
+//
+//	
+//
+//}
