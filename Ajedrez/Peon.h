@@ -2,12 +2,12 @@
 
 #include <vector>
 #include "pieza.h"
-#include "ClassTablero.h"
+#include "Tablero.h"
 
 class Peon : public Pieza{  
 
 public: 
 	Peon(Color color, Vector2D posicion);
-	vector<Vector2D> obtenerMovimientosPosibles(const Tablero& tablero) const;
+	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const;
 
 };

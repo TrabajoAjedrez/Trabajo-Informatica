@@ -1,4 +1,4 @@
-#include "ClassTablero.h"
+#include "Tablero.h"
 #include "freeglut.h"
 
 //TableroGL::TableroGL(float tamCasilla):
@@ -9,7 +9,7 @@
 //    colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
 //}
 
-void Tablero::dibuja(int filas, int columnas, float tamCasilla) {
+void ClassTablero::dibuja(int filas, int columnas, float tamCasilla) {
    
     this->tamCasilla = tamCasilla;
 
@@ -43,7 +43,7 @@ void Tablero::dibuja(int filas, int columnas, float tamCasilla) {
     glPopMatrix();
 }
 
-void Tablero::dibujarCasilla(float x, float z, bool esClara) {
+void ClassTablero::dibujarCasilla(float x, float z, bool esClara) {
     if (esClara) {
         glColor3fv(colorClaro);
     }
@@ -59,18 +59,18 @@ void Tablero::dibujarCasilla(float x, float z, bool esClara) {
     glEnd();
 }
 
-void Tablero::setPosicion(float x, float y, float z) {
+void ClassTablero::setPosicion(float x, float y, float z) {
     posX = x;
     posY = y;
     posZ = z;
 }
 
-bool Tablero::esPosicionValida(const Vector2D& posicion) const {
+bool ClassTablero::esPosicionValida(const Vector2D& posicion) const {
 	// Verifica si la posición está dentro de los límites del tablero
 	return (1);
 }
 
-bool Tablero::estaOcupada(const Vector2D& posicion) const {
+bool ClassTablero::estaOcupada(const Vector2D& posicion) const {
 	// Verifica si la posición está ocupada por una pieza
 	return (1);
 }

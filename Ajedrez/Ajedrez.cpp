@@ -1,8 +1,8 @@
 #include "freeglut.h"
 #include "Mundo.h"
 
-Mundo* tablero;
-
+ClassMundo* ObjMundo;
+//enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
@@ -10,6 +10,8 @@ Mundo* tablero;
 void OnDraw(void); //esta funcion sera llamada para dibujar
 void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
 void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecla	
+
+int PreguntarVariante();
 
 int main(int argc, char* argv[])
 {
@@ -24,7 +26,7 @@ int main(int argc, char* argv[])
 	default: std::cout << "Opción no válida. Usando 8x4.\n"; filas = 8; columnas = 4; break;
 	}
 
-	tablero = new Mundo(filas, columnas);
+	ObjMundo = new ClassMundo(filas, columnas);
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
 	glutInit(&argc, argv);
@@ -45,7 +47,7 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 	
-	tablero->inicializa();//al tener ya filas y columnas, se puede inicializar
+	ObjMundo->inicializa(opcion);//al tener ya filas y columnas, se puede inicializar
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
@@ -62,12 +64,12 @@ void OnDraw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); 
 	//no borrar esta linea ni poner nada despues
-	tablero->dibuja();
+	ObjMundo->dibuja();
 	glutSwapBuffers();
 }
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
-	tablero->tecla(key);
+	ObjMundo->tecla(key);
 	//poner aqui el código de teclado
 
 	glutPostRedisplay();
@@ -76,9 +78,19 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 void OnTimer(int value)
 {
 	//poner aqui el código de animacion
-	tablero->mueve();
+	ObjMundo->mueve();
 	//tablero->rotarOjo();
 	//no borrar estas lineas
 	glutTimerFunc(25, OnTimer, 0);
 	glutPostRedisplay();
+}
+
+int PreguntarVariante() {
+	int variante;
+	std::cout << "Selecciona la variante de ajedrez:\n";
+	std::cout << "1. Silverman\n";
+	std::cout << "2. Demichess\n";
+	std::cin >> variante;
+
+	return variante;
 }

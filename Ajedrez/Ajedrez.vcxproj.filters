@@ -30,7 +30,7 @@
     <ClCompile Include="src\pieza.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="src\ClassTablero.cpp">
+    <ClCompile Include="src\Tablero.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="src\vector2d.cpp">
@@ -53,7 +53,7 @@
     <ClInclude Include="src\pieza.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="src\ClassTablero.h">
+    <ClInclude Include="src\Tablero.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\vector2d.h">

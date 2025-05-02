@@ -140,7 +140,7 @@
     <ClCompile Include="src\classrey.cpp" />
     <ClCompile Include="src\pieza.cpp" />
     <ClCompile Include="src\Mundo.cpp" />
-    <ClCompile Include="src\ClassTablero.cpp" />
+    <ClCompile Include="src\Tablero.cpp" />
     <ClCompile Include="src\vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -149,7 +149,7 @@
     <ClInclude Include="src\classrey.h" />
     <ClInclude Include="src\pieza.h" />
     <ClInclude Include="src\Mundo.h" />
-    <ClInclude Include="src\ClassTablero.h" />
+    <ClInclude Include="src\Tablero.h" />
     <ClInclude Include="src\vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
