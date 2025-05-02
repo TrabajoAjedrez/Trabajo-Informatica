@@ -1,6 +1,6 @@
-#include "ClassReina.h"
-
-void ClassReina::dibuja()
-{
-	//Codigo para dibujar la reina
-}
+//#include "ClassReina.h"
+//
+//void ClassReina::dibuja()
+//{
+//	//Codigo para dibujar la reina
+//}

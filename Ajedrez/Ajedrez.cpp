@@ -1,3 +1,4 @@
+#include <iostream>
 #include "freeglut.h"
 #include "Mundo.h"
 
@@ -15,18 +16,9 @@ int PreguntarVariante();
 
 int main(int argc, char* argv[])
 {
-	int opcion;
-	std::cout << "Introduce 1 (4x5) o 2 (8x4): ";
-	std::cin >> opcion;
 
-	int filas, columnas;
-	switch (opcion) {
-	case 1: filas = 5; columnas = 4; break;
-	case 2: filas = 8; columnas = 4; break;
-	default: std::cout << "Opción no válida. Usando 8x4.\n"; filas = 8; columnas = 4; break;
-	}
+	int opcion = PreguntarVariante();
 
-	ObjMundo = new ClassMundo(filas, columnas);
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
 	glutInit(&argc, argv);

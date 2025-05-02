@@ -9,7 +9,7 @@
 //    colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
 //}
 
-void ClassTablero::dibuja(int filas, int columnas, float tamCasilla) {
+void ClassTablero::dibuja() {
    
     this->tamCasilla = tamCasilla;
 
@@ -19,8 +19,8 @@ void ClassTablero::dibuja(int filas, int columnas, float tamCasilla) {
     glPushMatrix();
     glTranslatef(posX, posY, posZ);
 
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
+    for (int i = 0; i < filas_; i++) {
+        for (int j = 0; j < columnas_; j++) {
             // Alternar colores de casillas
             bool esClara = (i + j) % 2 == 0;
             float x = j * tamCasilla;
@@ -35,9 +35,9 @@ void ClassTablero::dibuja(int filas, int columnas, float tamCasilla) {
     glLineWidth(2.0f);
     glBegin(GL_LINE_LOOP);
     glVertex3f(0, 0.01f, 0);
-    glVertex3f(filas * tamCasilla, 0.01f, 0);
-    glVertex3f(filas * tamCasilla, 0.01f, filas * tamCasilla);
-    glVertex3f(0, 0.01f, filas * tamCasilla);
+    glVertex3f(filas_ * tamCasilla, 0.01f, 0);
+    glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
+    glVertex3f(0, 0.01f, filas_ * tamCasilla);
     glEnd();
 
     glPopMatrix();
@@ -65,12 +65,12 @@ void ClassTablero::setPosicion(float x, float y, float z) {
     posZ = z;
 }
 
-bool ClassTablero::esPosicionValida(const Vector2D& posicion) const {
-	// Verifica si la posición está dentro de los límites del tablero
-	return (1);
-}
-
-bool ClassTablero::estaOcupada(const Vector2D& posicion) const {
-	// Verifica si la posición está ocupada por una pieza
-	return (1);
-}
+//bool ClassTablero::esPosicionValida(const Vector2D& posicion) const {
+//	// Verifica si la posición está dentro de los límites del tablero
+//	return (1);
+//}
+//
+//bool ClassTablero::estaOcupada(const Vector2D& posicion) const {
+//	// Verifica si la posición está ocupada por una pieza
+//	return (1);
+//}

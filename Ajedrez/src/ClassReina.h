@@ -1,9 +1,9 @@
-#pragma once
-
-class ClassReina
-{
-	int x, y;
-
-public:
-	void dibuja();
-};
+//#pragma once
+//
+//class ClassReina
+//{
+//	int x, y;
+//
+//public:
+//	void dibuja();
+//};
