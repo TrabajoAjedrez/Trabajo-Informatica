@@ -11,7 +11,7 @@ public:
 	enum  Pieza_t { Peon=1,Caballo, Torre,Alfil, Reina,Rey };
 	enum class Color { BLANCO, NEGRO };
 
-private:
+protected:
 	Pieza_t tipo;
 	Color color;
 	Vector2D pos;  //No se sabe si se va a utilizar
@@ -49,4 +49,5 @@ public:
 	void muevePeon() { sprite.loop(); sprite2.loop();}
 	void dibuja(int p, float x, float i);
 
+	//bool esPosicionValida(const Vector2D& posicion, int **tablero ) const;
 };

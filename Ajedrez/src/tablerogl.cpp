@@ -52,10 +52,10 @@ void TableroGL::dibujarCasilla(float x, float z, bool esClara) {
     }
 
     glBegin(GL_QUADS);
-    glVertex3f(x, 0, z);
-    glVertex3f(x + tamCasilla, 0, z);
-    glVertex3f(x + tamCasilla, 0, z + tamCasilla);
-    glVertex3f(x, 0, z + tamCasilla);
+    glVertex3f(x, z, 0);
+    glVertex3f(x + tamCasilla, z, 0);
+    glVertex3f(x + tamCasilla, z+tamCasilla,0);
+    glVertex3f(x, z+tamCasilla,0 );
     glEnd();
 }
 
@@ -65,6 +65,12 @@ void TableroGL::setPosicion(float x, float y, float z) {
     posZ = z;
 }
 
-//float TableroGL::getTamanoTotal() const {
-//    return filas_*columnas_ * tamCasilla;
-//}
+bool TableroGL::esPosicionValida(const Vector2D& posicion) const {
+	// Verifica si la posición está dentro de los límites del tablero
+	return (1);
+}
+
+bool TableroGL::estaOcupada(const Vector2D& posicion) const {
+	// Verifica si la posición está ocupada por una pieza
+	return (1);
+}
