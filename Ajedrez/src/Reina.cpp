@@ -1,4 +1,4 @@
-#include "ClassReina.h"
+#include "Reina.h"
 
 void ClassReina::dibuja()
 {
