@@ -25,5 +25,4 @@ public:
 	double y_ojo;
 	double z_ojo;
 
-	//friend class Pieza;
 };

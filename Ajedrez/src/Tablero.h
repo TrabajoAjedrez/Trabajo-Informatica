@@ -1,24 +1,24 @@
 #pragma once
+
+#include <vector>
 #include "freeglut.h"
-//#include "pieza.h"
+#include "Pieza.h"
 
 class ClassTablero {
 private:
 
     int filas_;
     int columnas_;
-
     int** tablero;
 
     float tamCasilla;       // Tamaño de cada casilla
     float posX, posY, posZ; // Posición del tablero
 
+    ClassPieza pieza;
+
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
     GLfloat colorOscuro[3];
-
-    // Dibuja una casilla individual
-    void dibujarCasilla(float x, float z, bool esClara);
 public:
     // Constructor: tamaño del tablero (normalmente 8x8) y tamaño de cada casilla
     ClassTablero(int filas, int columnas, float tamCasilla = 1.0f) :
@@ -44,7 +44,7 @@ public:
 
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
-
+    int** getTablero() const { return tablero; }
     //TEMPORAL ESTO LUEGO LO CAMBIO
     
     // Dibuja el tablero en la posición actual
@@ -53,8 +53,15 @@ public:
     // Establece la posición del tablero
     void setPosicion(float x, float y, float z);
 
+    void colocarPiezas();
+
+    void UbicaPieza();
+
+    void dibujarCasilla(float x, float z, bool esClara);
+
+    void muevePiezas();
     // Obtiene el tamaño total del tablero
-    float getTamanoTotal() const;
+    //float getTamanoTotal() const;
 
     /////
     //bool esPosicionValida(const Vector2D& posicion) const;

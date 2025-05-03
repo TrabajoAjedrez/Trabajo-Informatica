@@ -28,6 +28,8 @@ void ClassTablero::dibuja() {
         }
     }
 
+    UbicaPieza();
+
     // Dibujar borde del tablero
     glColor3f(0.1f, 0.1f, 0.1f);
     glLineWidth(2.0f);
@@ -37,6 +39,7 @@ void ClassTablero::dibuja() {
     glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
     glVertex3f(0, 0.01f, filas_ * tamCasilla);
     glEnd();
+
 
     glPopMatrix();
 }
@@ -61,6 +64,24 @@ void ClassTablero::setPosicion(float x, float y, float z) {
     posX = x;
     posY = y;
     posZ = z;
+}
+
+void ClassTablero::UbicaPieza() {
+    for (int i = 0; i < filas_; ++i) {
+        for (int j = 0; j < columnas_; ++j) {
+            float x = j + 0.8f;
+            float z = i + 0.9f;
+            pieza.dibuja(tablero[i][j], x, z);
+        }
+    }
+}
+
+void ClassTablero::colocarPiezas() {
+    pieza.coloca(tablero, filas_, columnas_);
+}
+
+void ClassTablero::muevePiezas() {
+    pieza.muevePeon();  // Anima sprites de la pieza
 }
 
 //bool ClassTablero::esPosicionValida(const Vector2D& posicion) const {
