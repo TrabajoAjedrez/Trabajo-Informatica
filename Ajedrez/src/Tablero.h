@@ -3,6 +3,7 @@
 #include <vector>
 #include "freeglut.h"
 #include "Pieza.h"
+//#include "Peon.h"
 
 class ClassTablero {
 private:
@@ -15,6 +16,10 @@ private:
 
     ClassPieza ObjPieza; // Objeto de la clase pieza
 
+    // Opciones para el tablero
+    //std::vector<std::vector<ClassPieza*>> piezas_Clean; 
+    //ClassPieza*** piezas_NoClean;
+
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
     GLfloat colorOscuro[3];
@@ -24,7 +29,20 @@ public:
     ClassTablero(int filas, int columnas, float tamCasilla = 1.0f) :
 		filas_(filas), columnas_(columnas), tamCasilla(tamCasilla), posX(0), posY(0), posZ(0)
     {
-		// Inicializar el tablero
+		// Inicializar el tablero - De forma no clean
+        //piezas_NoClean = new ClassPieza **[filas_];
+        //for (int i = 0; i < filas_; i++) {
+        //    piezas_NoClean[i] = new ClassPieza * [columnas_];
+        //    for (int j = 0; j < columnas_; j++) {
+        //        piezas_NoClean[i][j] = nullptr;
+        //    }
+        //}
+		// Inicializar el tablero - De forma clean
+        //piezas_Clean.resize(filas_);
+        //for (int i = 0; i < filas_; ++i)
+        //    piezas_Clean[i].resize(columnas_, nullptr);
+
+        //UwU
         tablero = new int* [filas];
         for (int i = 0; i < filas; i++) {
             tablero[i] = new int[columnas];
@@ -32,6 +50,7 @@ public:
                 tablero[i][j] = 0;
             }
         }
+
         colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
         colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
     }

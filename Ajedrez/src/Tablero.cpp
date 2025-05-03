@@ -80,6 +80,10 @@ void ClassTablero::ColocarPiezas() {
             else if (i == b) tablero[i][j] = -1;
         }
     }
+
+	// Colocar piezas en el tablero de la forma clean
+    //piezas_Clean[6][3] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(3, 6));
+    //piezas_Clean[1][3] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(3, 1));
 }
 // Anima las piezas en el tablero
 void ClassTablero::AnimaPiezas() {

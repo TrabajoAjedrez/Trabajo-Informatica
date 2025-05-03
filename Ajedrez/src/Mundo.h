@@ -26,4 +26,8 @@ public:
 	double y_ojo;
 	double z_ojo;
 
+	///// Tets ///// (No hacer mucho caso jeje)
+	void testPeonBloqueado();
+	void testPeonMovimientoBasico();
+	void runAllTests();
 };
