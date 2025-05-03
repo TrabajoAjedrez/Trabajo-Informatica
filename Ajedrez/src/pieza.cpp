@@ -2,6 +2,7 @@
 #include"vector2d.h"
 #include"ETSIDI.h"
 #include"freeglut.h"
+
 using namespace std;
 // Constructor
 ClassPieza::ClassPieza(Pieza_t t, Color c, Vector2D p) : tipo(t), color(c), pos(p) {}
@@ -15,30 +16,6 @@ Vector2D ClassPieza::getPos() const { return pos; }
 void ClassPieza::setTipo(Pieza_t t) { tipo = t; }
 void ClassPieza::setColor(Color c) { color = c; }
 void ClassPieza::setPos(Vector2D p) { pos = p; }
-// Método para imprimir la matriz del tablero ¡¡Deberia estar en tablero no en pieza!!
-void ClassPieza::print( int** tablero,int f, int c)  {
-	for (int i = 0; i < f; i++) {
-		for (int j = 0; j < c; j++) {
-			cout << tablero[i][j] << " ";
-		}
-		cout << endl;
-	}
-}
-// Método para colocar las piezas en la matriz del tablero ¡¡No el dibujo de las piezas!!
-void ClassPieza::coloca(int** tablero, int f, int c) {
-	int a = 1, b = 0;
-	if (f == 8)
-		b = 6;
-	else if (f == 5)
-		b = 3;
-
-	for (int i = 0; i < f; i++) {
-		for (int j = 0; j < c; j++) {
-			if (i == a) tablero[i][j] = -1;
-			else if (i == b) tablero[i][j] = 1;
-		}
-	}
-}
 // Método para dibujar el sprite la pieza
 void ClassPieza::dibuja(int p, float x, float y) {
 	glPushMatrix();

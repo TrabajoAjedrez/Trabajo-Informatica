@@ -68,14 +68,30 @@ void ClassTablero::UbicaPieza() {
 }
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
-    ObjPieza.coloca(tablero, filas_, columnas_);
+    int a = 1, b = 0;
+    if (filas_ == 8)
+        b = 6;
+    else if (filas_ == 5)
+        b = 3;
+
+    for (int i = 0; i < filas_; i++) {
+        for (int j = 0; j < columnas_; j++) {
+            if (i == a) tablero[i][j] = 1;
+            else if (i == b) tablero[i][j] = -1;
+        }
+    }
 }
 // Anima las piezas en el tablero
 void ClassTablero::AnimaPiezas() {
     ObjPieza.AnimaPeon();  // Anima sprites de la pieza
 }
 void ClassTablero::ImprimirEnPantalla() {
-	ObjPieza.print(tablero, filas_, columnas_); // Imprime la matriz del tablero
+    for (int i = 0; i < filas_; i++) {
+        for (int j = 0; j < columnas_; j++) {
+            cout << tablero[i][j] << " ";
+        }
+        cout << endl;
+    }
 }
 // Metodos para comprobar posiciones
 bool ClassTablero::esPosicionValida(const Vector2D& pos) const {

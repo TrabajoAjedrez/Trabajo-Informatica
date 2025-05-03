@@ -2,6 +2,7 @@
 #include "Mundo.h"
 #include "freeglut.h"
 
+
 using namespace std;
 
 void ClassMundo::tecla(unsigned char key) {
