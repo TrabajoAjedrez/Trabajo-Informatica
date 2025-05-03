@@ -77,3 +77,13 @@ void ClassTablero::AnimaPiezas() {
 void ClassTablero::ImprimirEnPantalla() {
 	ObjPieza.print(tablero, filas_, columnas_); // Imprime la matriz del tablero
 }
+// Metodos para comprobar posiciones
+bool ClassTablero::esPosicionValida(const Vector2D& pos) const {
+	return pos.x >= 0 && pos.x < columnas_ && pos.y >= 0 && pos.y < filas_; // Comprobar si la posición está dentro de los límites del tablero
+}
+bool ClassTablero::estaOcupada(const Vector2D& pos) const {
+    if (!esPosicionValida(pos)) { // Comprobar si la posición es válida
+        return false;
+    }
+	return tablero[pos.y][pos.x] != 0; // Comprobar si la posición está ocupada
+}

@@ -42,7 +42,6 @@ public:
         }
         delete[] tablero;
     }
-
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
@@ -61,5 +60,8 @@ public:
     void AnimaPiezas();
     // Imprime cosas en pantalla
     void ImprimirEnPantalla();
+	// Metodos para comprobar posiciones
+    bool esPosicionValida(const Vector2D& pos) const;
+    bool estaOcupada(const Vector2D& pos) const;
 };
 

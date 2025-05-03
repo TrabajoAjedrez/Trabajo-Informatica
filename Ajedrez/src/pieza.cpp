@@ -15,7 +15,7 @@ Vector2D ClassPieza::getPos() const { return pos; }
 void ClassPieza::setTipo(Pieza_t t) { tipo = t; }
 void ClassPieza::setColor(Color c) { color = c; }
 void ClassPieza::setPos(Vector2D p) { pos = p; }
-// Método para imprimir la matriz del tablero
+// Método para imprimir la matriz del tablero ¡¡Deberia estar en tablero no en pieza!!
 void ClassPieza::print( int** tablero,int f, int c)  {
 	for (int i = 0; i < f; i++) {
 		for (int j = 0; j < c; j++) {

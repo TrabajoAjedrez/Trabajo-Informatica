@@ -136,8 +136,8 @@
   <ItemGroup>
     <ClCompile Include="Ajedrez.cpp" />
     <ClCompile Include="Peon.cpp" />
-    <ClCompile Include="src\classreina.cpp" />
-    <ClCompile Include="src\classrey.cpp" />
+    <ClCompile Include="src\Reina.cpp" />
+    <ClCompile Include="src\Rey.cpp" />
     <ClCompile Include="src\Pieza.cpp" />
     <ClCompile Include="src\Mundo.cpp" />
     <ClCompile Include="src\Tablero.cpp" />
@@ -145,8 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Peon.h" />
-    <ClInclude Include="src\classreina.h" />
-    <ClInclude Include="src\classrey.h" />
+    <ClInclude Include="src\Reina.h" />
+    <ClInclude Include="src\Rey.h" />
     <ClInclude Include="src\Pieza.h" />
     <ClInclude Include="src\Mundo.h" />
     <ClInclude Include="src\Tablero.h" />
