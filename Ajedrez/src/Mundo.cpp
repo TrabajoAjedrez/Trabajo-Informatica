@@ -18,7 +18,8 @@ void ClassMundo::inicializa(int Variante) {
 		ObjTablero = new ClassTablero(4, 5); 
 		break;
 	case 2: 
-		ObjTablero = new ClassTablero(8, 4); break;
+		ObjTablero = new ClassTablero(8, 4); 
+		break;
 	default: 
 		 break;
 	}
@@ -27,8 +28,7 @@ void ClassMundo::inicializa(int Variante) {
 	y_ojo = ObjTablero->getColumnas() / 2;
 	z_ojo = ObjTablero->getFilas() * 2.0;
 
-	//pieza.coloca( ObjTablero,  filas_,  columnas_ );
-	//pieza.print(tablero, filas_, columnas_);
+	ObjTablero->colocarPiezas();
 }
 void ClassMundo::rotarOjo() {
 	double dist = sqrt(x_ojo * x_ojo + z_ojo * z_ojo);
@@ -38,9 +38,8 @@ void ClassMundo::rotarOjo() {
 	z_ojo = dist * sin(ang);
 }
 void ClassMundo::mueve() {
-	//pieza.muevePeon();
 
-
+	ObjTablero->animaPiezas();
 
 }
 void ClassMundo::dibuja() {

@@ -1,7 +1,7 @@
 //#include "Peon.h"
 //
 //Peon::Peon(Color color, Vector2D posicion) 
-//	: Pieza(Pieza_t::Peon, color, posicion) 
+//	: ClassPieza(Pieza_t::Peon, color, posicion) 
 //{}
 //
 //vector<Vector2D> Peon::obtenerMovimientosPosibles(const ClassTablero& tablero) const {

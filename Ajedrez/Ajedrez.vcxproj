@@ -138,7 +138,7 @@
     <ClCompile Include="Peon.cpp" />
     <ClCompile Include="src\classreina.cpp" />
     <ClCompile Include="src\classrey.cpp" />
-    <ClCompile Include="src\pieza.cpp" />
+    <ClCompile Include="src\Pieza.cpp" />
     <ClCompile Include="src\Mundo.cpp" />
     <ClCompile Include="src\Tablero.cpp" />
     <ClCompile Include="src\vector2d.cpp" />
@@ -147,7 +147,7 @@
     <ClInclude Include="Peon.h" />
     <ClInclude Include="src\classreina.h" />
     <ClInclude Include="src\classrey.h" />
-    <ClInclude Include="src\pieza.h" />
+    <ClInclude Include="src\Pieza.h" />
     <ClInclude Include="src\Mundo.h" />
     <ClInclude Include="src\Tablero.h" />
     <ClInclude Include="src\vector2d.h" />
