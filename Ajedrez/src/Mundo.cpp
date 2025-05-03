@@ -20,7 +20,7 @@ void ClassMundo::inicializa(int Variante) {
 	case 2: 
 		ObjTablero = new ClassTablero(8, 4); 
 		break;
-	default: 
+	default:
 		 break;
 	}
 	// Inicializa la posicion de la camara, segun el tablero
@@ -29,6 +29,7 @@ void ClassMundo::inicializa(int Variante) {
 	z_ojo = ObjTablero->getFilas() * 2.0;
 	// Se llama al tablero para que inicialice y coloque las piezas en la matriz del tablero
 	ObjTablero->ColocarPiezas();
+	// Imprimimos el tablero por pantalla
 	ObjTablero->ImprimirEnPantalla();
 }
 void ClassMundo::rotarOjo() {
