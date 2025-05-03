@@ -1,22 +1,15 @@
 #include "Tablero.h"
 #include "freeglut.h"
 
-//TableroGL::TableroGL(float tamCasilla):
-//    tamCasilla(tamCasilla), posX(0), posY(0), posZ(0) 
-//{
-//    // Colores por defecto (marfil y marrón)
-//    colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
-//    colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
-//}
-
 void ClassTablero::dibuja() {
    
+	// Colores para las casillas (pueden personalizarse)
     colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
     colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
 
     glPushMatrix();
-    glTranslatef(posX, posY, posZ);
-
+	glTranslatef(posX, posY, posZ); // Trasladar el tablero a la posición deseada
+	// Bucle para dibujar cada casilla del tablero
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {
             // Alternar colores de casillas
@@ -27,9 +20,8 @@ void ClassTablero::dibuja() {
             dibujarCasilla(x, z, esClara);
         }
     }
-
+	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
-
     // Dibujar borde del tablero
     glColor3f(0.1f, 0.1f, 0.1f);
     glLineWidth(2.0f);
@@ -40,10 +32,9 @@ void ClassTablero::dibuja() {
     glVertex3f(0, 0.01f, filas_ * tamCasilla);
     glEnd();
 
-
     glPopMatrix();
 }
-
+// Dibuja una casilla en la posición (x,z) con el color correspondiente
 void ClassTablero::dibujarCasilla(float x, float z, bool esClara) {
     if (esClara) {
         glColor3fv(colorClaro);
@@ -59,37 +50,30 @@ void ClassTablero::dibujarCasilla(float x, float z, bool esClara) {
     glVertex3f(x, z+tamCasilla,0 );
     glEnd();
 }
-
+// Establece la posición del tablero en el espacio
 void ClassTablero::setPosicion(float x, float y, float z) {
     posX = x;
     posY = y;
     posZ = z;
 }
-
+// Dibuja las piezas en el tablero
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
             float x = j + 0.8f;
             float z = i + 0.9f;
-            pieza.dibuja(tablero[i][j], x, z);
+            ObjPieza.dibuja(tablero[i][j], x, z);
         }
     }
 }
-
-void ClassTablero::colocarPiezas() {
-    pieza.coloca(tablero, filas_, columnas_);
+// Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
+void ClassTablero::ColocarPiezas() {
+    ObjPieza.coloca(tablero, filas_, columnas_);
 }
-
-void ClassTablero::animaPiezas() {
-    pieza.muevePeon();  // Anima sprites de la pieza
+// Anima las piezas en el tablero
+void ClassTablero::AnimaPiezas() {
+    ObjPieza.AnimaPeon();  // Anima sprites de la pieza
 }
-
-//bool ClassTablero::esPosicionValida(const Vector2D& posicion) const {
-//	// Verifica si la posición está dentro de los límites del tablero
-//	return (1);
-//}
-//
-//bool ClassTablero::estaOcupada(const Vector2D& posicion) const {
-//	// Verifica si la posición está ocupada por una pieza
-//	return (1);
-//}
+void ClassTablero::ImprimirEnPantalla() {
+	ObjPieza.print(tablero, filas_, columnas_); // Imprime la matriz del tablero
+}

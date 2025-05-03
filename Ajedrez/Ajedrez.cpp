@@ -2,7 +2,7 @@
 #include "freeglut.h"
 #include "Mundo.h"
 
-ClassMundo* ObjMundo=nullptr;
+ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
 //los callback, funciones que seran llamadas automaticamente por la glut
@@ -16,9 +16,9 @@ int PreguntarVariante();
 
 int main(int argc, char* argv[])
 {
-	ObjMundo = new ClassMundo();
+	ObjMundo = new ClassMundo(); //Creamos el objeto que contiene el mundo
 
-	int opcion = PreguntarVariante();
+	int opcion = PreguntarVariante(); //Pedimos la variante de ajedrez
 
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
@@ -40,7 +40,7 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 	
-	ObjMundo->inicializa(opcion);//al tener ya filas y columnas, se puede inicializar
+	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
@@ -77,7 +77,7 @@ void OnTimer(int value)
 	glutTimerFunc(25, OnTimer, 0);
 	glutPostRedisplay();
 }
-
+//Funcion que pregunta al usuario que variante de ajedrez quiere jugar
 int PreguntarVariante() {
 	int variante;
 	std::cout << "Selecciona la variante de ajedrez:\n";

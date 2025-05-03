@@ -1,4 +1,4 @@
-#include"pieza.h"
+#include"Pieza.h"
 #include"vector2d.h"
 #include"ETSIDI.h"
 #include"freeglut.h"
@@ -15,7 +15,7 @@ Vector2D ClassPieza::getPos() const { return pos; }
 void ClassPieza::setTipo(Pieza_t t) { tipo = t; }
 void ClassPieza::setColor(Color c) { color = c; }
 void ClassPieza::setPos(Vector2D p) { pos = p; }
-
+// Método para imprimir la matriz del tablero
 void ClassPieza::print( int** tablero,int f, int c)  {
 	for (int i = 0; i < f; i++) {
 		for (int j = 0; j < c; j++) {
@@ -24,6 +24,7 @@ void ClassPieza::print( int** tablero,int f, int c)  {
 		cout << endl;
 	}
 }
+// Método para colocar las piezas en la matriz del tablero ¡¡No el dibujo de las piezas!!
 void ClassPieza::coloca(int** tablero, int f, int c) {
 	int a = 1, b = 0;
 	if (f == 8)
@@ -38,6 +39,7 @@ void ClassPieza::coloca(int** tablero, int f, int c) {
 		}
 	}
 }
+// Método para dibujar el sprite la pieza
 void ClassPieza::dibuja(int p, float x, float y) {
 	glPushMatrix();
 	glTranslated(x, y, 0.1);
@@ -51,7 +53,6 @@ void ClassPieza::dibuja(int p, float x, float y) {
 			sprite2.setState(0, false);
 		sprite2.draw();
 	}
-	//fin del codigo incluido
 	glPopMatrix();
 }
 

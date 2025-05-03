@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "pieza.h"
+#include "Pieza.h"
 #include "Tablero.h"
 
 class Peon : public ClassPieza{  

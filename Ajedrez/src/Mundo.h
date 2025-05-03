@@ -3,13 +3,14 @@
 
 class ClassMundo {
 
-	ClassTablero *ObjTablero;
+	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
 
 public:
-
+	// Cosntructor, inicializa el puntero a null
 	ClassMundo() 
 		: ObjTablero(nullptr), x_ojo(0), y_ojo(0), z_ojo(0)	
 	{}
+	// Destructor, libera la memoria del tablero
 	~ClassMundo() {
 		delete ObjTablero;
 	}
