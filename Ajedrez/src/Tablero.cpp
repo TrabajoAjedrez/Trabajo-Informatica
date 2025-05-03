@@ -11,8 +11,6 @@
 
 void ClassTablero::dibuja() {
    
-    this->tamCasilla = tamCasilla;
-
     colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
     colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
 

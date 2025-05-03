@@ -1,6 +1,5 @@
 #pragma once
 #include "freeglut.h"
-#include "Mundo.h"
 //#include "pieza.h"
 
 class ClassTablero {
@@ -57,8 +56,8 @@ public:
     // Obtiene el tamaño total del tablero
     float getTamanoTotal() const;
 
- //   /////
- //bool esPosicionValida(const Vector2D& posicion) const;
+    /////
+    //bool esPosicionValida(const Vector2D& posicion) const;
 
 	//bool estaOcupada(const Vector2D& posicion) const;
 };

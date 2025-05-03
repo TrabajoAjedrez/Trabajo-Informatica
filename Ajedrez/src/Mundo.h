@@ -7,7 +7,9 @@ class ClassMundo {
 
 public:
 
-	ClassMundo() : ObjTablero(nullptr) {}
+	ClassMundo() 
+		: ObjTablero(nullptr), x_ojo(0), y_ojo(0), z_ojo(0)	
+	{}
 	~ClassMundo() {
 		delete ObjTablero;
 	}
@@ -18,7 +20,6 @@ public:
 	void rotarOjo();
 	void mueve();
 	void dibuja();
-	void matriz();
 
 	double x_ojo;
 	double y_ojo;

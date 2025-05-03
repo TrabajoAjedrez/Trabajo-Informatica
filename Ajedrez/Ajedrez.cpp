@@ -2,7 +2,7 @@
 #include "freeglut.h"
 #include "Mundo.h"
 
-ClassMundo* ObjMundo;
+ClassMundo* ObjMundo=nullptr;
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
 //los callback, funciones que seran llamadas automaticamente por la glut
@@ -16,6 +16,7 @@ int PreguntarVariante();
 
 int main(int argc, char* argv[])
 {
+	ObjMundo = new ClassMundo();
 
 	int opcion = PreguntarVariante();
 

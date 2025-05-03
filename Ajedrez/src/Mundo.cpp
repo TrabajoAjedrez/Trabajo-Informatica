@@ -53,7 +53,3 @@ void ClassMundo::dibuja() {
 	glPopMatrix();
 	//pieza.ubica( ObjTablero, filas_, columnas_);
 }
-
-void ClassMundo::matriz() {
-	int** tablero;
-}
