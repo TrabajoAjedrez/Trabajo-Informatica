@@ -27,6 +27,7 @@ public:
 	// Constructor - define el tipo, el color y la posicion de una pieza
 	ClassPieza(Pieza_t t, Color c, Vector2D p);
 
+
 	// Métodos para consultar las propiedades privadas
 	Pieza_t getTipo()const;
 	Color getColor()const;

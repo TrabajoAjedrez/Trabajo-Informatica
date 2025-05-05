@@ -3,6 +3,7 @@
 #include <vector>
 #include "freeglut.h"
 #include "Pieza.h"
+//#include "Peon.h"
 
 class ClassTablero {
 private:
@@ -14,6 +15,10 @@ private:
     float posX, posY, posZ; // Posición del tablero en el espacio
 
     ClassPieza ObjPieza; // Objeto de la clase pieza
+
+    // Opciones para el tablero
+    //std::vector<std::vector<ClassPieza*>> piezas_Clean; 
+    //ClassPieza*** piezas_NoClean;
 
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
