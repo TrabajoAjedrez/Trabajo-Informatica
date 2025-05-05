@@ -1,5 +1,6 @@
 #include "Tablero.h"
 #include "freeglut.h"
+#include "Peon.h"
 
 void ClassTablero::dibuja() {
    
@@ -62,23 +63,16 @@ void ClassTablero::UbicaPieza() {
         for (int j = 0; j < columnas_; ++j) {
             float x = j + 0.8f;
             float z = i + 0.9f;
-            ObjPieza.dibuja(tablero[i][j], x, z);
+            if (tablero[i][j] != nullptr)
+                tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
         }
     }
 }
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
-    int a = 1, b = 0;
-    if (filas_ == 8)
-        b = 6;
-    else if (filas_ == 5)
-        b = 3;
-
-    for (int i = 0; i < filas_; i++) {
-        for (int j = 0; j < columnas_; j++) {
-            if (i == a) tablero[i][j] = 1;
-            else if (i == b) tablero[i][j] = -1;
-        }
+    for (int j = 0; j < columnas_; ++j) {
+        tablero[1][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, 1));
+        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, filas_ - 2));
     }
 }
 // Anima las piezas en el tablero
@@ -98,8 +92,6 @@ bool ClassTablero::esPosicionValida(const Vector2D& pos) const {
 	return pos.x >= 0 && pos.x < columnas_ && pos.y >= 0 && pos.y < filas_; // Comprobar si la posición está dentro de los límites del tablero
 }
 bool ClassTablero::estaOcupada(const Vector2D& pos) const {
-    if (!esPosicionValida(pos)) { // Comprobar si la posición es válida
-        return false;
-    }
-	return tablero[pos.y][pos.x] != 0; // Comprobar si la posición está ocupada
+    if (!esPosicionValida(pos)) return false;
+    return tablero[pos.y][pos.x] != nullptr;
 }

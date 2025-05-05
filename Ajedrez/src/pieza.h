@@ -37,5 +37,5 @@ public:
 	void setPos(Vector2D p);
 	//Gestión del Sprite
 	void AnimaPeon() { sprite.loop(); sprite2.loop();}
-	void dibuja(int p, float x, float i);
+	void dibuja(float x, float i);
 };
