@@ -35,7 +35,11 @@ public:
 	void setTipo(Pieza_t t);
 	void setColor(Color c);
 	void setPos(Vector2D p);
+	//Testeo matriz por pantalla
+	void print( int** tablero, int f, int c);
+	//Pone cada pieza en su sitio de la matriz del tablero
+	void coloca(int** tablero, int f, int c);
 	//Gestión del Sprite
 	void AnimaPeon() { sprite.loop(); sprite2.loop();}
-	void dibuja(int p, float x, float i);
+	void dibuja(float x, float i);
 };

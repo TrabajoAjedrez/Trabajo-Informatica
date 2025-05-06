@@ -3,17 +3,22 @@
 #include <vector>
 #include "freeglut.h"
 #include "Pieza.h"
+//#include "Peon.h"
 
 class ClassTablero {
 private:
     int filas_; // Numero de filas del tablero
     int columnas_; // Numero de columnas del tablero
-	int** tablero; // Matriz que representa el tablero
+	std::vector<std::vector<ClassPieza*>> tablero; // Tablero de piezas
 
     float tamCasilla;       // Tamaño de cada casilla
     float posX, posY, posZ; // Posición del tablero en el espacio
 
-    ClassPieza ObjPieza; // Objeto de la clase pieza
+    //ClassPieza ObjPieza; // Objeto de la clase pieza
+
+    // Opciones para el tablero
+    //std::vector<std::vector<ClassPieza*>> piezas_Clean; 
+    //ClassPieza*** piezas_NoClean;
 
     // Colores para las casillas (pueden personalizarse)
     GLfloat colorClaro[3];
@@ -25,27 +30,14 @@ public:
 		filas_(filas), columnas_(columnas), tamCasilla(tamCasilla), posX(0), posY(0), posZ(0)
     {
 		// Inicializar el tablero
-        tablero = new int* [filas];
-        for (int i = 0; i < filas; i++) {
-            tablero[i] = new int[columnas];
-            for (int j = 0; j < columnas; j++) {
-                tablero[i][j] = 0;
-            }
-        }
+        tablero.resize(filas_, std::vector<ClassPieza*>(columnas_, nullptr));
+
         colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
         colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
-    }
-	// Destructor: libera la memoria del tablero
-    ~ClassTablero() {
-        for (int i = 0; i < filas_; i++) {
-            delete[] tablero[i];
-        }
-        delete[] tablero;
     }
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
-    int** getTablero() const { return tablero; }
     // Dibuja el tablero
     void dibuja();
     // Establece la posición del tablero
@@ -56,8 +48,6 @@ public:
     void UbicaPieza();
     // Coloca las piezas en el tablero
     void ColocarPiezas();
-	// Anima las piezas en el tablero
-    void AnimaPiezas();
     // Imprime cosas en pantalla
     void ImprimirEnPantalla();
 	// Metodos para comprobar posiciones

@@ -1,7 +1,7 @@
-#include <iostream>
+﻿#include <iostream>
+#include <cassert>
 #include "Mundo.h"
 #include "freeglut.h"
-
 
 using namespace std;
 
@@ -12,7 +12,8 @@ void ClassMundo::tecla_especial(unsigned char key) {
 
 }
 void ClassMundo::inicializa(int Variante) {
-	// Inicializa el tablero seg�n la variante seleccionada
+
+	// Inicializa el tablero según la variante seleccionada
 	switch (Variante) 
 	{
 	case 1: 
@@ -32,6 +33,8 @@ void ClassMundo::inicializa(int Variante) {
 	ObjTablero->ColocarPiezas();
 	// Imprimimos el tablero por pantalla
 	ObjTablero->ImprimirEnPantalla();
+
+	//runAllTests();
 }
 void ClassMundo::rotarOjo() {
 	double dist = sqrt(x_ojo * x_ojo + z_ojo * z_ojo);
@@ -42,7 +45,7 @@ void ClassMundo::rotarOjo() {
 }
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
-	ObjTablero->AnimaPiezas();
+	//ObjTablero->AnimaPiezas();
 
 }
 void ClassMundo::dibuja() {
