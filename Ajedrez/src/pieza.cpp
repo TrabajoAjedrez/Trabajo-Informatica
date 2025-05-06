@@ -16,20 +16,4 @@ Vector2D ClassPieza::getPos() const { return pos; }
 void ClassPieza::setTipo(Pieza_t t) { tipo = t; }
 void ClassPieza::setColor(Color c) { color = c; }
 void ClassPieza::setPos(Vector2D p) { pos = p; }
-// Método para dibujar el sprite la pieza
-void ClassPieza::dibuja(float x, float y) {
-	glPushMatrix();
-	glTranslated(x, y, 0.1);
-	if (tipo == Peon) {
-		if (sprite.getState() == 0)
-			sprite.setState(0, false);
-		sprite.draw();
-	}
-	//if (p == -1) {
-	//	if (sprite2.getState() == 0)
-	//		sprite2.setState(0, false);
-	//	sprite2.draw();
-	//}
-	glPopMatrix();
-}
 

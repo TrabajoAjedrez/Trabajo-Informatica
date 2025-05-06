@@ -74,15 +74,11 @@ void ClassTablero::ColocarPiezas() {
         tablero[1][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, 1));
         tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, filas_ - 2));
     }
-
-	// Colocar piezas en el tablero de la forma clean
-    //piezas_Clean[6][3] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(3, 6));
-    //piezas_Clean[1][3] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(3, 1));
 }
 // Anima las piezas en el tablero
-void ClassTablero::AnimaPiezas() {
-    ObjPieza.AnimaPeon();  // Anima sprites de la pieza
-}
+//void ClassTablero::AnimaPiezas() {
+//    ObjPieza.AnimaPeon();  // Anima sprites de la pieza
+//}
 void ClassTablero::ImprimirEnPantalla() {
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {

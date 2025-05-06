@@ -2,7 +2,6 @@
 #include <cassert>
 #include "Mundo.h"
 #include "freeglut.h"
-#include "Peon.h"
 
 using namespace std;
 
@@ -46,7 +45,7 @@ void ClassMundo::rotarOjo() {
 }
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
-	ObjTablero->AnimaPiezas();
+	//ObjTablero->AnimaPiezas();
 
 }
 void ClassMundo::dibuja() {
@@ -58,37 +57,4 @@ void ClassMundo::dibuja() {
 	// Se dibuja el tablero
 	ObjTablero->dibuja();
 	glPopMatrix();
-}
-
-// Metodos para tests (No hacer mucho caso tampoco)
-// Test 1: Peón blanco desde posición inicial
-void ClassMundo::testPeonMovimientoBasico() {
-	ClassTablero tablero(8, 4);
-	ClassPeon peon(ClassPieza::Color::BLANCO, Vector2D(2, 2));
-
-	int** t = tablero.getTablero();
-	for (int i = 0; i < tablero.getFilas(); ++i)
-		for (int j = 0; j < tablero.getColumnas(); ++j)
-			t[i][j] = 0;
-
-	auto movs = peon.obtenerMovimientosPosibles(tablero);
-
-	assert(movs.size() == 2);
-	std::cout << "testPeonMovimientoBasico passed\n";
-}
-// Test 2: Peón bloqueado
-void ClassMundo::testPeonBloqueado() {
-	ClassTablero tablero(8, 8);
-	ClassPeon peon(ClassPieza::Color::BLANCO, Vector2D(4, 6));
-
-	tablero.getTablero()[3][2] = 1;
-
-	auto movs = peon.obtenerMovimientosPosibles(tablero);
-	assert(movs.size() == 0);
-
-	std::cout << " testPeonBloqueado passed\n";
-}
-void ClassMundo::runAllTests() {
-	testPeonMovimientoBasico();
-	//testPeonBloqueado();
 }

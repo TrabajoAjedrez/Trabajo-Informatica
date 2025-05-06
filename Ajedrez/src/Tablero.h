@@ -14,7 +14,7 @@ private:
     float tamCasilla;       // Tamaño de cada casilla
     float posX, posY, posZ; // Posición del tablero en el espacio
 
-    ClassPieza ObjPieza; // Objeto de la clase pieza
+    //ClassPieza ObjPieza; // Objeto de la clase pieza
 
     // Opciones para el tablero
     //std::vector<std::vector<ClassPieza*>> piezas_Clean; 
@@ -48,8 +48,6 @@ public:
     void UbicaPieza();
     // Coloca las piezas en el tablero
     void ColocarPiezas();
-	// Anima las piezas en el tablero
-    void AnimaPiezas();
     // Imprime cosas en pantalla
     void ImprimirEnPantalla();
 	// Metodos para comprobar posiciones
