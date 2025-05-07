@@ -45,7 +45,7 @@ void ClassMundo::rotarOjo() {
 }
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
-	//ObjTablero->AnimaPiezas();
+	ObjTablero->AnimaPiezas();
 
 }
 void ClassMundo::dibuja() {

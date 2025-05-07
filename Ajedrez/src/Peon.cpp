@@ -1,4 +1,5 @@
 #include "Peon.h"
+#include "ETSIDI.h"
 
 ClassPeon::ClassPeon(Color color, Vector2D posicion) 
 	: ClassPieza(Pieza_t::Peon, color, posicion) 
@@ -61,3 +62,17 @@ void ClassPeon::dibuja(float x, float y) {
 	glPopMatrix();
 }
 
+void ClassPeon::anima() {
+	if (color == Color::BLANCO) {
+		if (sprite.getState() == 0)
+			sprite.setState(0, false);
+		sprite.draw();
+	}
+	else {
+		if (sprite.getState() == 0)
+			sprite2.setState(0, false);
+		sprite.draw();
+	}
+	sprite.loop();
+	sprite2.loop();
+}

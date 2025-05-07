@@ -50,6 +50,8 @@ public:
     void ColocarPiezas();
     // Imprime cosas en pantalla
     void ImprimirEnPantalla();
+    // Animar piezas
+    void AnimaPiezas();
 	// Metodos para comprobar posiciones
     bool esPosicionValida(const Vector2D& pos) const;
     bool estaOcupada(const Vector2D& pos) const;

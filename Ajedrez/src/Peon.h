@@ -3,6 +3,7 @@
 #include <vector>
 #include "Pieza.h"
 #include "Tablero.h"
+#include "ETSIDI.h"
 
 
 class ClassPeon : public ClassPieza{  
@@ -16,4 +17,5 @@ public:
 
 	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const;
 	void dibuja(float x, float y);
+	void anima();
 };

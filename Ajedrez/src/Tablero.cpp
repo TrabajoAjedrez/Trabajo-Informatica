@@ -76,9 +76,14 @@ void ClassTablero::ColocarPiezas() {
     }
 }
 // Anima las piezas en el tablero
-//void ClassTablero::AnimaPiezas() {
-//    ObjPieza.AnimaPeon();  // Anima sprites de la pieza
-//}
+void ClassTablero::AnimaPiezas() {
+    for (int i = 0; i < filas_; ++i) {
+        for (int j = 0; j < columnas_; ++j) {
+            if (tablero[i][j] != nullptr)
+                tablero[i][j]->anima();  // método que llamará al sprite según color o tipo
+        }
+    }
+}
 void ClassTablero::ImprimirEnPantalla() {
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {
