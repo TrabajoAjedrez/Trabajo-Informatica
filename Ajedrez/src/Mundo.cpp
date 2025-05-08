@@ -22,17 +22,6 @@ void ClassMundo::inicializa(int Variante) {
 
 	ObjTablero = new ClassTablero(dimensiones);
 
-	/*switch (Variante) 
-	{
-	case 1: 
-		ObjTablero = new ClassTablero(4, 5); 
-		break;
-	case 2: 
-		ObjTablero = new ClassTablero(8, 4); 
-		break;
-	default:
-		 break;
-	}*/
 
 	// Inicializa la posicion de la camara, segun el tablero
 	x_ojo = ObjTablero->getFilas() / 2;
@@ -52,6 +41,14 @@ void ClassMundo::rotarOjo() {
 	ang += 0.01;
 	x_ojo = dist * cos(ang);
 	z_ojo = dist * sin(ang);
+}
+
+bool ClassMundo::turno(bool turn) {
+	
+	
+
+	turn = !turn; //guardo el nuevo valor de la variable turno
+	return turn; //para cambiar de turno
 }
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas

@@ -1,10 +1,8 @@
+#include <iostream>
+#include "freeglut.h"
 #include "Reglas.h"
 
-
-//bool turno_siguiente(const bool turno) {
-//	if (turno == false)
-//		turno
-//}
+using namespace std;
 
 Vector2D ClassReglas::devolver_forma(const int& Variante) {
 	switch (Variante)
@@ -19,4 +17,16 @@ Vector2D ClassReglas::devolver_forma(const int& Variante) {
 		return{ 0,0 };
 		break;
 	}
+}
+
+void ClassReglas::actualiza_tiempo() {
+
+	if (tiempo_restante > 0) {
+		tiempo_restante--;
+		std::cout << "Quedan " << tiempo_restante << " segundos" << std::endl;
+	}
+}
+
+void ClassReglas::inicia_temporizador(int segundos) {
+	tiempo_restante = segundos;
 }
