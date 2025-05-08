@@ -26,8 +26,8 @@ private:
 
 public:
     // Constructor: tamaño del tablero y tamaño de cada casilla
-    ClassTablero(int filas, int columnas, float tamCasilla = 1.0f) :
-		filas_(filas), columnas_(columnas), tamCasilla(tamCasilla), posX(0), posY(0), posZ(0)
+    ClassTablero(Vector2D dim, float tamCasilla = 1.0f) :
+		columnas_(dim.x), filas_(dim.y), tamCasilla(tamCasilla), posX(0), posY(0), posZ(0)
     {
 		// Inicializar el tablero
         tablero.resize(filas_, std::vector<ClassPieza*>(columnas_, nullptr));
