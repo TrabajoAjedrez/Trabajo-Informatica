@@ -65,3 +65,10 @@ void ClassMundo::dibuja() {
 	ObjTablero->dibuja();
 	glPopMatrix();
 }
+int ClassMundo::getFilas() const {
+	return ObjTablero ? ObjTablero->getFilas() : 0;
+}
+
+int ClassMundo::getColumnas() const {
+	return ObjTablero ? ObjTablero->getColumnas() : 0;
+}
