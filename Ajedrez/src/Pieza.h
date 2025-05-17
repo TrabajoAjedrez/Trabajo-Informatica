@@ -30,5 +30,4 @@ public:
 	void setColor(Color c);
 	void setPos(Vector2D p);
 	virtual void dibuja(float x, float y) = 0 ;  // en la clase base
-	virtual void anima() = 0;
 };

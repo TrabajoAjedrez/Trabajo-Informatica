@@ -2,12 +2,6 @@
 #include "freeglut.h"
 #include "Mundo.h"
 #include "Reglas.h"
-#include "raton.h"
-
-raton ratonObj; // crea instancia global del ratón
-
-
-int varianteSeleccionada = 1;
 
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
@@ -27,18 +21,6 @@ void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecl
 
 int PreguntarVariante();
 
-void OnMouseClick(int button, int state, int x, int y) {
-	if (ObjMundo) {
-		int filas = ObjMundo->getFilas();
-		int columnas = ObjMundo->getColumnas();
-		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
-	}
-}
-void OnMouseClickR(int button, int state, int x, int y) {
-	ratonObj.click(button, state, x, y);  // imprime coordenadas normalizadas
-}
-
-
 int main(int argc, char* argv[])
 {
 	ObjMundo = new ClassMundo(); //Creamos el objeto que contiene el mundo
@@ -46,8 +28,7 @@ int main(int argc, char* argv[])
 	ClassReglas reglas;
 	preglas = &reglas; //preglas apunta a reglas (asignacion)
 
-	int opcion = PreguntarVariante(); //Pedimos la variante de ajedre
-	varianteSeleccionada = opcion;
+	int opcion = PreguntarVariante(); //Pedimos la variante de ajedrez
 
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
@@ -72,10 +53,6 @@ int main(int argc, char* argv[])
 	glutDisplayFunc(OnDraw);
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
-
-
-	glutMouseFunc(OnMouseClick);
-
 	
 	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
 

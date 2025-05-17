@@ -136,7 +136,6 @@
   <ItemGroup>
     <ClCompile Include="Ajedrez.cpp" />
     <ClCompile Include="src\Peon.cpp" />
-    <ClCompile Include="src\raton.cpp" />
     <ClCompile Include="src\Reglas.cpp" />
     <ClCompile Include="src\Reina.cpp" />
     <ClCompile Include="src\Rey.cpp" />
@@ -147,7 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Peon.h" />
-    <ClInclude Include="src\raton.h" />
     <ClInclude Include="src\Reglas.h" />
     <ClInclude Include="src\Reina.h" />
     <ClInclude Include="src\Rey.h" />
