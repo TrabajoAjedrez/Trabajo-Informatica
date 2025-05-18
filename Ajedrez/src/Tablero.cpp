@@ -71,8 +71,8 @@ void ClassTablero::UbicaPieza() {
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
     for (int j = 0; j < columnas_; ++j) {
-        tablero[1][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, 1));
-        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, filas_ - 2));
+        tablero[1][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, 1));
+        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, filas_ - 2));
     }
 }
 // Anima las piezas en el tablero
