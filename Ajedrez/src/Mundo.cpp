@@ -6,7 +6,10 @@
 
 using namespace std;
 
-ClassReglas reglas;
+ClassReglas reglas; 
+// Variables para controlar los temporizadores
+int tiempo_inicial = 0;
+const int INTERVALO_TEMPORIZADOR = 1000; // 1000ms
 
 void ClassMundo::tecla(unsigned char key) {
 
@@ -14,6 +17,14 @@ void ClassMundo::tecla(unsigned char key) {
 void ClassMundo::tecla_especial(unsigned char key) {
 
 }
+
+void onTimer(int value) {
+	reglas.actualiza_tiempo(); // Actualiza el tiempo restante
+	glutTimerFunc(INTERVALO_TEMPORIZADOR, onTimer, 0); // Reprograma el temporizador
+	glutPostRedisplay(); // Redibuja la ventana
+}
+
+
 void ClassMundo::inicializa(int Variante) {
 
 	// Inicializa el tablero según la variante seleccionada
@@ -33,6 +44,19 @@ void ClassMundo::inicializa(int Variante) {
 	ObjTablero->ImprimirEnPantalla();
 
 	//runAllTests();
+
+	//temporizador
+	tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
+	reglas.inicia_temporizador(8); // 8s de prueba
+
+	reglas.inicia_temporizador(8); // 8s de prueba
+	int tiempo_actual = glutGet(GLUT_ELAPSED_TIME); // Obtener tiempo transcurrido
+
+	// Actualizar temporizador cada segundo
+	if (tiempo_actual - tiempo_inicial >= INTERVALO_TEMPORIZADOR) {
+		reglas.actualiza_tiempo();
+		tiempo_inicial = tiempo_actual;
+	}
 
 }
 void ClassMundo::rotarOjo() {

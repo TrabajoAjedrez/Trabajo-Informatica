@@ -25,6 +25,8 @@ void ClassReglas::actualiza_tiempo() {
 		tiempo_restante--;
 		std::cout << "Quedan " << tiempo_restante << " segundos" << std::endl;
 	}
+
+//	tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
 }
 
 void ClassReglas::inicia_temporizador(int segundos) {
