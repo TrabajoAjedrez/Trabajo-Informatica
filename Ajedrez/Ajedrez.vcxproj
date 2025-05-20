@@ -135,6 +135,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Ajedrez.cpp" />
+    <ClCompile Include="src\alfil.cpp" />
+    <ClCompile Include="src\caballo.cpp" />
     <ClCompile Include="src\Peon.cpp" />
     <ClCompile Include="src\raton.cpp" />
     <ClCompile Include="src\Reglas.cpp" />
@@ -143,9 +145,12 @@
     <ClCompile Include="src\Pieza.cpp" />
     <ClCompile Include="src\Mundo.cpp" />
     <ClCompile Include="src\Tablero.cpp" />
+    <ClCompile Include="src\torre.cpp" />
     <ClCompile Include="src\vector2d.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\alfil.h" />
+    <ClInclude Include="src\caballo.h" />
     <ClInclude Include="src\Peon.h" />
     <ClInclude Include="src\raton.h" />
     <ClInclude Include="src\Reglas.h" />
@@ -154,6 +159,7 @@
     <ClInclude Include="src\Pieza.h" />
     <ClInclude Include="src\Mundo.h" />
     <ClInclude Include="src\Tablero.h" />
+    <ClInclude Include="src\torre.h" />
     <ClInclude Include="src\vector2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

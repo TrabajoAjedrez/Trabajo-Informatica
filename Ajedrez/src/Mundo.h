@@ -4,8 +4,7 @@
 class ClassMundo {
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
-	
-
+	int variante_=0;//valor inicial 
 public:
 	// Cosntructor, inicializa el puntero a null
 	ClassMundo() 
@@ -20,7 +19,7 @@ public:
 	void temporizador();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
-	void inicializa(int Variante);
+	void inicializa();
 	void rotarOjo();
 	//bool turno(bool turn=1);//lo pongo a 1 porque empiezan blancas
 	void mueve();
@@ -35,7 +34,8 @@ public:
 	void testPeonMovimientoBasico();
 	void runAllTests();
 
-
+	void set_variante(int variante) { variante_ = variante; };
+	int get_variante() { return variante_; }
 	int getFilas() const;
 	int getColumnas() const;
 

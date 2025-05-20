@@ -1,7 +1,10 @@
 #include "Tablero.h"
 #include "freeglut.h"
 #include "Peon.h"
-
+#include "Reina.h"
+#include "Rey.h"
+#include "torre.h"
+#include "caballo.h"
 void ClassTablero::dibuja() {
    
 	// Colores para las casillas (pueden personalizarse)
@@ -61,7 +64,7 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-            float x = j + 0.8f;
+            float x = j + 1.0f;
             float z = i + 0.9f;
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
@@ -70,9 +73,40 @@ void ClassTablero::UbicaPieza() {
 }
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
+    //colocar peones
     for (int j = 0; j < columnas_; ++j) {
-        tablero[1][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, 1));
-        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, filas_ - 2));
+        tablero[1][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, 1));
+        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, filas_ - 2));
+    }
+    //colocar reinas
+    if (filas_ == 5) {
+        tablero[0][1] = new ClassReina(ClassPieza::Color::BLANCO, Vector2D(0, 1));
+        tablero[4][1] = new ClassReina(ClassPieza::Color::NEGRO, Vector2D(4,1));
+    }
+    //colocar reyes
+    if (filas_ == 5) {
+        tablero[0][2] = new ClassRey(ClassPieza::Color::BLANCO, Vector2D(0, 2));
+        tablero[4][2] = new ClassRey(ClassPieza::Color::NEGRO, Vector2D(4, 2));
+    }
+    else {
+        tablero[0][0] = new ClassRey(ClassPieza::Color::BLANCO, Vector2D(0, 0));
+        tablero[7][0] = new ClassRey(ClassPieza::Color::NEGRO, Vector2D(7, 0));
+    }
+    //colocar torres   
+    if (filas_ == 5) {
+        tablero[0][0] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 0));
+        tablero[0][3] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 3));
+        tablero[4][0] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(4, 0));
+        tablero[4][3] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(4, 3));
+    }
+    else {  
+        tablero[0][3] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 3));
+        tablero[7][3] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(7, 3));
+    }
+    //colocar caballo
+    if (filas_ == 8) {
+        tablero[0][2] = new ClassCaballo(ClassPieza::Color::BLANCO, Vector2D(0, 2));
+        tablero[7][2] = new ClassCaballo(ClassPieza::Color::NEGRO, Vector2D(7, 2));
     }
 }
 // Anima las piezas en el tablero

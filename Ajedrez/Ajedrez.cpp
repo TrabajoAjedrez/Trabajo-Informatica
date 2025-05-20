@@ -8,9 +8,6 @@
 raton ratonObj; // crea instancia global del ratón
 
 
-int varianteSeleccionada = 1;
-
-
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
@@ -21,10 +18,11 @@ void OnDraw(void); //esta funcion sera llamada para dibujar
 void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
 void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecla	
 
-int PreguntarVariante();
+
 
 void OnMouseClick(int button, int state, int x, int y) {
 	if (ObjMundo) {
+		int varianteSeleccionada = ObjMundo->get_variante();
 		int filas = ObjMundo->getFilas();
 		int columnas = ObjMundo->getColumnas();
 		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
@@ -42,10 +40,6 @@ int main(int argc, char* argv[])
 
 	ClassReglas reglas;
 	ClassReglas* preglas = &reglas; //preglas apunta a reglas (asignacion)
-
-	
-	int opcion = PreguntarVariante(); //Pedimos la variante de ajedre
-	varianteSeleccionada = opcion;
 
 
 	//Inicializar el gestor de ventanas GLUT
@@ -71,7 +65,7 @@ int main(int argc, char* argv[])
 
 	glutMouseFunc(OnMouseClick);
 	
-	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
+	ObjMundo->inicializa(); // Inicializamos el mundo con la variante seleccionada
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
@@ -109,14 +103,4 @@ void OnTimer(int value)
 	
 	glutPostRedisplay();
 	glutTimerFunc(25, OnTimer, 0); //callback de animacion
-}
-//Funcion que pregunta al usuario que variante de ajedrez quiere jugar
-int PreguntarVariante() {
-	int variante;
-	std::cout << "Selecciona la variante de ajedrez:\n";
-	std::cout << "1. Silverman\n";
-	std::cout << "2. Demichess\n";
-	std::cin >> variante;
-
-	return variante;
 }

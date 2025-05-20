@@ -9,6 +9,7 @@ using namespace std;
 ClassReglas reglas; 
 static ClassMundo* mundoPtr = nullptr;
 
+
 void ClassMundo::tecla(unsigned char key) {
 
 }
@@ -19,10 +20,11 @@ void ClassMundo::tecla_especial(unsigned char key) {
 
 
 
-void ClassMundo::inicializa(int Variante) {
+void ClassMundo::inicializa() {
 
 	mundoPtr = this; 
 
+	int Variante = reglas.preguntar_variante();
 	// Inicializa el tablero según la variante seleccionada
 
 	auto dimensiones = reglas.devolver_forma(Variante);

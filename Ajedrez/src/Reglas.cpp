@@ -4,6 +4,17 @@
 
 using namespace std;
 
+int ClassReglas::preguntar_variante() {
+	int variante;
+	std::cout << "Selecciona la variante de ajedrez:\n";
+	std::cout << "1. Silverman\n";
+	std::cout << "2. Demichess\n";
+	std::cin >> variante;
+
+	return variante;
+};
+
+
 Vector2D ClassReglas::devolver_forma(const int& Variante) {
 	switch (Variante)
 	{

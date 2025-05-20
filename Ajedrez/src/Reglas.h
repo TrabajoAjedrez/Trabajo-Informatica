@@ -13,6 +13,7 @@ protected:
 public:
 
 	//obtener shape segun las reglas de Demi y de Silverman
+	int preguntar_variante();
 	Vector2D devolver_forma(const int& Variante);
 
 	void actualiza_tiempo();  // Solo decrementa el tiempo
