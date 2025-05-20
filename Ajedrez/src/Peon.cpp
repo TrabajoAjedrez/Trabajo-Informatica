@@ -1,6 +1,9 @@
 #include "Peon.h"
 #include "ETSIDI.h"
 
+
+using namespace std;
+
 ClassPeon::ClassPeon(Color color, Vector2D posicion) 
 	: ClassPieza(Pieza_t::Peon, color, posicion) 
 {
@@ -51,6 +54,19 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 
 	return movimientos;
 }
+void ClassPeon::mueve(const Vector2D* n, const vector<Vector2D> s) {
+	// Comprobar si la nueva posición está en la lista de movimientos posibles  
+	for (auto movimiento : s) {
+		if (n->x == movimiento.x && n->y == movimiento.y) {
+			pos.x = n->x; // Actualizar la posición de la pieza  
+			pos.y = n->y;
+			return;
+		}
+	}
+	cout << "Movimiento no permitido." << endl;
+}
+
+
 
 void ClassPeon::dibuja(float x, float y) {
 	glPushMatrix();

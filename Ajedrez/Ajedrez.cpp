@@ -2,6 +2,8 @@
 #include "freeglut.h"
 #include "Mundo.h"
 #include "Reglas.h"
+#include "Peon.h"
+#include "Pieza.h"
 
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
@@ -55,6 +57,20 @@ int main(int argc, char* argv[])
 	glutKeyboardFunc(OnKeyboardDown);
 	
 	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
+
+	//Pruebas funcion mueve
+	/*
+	ClassPeon p23{}; // Posición inicial del peón
+
+	// Movimientos válidos para el peón desde (1,2)
+	vector<Vector2D> movimientos_validos = {{1, 5},{1, 4}};
+
+	Vector2D intento1 = { 1, 3 }; // Movimiento válido
+	Vector2D intento2 = { 2, 3 }; // Movimiento inválido
+	p23.mueve(&intento1, movimientos_validos);
+	p23.mueve(&intento2, movimientos_validos);
+
+	cout << "Posicion del peon: " << p23.getPos().x << ", " << p23.getPos().y << endl;*/
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();

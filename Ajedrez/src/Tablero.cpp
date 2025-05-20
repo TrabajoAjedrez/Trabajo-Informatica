@@ -1,6 +1,7 @@
 #include "Tablero.h"
 #include "freeglut.h"
 #include "Peon.h"
+#include "pieza.h"
 
 void ClassTablero::dibuja() {
    
@@ -23,6 +24,7 @@ void ClassTablero::dibuja() {
     }
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
+
     // Dibujar borde del tablero
     glColor3f(0.1f, 0.1f, 0.1f);
     glLineWidth(2.0f);

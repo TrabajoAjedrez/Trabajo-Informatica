@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
 #include"ETSIDI.h"
-#include <vector2d.h>
+#include "vector2d.h"
+#include <vector>
 
 using namespace std;
 
@@ -25,9 +26,13 @@ public:
 	Pieza_t getTipo()const;
 	Color getColor()const;
 	Vector2D getPos()const;   //No se sabe si se va a utilizar
+
 	// Métodos para modificar las propiedades privadas
 	void setTipo(Pieza_t t);
 	void setColor(Color c);
 	void setPos(Vector2D p);
+
 	virtual void dibuja(float x, float y) = 0 ;  // en la clase base
+	virtual void anima() = 0;
+	virtual void mueve(const Vector2D* n, const vector<Vector2D> s) = 0;
 };
