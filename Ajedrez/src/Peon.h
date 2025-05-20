@@ -18,6 +18,6 @@ public:
 	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const;
 	void dibuja(float x, float y);
 	void anima();
-    void mueve(const Vector2D* n, const vector<Vector2D> s)override;
+        void mueve(const Vector2D* n, const vector<Vector2D> s)override;
         
 };
