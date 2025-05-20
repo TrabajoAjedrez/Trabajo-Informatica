@@ -83,11 +83,20 @@ void ClassMundo::mueve() {
 
 void ClassMundo::dibuja() {
 	gluLookAt(x_ojo, y_ojo, z_ojo,
-		ObjTablero->getFilas()/2, ObjTablero->getColumnas()/2, 0, //NOTESE QUE HEMOS CAMBIADO ESTO
+		ObjTablero->getFilas() / 2, ObjTablero->getColumnas() / 2, 0, //NOTESE QUE HEMOS CAMBIADO ESTO
 		0.0, 1.0, 0.0); //PARA MIRAR AL CENTRO DE LA ESCENA
 
 	glPushMatrix();
 	// Se dibuja el tablero
 	ObjTablero->dibuja();
 	glPopMatrix();
+}
+
+int ClassMundo::getFilas() const {
+	return ObjTablero ? ObjTablero->getFilas() : 0;
+}
+
+int ClassMundo::getColumnas() const {
+	return ObjTablero ? ObjTablero->getColumnas() : 0;
+
 }

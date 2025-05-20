@@ -34,4 +34,9 @@ public:
 	void testPeonBloqueado();
 	void testPeonMovimientoBasico();
 	void runAllTests();
+
+
+	int getFilas() const;
+	int getColumnas() const;
+
 };

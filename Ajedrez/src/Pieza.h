@@ -15,11 +15,17 @@ protected:
 	Pieza_t tipo; // Tipo de pieza
 	Color color; // Bando de la pieza
 	Vector2D pos;  //No se sabe si se va a utilizar
-
+	ETSIDI::SpriteSequence sprite{ "Imagenes/soldier1.png",4 };
+	ETSIDI::SpriteSequence sprite2{ "Imagenes/peonRojo.png",4 };
 public:
+	ClassPieza() {
+		sprite.setCenter(1, 1);
+		sprite.setSize(1.5, 1.5);
+		sprite2.setCenter(1, 1);
+		sprite2.setSize(1.5, 1.5);
+	}
 	// Constructor - define el tipo, el color y la posicion de una pieza
 	ClassPieza(Pieza_t t, Color c, Vector2D p);
-	ClassPieza() = default;
 
 	// Métodos para consultar las propiedades privadas
 	Pieza_t getTipo()const;
@@ -30,4 +36,5 @@ public:
 	void setColor(Color c);
 	void setPos(Vector2D p);
 	virtual void dibuja(float x, float y) = 0 ;  // en la clase base
+	virtual void anima() = 0;
 };

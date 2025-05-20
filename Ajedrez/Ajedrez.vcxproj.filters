@@ -42,6 +42,9 @@
     <ClCompile Include="src\Reglas.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="src\raton.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
     <ClCompile Include="src\torre.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -84,6 +87,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="src\caballo.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\raton.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
