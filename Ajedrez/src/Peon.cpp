@@ -5,9 +5,9 @@ ClassPeon::ClassPeon(Color color, Vector2D posicion)
 	: ClassPieza(Pieza_t::Peon, color, posicion) 
 {
 	sprite.setCenter(1, 1);
-	sprite.setSize(1.5, 1.5);
+	sprite.setSize(1, 1);
 	sprite2.setCenter(1, 1);
-	sprite2.setSize(1.5, 1.5);
+	sprite2.setSize(1, 1);
 }
 
 vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& tablero) const {

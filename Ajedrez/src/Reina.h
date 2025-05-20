@@ -1,9 +1,20 @@
 #pragma once
 
-class ClassReina
-{
-	int x, y;
+#include <vector>
+#include "Pieza.h"
+#include "Tablero.h"
+#include "ETSIDI.h"
+
+
+class ClassReina : public ClassPieza {
+
+	ETSIDI::SpriteSequence sprite{ "Imagenes/reinaAzul.png",4 };
+	ETSIDI::SpriteSequence sprite2{ "Imagenes/reinaRoja.png",4 };
 
 public:
-	void dibuja();
+	ClassReina(Color color, Vector2D posicion);
+	ClassReina() = default;
+
+	void dibuja(float x, float y);
+	void anima();
 };

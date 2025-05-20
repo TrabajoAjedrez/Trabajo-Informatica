@@ -1,7 +1,5 @@
 #include"Pieza.h"
 #include"vector2d.h"
-#include"ETSIDI.h"
-#include"freeglut.h"
 
 using namespace std;
 // Constructor
