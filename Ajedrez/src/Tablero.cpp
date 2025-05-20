@@ -5,6 +5,7 @@
 #include "Rey.h"
 #include "torre.h"
 #include "caballo.h"
+#include "alfil.h"
 void ClassTablero::dibuja() {
    
 	// Colores para las casillas (pueden personalizarse)
@@ -105,9 +106,11 @@ void ClassTablero::ColocarPiezas() {
     }
     //colocar caballo
     if (filas_ == 8) {
-        tablero[0][2] = new ClassCaballo(ClassPieza::Color::BLANCO, Vector2D(0, 2));
-        tablero[7][2] = new ClassCaballo(ClassPieza::Color::NEGRO, Vector2D(7, 2));
+        tablero[0][1] = new ClassAlfil(ClassPieza::Color::BLANCO, Vector2D(0, 1));
+        tablero[7][1] = new ClassAlfil(ClassPieza::Color::NEGRO, Vector2D(7, 1));
     }
+    //colocar alfiles
+
 }
 // Anima las piezas en el tablero
 void ClassTablero::AnimaPiezas() {
