@@ -15,6 +15,7 @@ public:
 		delete ObjTablero;
 	}
 
+	void onTimer(int value);
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
 	void inicializa(int Variante);
