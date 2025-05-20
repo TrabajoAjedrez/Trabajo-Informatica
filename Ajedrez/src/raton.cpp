@@ -42,7 +42,7 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
             tableroYMax = 0.67f;
         }
         else {
-            std::cout << "Caso de tablero no reconocido  (click izquierdo) " << std::endl;
+           // std::cout << "Caso de tablero no reconocido  (click izquierdo) " << std::endl;
             return;
         }
 
@@ -59,11 +59,20 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
 
             //Ajustes finales por seguridad
             if (row >= 0 && row < filas && col >= 0 && col < columnas) {
-                std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ")  (click izquierdo) " << std::endl;
+                //std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ")  (click izquierdo) " << std::endl;
+                casilla.x = row + 1;
+                casilla.y = col + 1;
+                tablero = 1;
+                clickDI = 0;
             }
         }
         else {
-            std::cout << "Click fuera del tablero  (click izquierdo) " << std::endl;
+            //std::cout << "Click fuera del tablero  (click izquierdo) " << std::endl;
+            casilla.x = 0;
+            casilla.y = 0;
+            tablero = 0;
+            clickDI = 0;
+
         }
     }
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
@@ -91,7 +100,7 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
             tableroYMax = 0.67f;
         }
         else {
-            std::cout << "Caso de tablero no reconocido (click derecho) " << std::endl;
+            //std::cout << "Caso de tablero no reconocido (click derecho) " << std::endl;
             return;
         }
 
@@ -108,11 +117,19 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
 
             //Ajustes finales por seguridad
             if (row >= 0 && row < filas && col >= 0 && col < columnas) {
-                std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ") (click derecho) " << std::endl;
+                //std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ") (click derecho) " << std::endl;
+                casilla.x = row + 1;
+                casilla.y = col + 1;
+                tablero = 1;
+                clickDI = 1;
             }
         }
         else {
-            std::cout << "Click fuera del tablero  (click derecho) " << std::endl;
+            //std::cout << "Click fuera del tablero  (click derecho) " << std::endl;
+            casilla.x = 0;
+            casilla.y = 0;
+            tablero = 0;
+            clickDI = 1;
         }
     }
 }//raton.cpp
