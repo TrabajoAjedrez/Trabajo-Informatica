@@ -7,9 +7,7 @@
 using namespace std;
 
 ClassReglas reglas; 
-// Variables para controlar los temporizadores
-int tiempo_inicial = 0;
-const int INTERVALO_TEMPORIZADOR = 1000; // 1000ms
+static ClassMundo* mundoPtr = nullptr;
 
 void ClassMundo::tecla(unsigned char key) {
 
@@ -18,14 +16,12 @@ void ClassMundo::tecla_especial(unsigned char key) {
 
 }
 
-void onTimer(int value) {
-	reglas.actualiza_tiempo(); // Actualiza el tiempo restante
-	glutTimerFunc(INTERVALO_TEMPORIZADOR, onTimer, 0); // Reprograma el temporizador
-	glutPostRedisplay(); // Redibuja la ventana
-}
+
 
 
 void ClassMundo::inicializa(int Variante) {
+
+	mundoPtr = this; 
 
 	// Inicializa el tablero según la variante seleccionada
 
@@ -46,19 +42,25 @@ void ClassMundo::inicializa(int Variante) {
 	//runAllTests();
 
 	//temporizador
-	tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
-	reglas.inicia_temporizador(8); // 8s de prueba
-
-	reglas.inicia_temporizador(8); // 8s de prueba
-	int tiempo_actual = glutGet(GLUT_ELAPSED_TIME); // Obtener tiempo transcurrido
-
-	// Actualizar temporizador cada segundo
-	if (tiempo_actual - tiempo_inicial >= INTERVALO_TEMPORIZADOR) {
-		reglas.actualiza_tiempo();
-		tiempo_inicial = tiempo_actual;
-	}
+	reglas.inicia_temporizador(8); // Por ejemplo, 8 segundos
+	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 
 }
+
+void ClassMundo::onTimer(int value) {
+	if (mundoPtr) {
+		mundoPtr->temporizador();
+		if (reglas.get_tiempo_restante() > 0) {
+			glutTimerFunc(1000, ClassMundo::onTimer, 0);
+		}
+	}
+	glutPostRedisplay();
+}
+
+void ClassMundo::temporizador() {
+	reglas.actualiza_tiempo();
+}
+
 void ClassMundo::rotarOjo() {
 	double dist = sqrt(x_ojo * x_ojo + z_ojo * z_ojo);
 	double ang = atan2(z_ojo, x_ojo);

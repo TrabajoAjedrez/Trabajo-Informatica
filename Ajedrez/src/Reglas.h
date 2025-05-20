@@ -17,5 +17,5 @@ public:
 
 	void actualiza_tiempo();  // Solo decrementa el tiempo
 	void inicia_temporizador(int segundos);//inicia en cada turno
-//	int get_tiempo_restante() const;
+	int get_tiempo_restante() const;
 };

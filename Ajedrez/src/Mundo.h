@@ -4,6 +4,7 @@
 class ClassMundo {
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
+	
 
 public:
 	// Cosntructor, inicializa el puntero a null
@@ -15,7 +16,8 @@ public:
 		delete ObjTablero;
 	}
 
-	void onTimer(int value);
+	static void onTimer(int value); //para convertir el puntero en metodo
+	void temporizador();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
 	void inicializa(int Variante);

@@ -19,6 +19,10 @@ Vector2D ClassReglas::devolver_forma(const int& Variante) {
 	}
 }
 
+void ClassReglas::inicia_temporizador(int segundos) {
+	tiempo_restante = segundos;
+}
+
 void ClassReglas::actualiza_tiempo() {
 
 	if (tiempo_restante > 0) {
@@ -29,6 +33,6 @@ void ClassReglas::actualiza_tiempo() {
 //	tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
 }
 
-void ClassReglas::inicia_temporizador(int segundos) {
-	tiempo_restante = segundos;
+int ClassReglas::get_tiempo_restante() const {
+	return tiempo_restante;
 }
