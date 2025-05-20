@@ -19,20 +19,43 @@ Vector2D ClassReglas::devolver_forma(const int& Variante) {
 	}
 }
 
-void ClassReglas::inicia_temporizador(int segundos) {
-	tiempo_restante = segundos;
+void ClassReglas::set_turno() {
+
+	turno_ = !turno_; //guardo el nuevo valor de la variable turno
 }
+
+void ClassReglas::inicia_temporizador(int segundos) {
+
+	cout << "inicia temporizador" << endl;
+	auto turno = ClassReglas::get_turno();
+	
+	if(turno==1)
+		tiempo_restante_blancas = segundos;
+	else if (turno == 0)
+		tiempo_restante_blancas = segundos;
+
+	}
 
 void ClassReglas::actualiza_tiempo() {
 
-	if (tiempo_restante > 0) {
-		tiempo_restante--;
-		std::cout << "Quedan " << tiempo_restante << " segundos" << std::endl;
+	if (turno_ == 1) {
+		if (tiempo_restante_blancas > 0) {
+			tiempo_restante_blancas--;
+			std::cout << "Quedan " << tiempo_restante_blancas << " segundos para las blancas" << std::endl;
+		}
 	}
-
-//	tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
+	if (turno_ == 0) {
+		if (tiempo_restante_negras > 0) {
+			tiempo_restante_negras--;
+			std::cout << "Quedan " << tiempo_restante_blancas << " segundos para las negras" << std::endl;
+		}
+	}
+	
 }
 
 int ClassReglas::get_tiempo_restante() const {
-	return tiempo_restante;
+	if (turno_ == 1)
+		return tiempo_restante_blancas;
+	else if (turno_ == 0)
+		return tiempo_restante_negras;
 }

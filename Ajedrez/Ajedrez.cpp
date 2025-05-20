@@ -14,12 +14,6 @@ int varianteSeleccionada = 1;
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 //enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
-//ClassReglas* preglas=nullptr; 
-
-//// Variables para controlar los temporizadores
-//int tiempo_inicial = 0;
-//const int INTERVALO_TEMPORIZADOR = 1000; // 1000ms
-
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
 //NO HACE FALTA LLAMARLAS EXPLICITAMENTE
@@ -69,9 +63,6 @@ int main(int argc, char* argv[])
 	glMatrixMode(GL_PROJECTION);
 	gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
-	//tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
-	//preglas = new ClassReglas(); // Crea el objeto reglas
-	//preglas->inicia_temporizador(8); // 8s de prueba
 
 	//Registrar los callbacks
 	glutDisplayFunc(OnDraw);
@@ -111,16 +102,7 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 
 void OnTimer(int value)
 {
-	//int tiempo_actual = glutGet(GLUT_ELAPSED_TIME); // Obtener tiempo transcurrido
-
-	//// Actualizar temporizador cada segundo
-	//if (tiempo_actual - tiempo_inicial >= INTERVALO_TEMPORIZADOR) {
-	//	if (preglas) {
-	//		preglas->actualiza_tiempo();
-	//	}
-	//	tiempo_inicial = tiempo_actual;
-	//}
-
+	
 	if (ObjMundo) {
 		ObjMundo->mueve();
 	}
