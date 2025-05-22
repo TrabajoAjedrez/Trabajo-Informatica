@@ -2,6 +2,9 @@
 #include <iostream>
 #include"ETSIDI.h"
 #include <vector2d.h>
+#include <vector>
+
+class ClassTablero;
 
 using namespace std;
 

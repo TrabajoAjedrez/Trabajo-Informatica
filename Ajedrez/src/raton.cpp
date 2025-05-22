@@ -2,8 +2,9 @@
 #include <iostream>
 #include "freeglut.h" // Para GLUT
 // Si quieres incluir <iostream> para std::cout
+#include "Mundo.h" // Asegúrate de que la clase ClassMundo esté definida aquí
 
-void raton::click(int button, int state, int x, int y) {
+void raton::click(int button, int state, int x, int y, ClassMundo* mundo) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
         int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -11,12 +12,12 @@ void raton::click(int button, int state, int x, int y) {
         float normalizedX = (float)x / windowWidth;
         float normalizedY = (float)y / windowHeight;
 
-        std::cout << "Coordenadas rat?n normalizadas: (" << normalizedX << ", " << normalizedY << ")" << std::endl;
+        std::cout << "Coordenadas raton normalizadas: (" << normalizedX << ", " << normalizedY << ")" << std::endl;
     }
 }
 
 
-void raton::mouse(int button, int state, int x, int y, int filas, int columnas, int caso) {
+void raton::mouse(int button, int state, int x, int y, int filas, int columnas, int caso, ClassMundo* mundo) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
         int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
@@ -60,7 +61,10 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
             //Ajustes finales por seguridad
             if (row >= 0 && row < filas && col >= 0 && col < columnas) {
                 std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ")  (click izquierdo) " << std::endl;
+
+                mundo->seleccionarCasilla(Vector2D(col, row));
             }
+
         }
         else {
             std::cout << "Click fuera del tablero  (click izquierdo) " << std::endl;
