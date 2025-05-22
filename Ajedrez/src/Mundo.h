@@ -1,10 +1,14 @@
 #pragma once
 #include"Tablero.h"
+#include "vector2d.h"
+#include "raton.h"
 
 class ClassMundo {
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
-	
+	raton ratonObj; // crea instancia global del ratón
+	Vector2D  casillaSeleccionada;
+	bool haySeleccionActiva = false;
 
 public:
 	// Cosntructor, inicializa el puntero a null
@@ -26,15 +30,13 @@ public:
 	void mueve();
 	void dibuja();
 
+	// Método para seleccionar una casilla // Se podria mejorar
+	void seleccionarCasilla(const Vector2D& clicada);
+	raton& getRaton() { return ratonObj; }
+
 	double x_ojo;
 	double y_ojo;
 	double z_ojo;
-
-	///// Tets ///// (No hacer mucho caso jeje)
-	void testPeonBloqueado();
-	void testPeonMovimientoBasico();
-	void runAllTests();
-
 
 	int getFilas() const;
 	int getColumnas() const;

@@ -33,11 +33,11 @@ void OnMouseClick(int button, int state, int x, int y) {
 	if (ObjMundo) {
 		int filas = ObjMundo->getFilas();
 		int columnas = ObjMundo->getColumnas();
-		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
+		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada, ObjMundo);
 	}
 }
 void OnMouseClickR(int button, int state, int x, int y) {
-	ratonObj.click(button, state, x, y);  // imprime coordenadas normalizadas
+	ratonObj.click(button, state, x, y, ObjMundo);  // imprime coordenadas normalizadas
 }
 
 
@@ -78,7 +78,19 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 
-	glutMouseFunc(OnMouseClick);
+	glutMouseFunc([](int button, int state, int x, int y) {
+		if (ObjMundo) {
+			int filas = ObjMundo->getFilas();
+			int columnas = ObjMundo->getColumnas();
+
+			// Lógica original de OnMouseClick
+			ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada, ObjMundo);
+
+			// Lógica original de OnMouseClickR
+			ObjMundo->getRaton().click(button, state, x, y, ObjMundo);
+		}
+	});
+
 	
 	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
 

@@ -10,7 +10,7 @@ ClassPeon::ClassPeon(Color color, Vector2D posicion)
 	sprite2.setSize(1, 1);
 }
 
-vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& tablero) const{
 	
 	vector<Vector2D> movimientos;
 	int direccion;

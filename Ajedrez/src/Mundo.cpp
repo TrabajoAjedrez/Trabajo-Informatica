@@ -100,3 +100,54 @@ int ClassMundo::getColumnas() const {
 	return ObjTablero ? ObjTablero->getColumnas() : 0;
 
 }
+
+///
+void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
+
+	//TESTTTSS
+	ClassPieza* tpieza = ObjTablero->getPieza(clicada);
+	if (tpieza) {
+		std::string tipoTexto;
+		switch (tpieza->getTipo()) {
+		case ClassPieza::Pieza_t::Peon:    tipoTexto = "peon"; break;
+		case ClassPieza::Pieza_t::Torre:   tipoTexto = "torre"; break;
+		case ClassPieza::Pieza_t::Alfil:   tipoTexto = "alfil"; break;
+		case ClassPieza::Pieza_t::Reina:   tipoTexto = "reina"; break;
+		case ClassPieza::Pieza_t::Rey:     tipoTexto = "rey"; break;
+		case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
+		default: tipoTexto = "pieza desconocida"; break;
+		}
+
+		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::BLANCO) ? "blanco" : "negro";
+
+		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
+	}
+	else {
+		std::cout << " Casilla vacía (" << clicada.x << ", " << clicada.y << ")\n";
+	}
+	///////
+
+	if (!haySeleccionActiva) {
+		// Primer clic: seleccionar origen
+		if (ObjTablero->estaOcupada(clicada)) {
+			casillaSeleccionada = clicada;
+			haySeleccionActiva = true;
+		}
+	}
+	else {
+		// Segundo clic: intentar mover
+		ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
+		if (pieza) {
+			auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
+			bool valido = false;
+			for (const auto& m : movimientos)
+				if (m == clicada)
+					valido = true;
+
+			if (valido) {
+				ObjTablero->moverPieza();
+			}
+		}
+		haySeleccionActiva = false;
+	}
+}

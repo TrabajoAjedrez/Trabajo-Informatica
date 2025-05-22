@@ -17,4 +17,9 @@ public:
 
 	void dibuja(float x, float y);
 	void anima();
+	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const override {
+		vector<Vector2D> movimientosPosibles;
+
+		return movimientosPosibles;
+	}
 };
