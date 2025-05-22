@@ -1,10 +1,11 @@
 #pragma once
 #include"Tablero.h"
+#include "vector2d.h"
 
 class ClassMundo {
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
-	
+	Vector2D  casillaSeleccionada;
 
 public:
 	// Cosntructor, inicializa el puntero a null

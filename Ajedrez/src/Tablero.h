@@ -55,5 +55,10 @@ public:
 	// Metodos para comprobar posiciones
     bool esPosicionValida(const Vector2D& pos) const;
     bool estaOcupada(const Vector2D& pos) const;
+
+    ////
+    void moverPieza();
+    ClassPieza* getPieza(const Vector2D& pos) const;
+
 };
 

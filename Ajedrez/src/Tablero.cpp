@@ -140,3 +140,10 @@ bool ClassTablero::estaOcupada(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return false;
     return tablero[pos.y][pos.x] != nullptr;
 }
+void ClassTablero::moverPieza(){
+
+}
+ClassPieza* ClassTablero::getPieza(const Vector2D& pos) const {
+    if (!esPosicionValida(pos)) return nullptr;
+    return tablero[pos.y][pos.x];
+}

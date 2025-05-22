@@ -100,3 +100,30 @@ int ClassMundo::getColumnas() const {
 	return ObjTablero ? ObjTablero->getColumnas() : 0;
 
 }
+
+///
+void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
+	if (!haySeleccionActiva) {
+		// Primer clic: seleccionar origen
+		if (ObjTablero->estaOcupada(clicada)) {
+			casillaSeleccionada = clicada;
+			haySeleccionActiva = true;
+		}
+	}
+	else {
+		// Segundo clic: intentar mover
+		ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
+		if (pieza) {
+			auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
+			bool valido = false;
+			for (const auto& m : movimientos)
+				if (m == clicada)
+					valido = true;
+
+			if (valido) {
+				ObjTablero->moverPieza();
+			}
+		}
+		haySeleccionActiva = false;
+	}
+}

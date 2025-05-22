@@ -15,7 +15,7 @@ public:
 	ClassPeon(Color color, Vector2D posicion);
 	ClassPeon() = default;
 
-	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const;
+	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const override;
 	void dibuja(float x, float y);
 	void anima();
 };
