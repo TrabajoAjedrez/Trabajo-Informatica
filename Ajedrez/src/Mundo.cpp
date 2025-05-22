@@ -29,6 +29,14 @@ void ClassMundo::inicializa(int Variante) {
 
 	ObjTablero = new ClassTablero(dimensiones);
 
+	//de quien es el turno?
+	if (reglas.get_turno()) {
+		std::cout << "Turno de las azules" << std::endl;
+	}
+	else {
+		std::cout << "Turno de las rojas" << std::endl;
+	}
+
 
 	// Inicializa la posicion de la camara, segun el tablero
 	x_ojo = ObjTablero->getFilas() / 2;
@@ -45,6 +53,9 @@ void ClassMundo::inicializa(int Variante) {
 	reglas.inicia_temporizador(8); // Por ejemplo, 8 segundos
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 
+
+	//cambio de turno
+	reglas.set_turno();
 }
 
 void ClassMundo::onTimer(int value) {
@@ -69,13 +80,7 @@ void ClassMundo::rotarOjo() {
 	z_ojo = dist * sin(ang);
 }
 
-bool ClassMundo::turno(bool turn) {
-	
-	
 
-	turn = !turn; //guardo el nuevo valor de la variable turno
-	return turn; //para cambiar de turno
-}
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
 	ObjTablero->AnimaPiezas();
