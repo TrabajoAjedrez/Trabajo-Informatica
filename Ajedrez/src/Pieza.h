@@ -2,6 +2,9 @@
 #include <iostream>
 #include"ETSIDI.h"
 #include <vector2d.h>
+#include <vector>
+
+class ClassTablero; // Forward declaration of ClassTablero
 
 using namespace std;
 
@@ -37,4 +40,5 @@ public:
 	void setPos(Vector2D p);
 	virtual void dibuja(float x, float y) = 0 ;  // en la clase base
 	virtual void anima() = 0;
+	virtual vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const = 0; // Método virtual puro
 };
