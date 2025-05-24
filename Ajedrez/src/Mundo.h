@@ -26,7 +26,6 @@ public:
 	void tecla_especial(unsigned char key);
 	void inicializa(int Variante);
 	void rotarOjo();
-	bool turno(bool turn=1);//lo pongo a 1 porque empiezan blancas
 	void mueve();
 	void dibuja();
 
