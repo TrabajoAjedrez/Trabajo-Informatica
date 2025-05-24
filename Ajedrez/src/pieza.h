@@ -12,7 +12,7 @@ class ClassPieza {
 
 public: 
 	enum  Pieza_t { Peon=1,Caballo, Torre,Alfil, Reina,Rey };
-	enum class Color { BLANCO, NEGRO };
+	enum class Color { ROJO, AZUL };
 
 protected:
 	Pieza_t tipo; // Tipo de pieza
