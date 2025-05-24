@@ -12,7 +12,7 @@ ClassTorre::ClassTorre(Color color, Vector2D posicion)
 void ClassTorre::dibuja(float x, float y) {
 	glPushMatrix();
 	glTranslated(x, y, 0.1);
-	if (color == Color::BLANCO)
+	if (color == Color::AZUL)
 		sprite.draw();
 	else
 		sprite2.draw();
@@ -20,15 +20,15 @@ void ClassTorre::dibuja(float x, float y) {
 }
 
 void ClassTorre::anima() {
-	if (color == Color::BLANCO) {
+	if (color == Color::AZUL) {
 		if (sprite.getState() == 0)
 			sprite.setState(0, false);
 		sprite.draw();
 	}
 	else {
-		if (sprite.getState() == 0)
+		if (sprite2.getState() == 0)
 			sprite2.setState(0, false);
-		sprite.draw();
+		sprite2.draw();
 	}
 	sprite.loop();
 	sprite2.loop();

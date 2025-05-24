@@ -65,8 +65,8 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-            float x = j + 1.0f;
-            float z = i + 0.9f;
+            float x = (columnas_-j);
+            float z = (filas_-i);
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
         }
@@ -76,42 +76,42 @@ void ClassTablero::UbicaPieza() {
 void ClassTablero::ColocarPiezas() {
     //colocar peones
     for (int j = 0; j < columnas_; ++j) {
-        tablero[1][j] = new ClassPeon(ClassPieza::Color::BLANCO, Vector2D(j, 1));
-        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::NEGRO, Vector2D(j, filas_ - 2));
+        tablero[1][j] = new ClassPeon(ClassPieza::Color::ROJO, Vector2D(j, 1));
+        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::AZUL, Vector2D(j, filas_ - 2));
     }
     //colocar reinas
     if (filas_ == 5) {
-        tablero[0][1] = new ClassReina(ClassPieza::Color::BLANCO, Vector2D(0, 1));
-        tablero[4][1] = new ClassReina(ClassPieza::Color::NEGRO, Vector2D(4,1));
+        tablero[0][1] = new ClassReina(ClassPieza::Color::ROJO, Vector2D(0, 1));
+        tablero[4][1] = new ClassReina(ClassPieza::Color::AZUL, Vector2D(4,1));
     }
     //colocar reyes
     if (filas_ == 5) {
-        tablero[0][2] = new ClassRey(ClassPieza::Color::BLANCO, Vector2D(0, 2));
-        tablero[4][2] = new ClassRey(ClassPieza::Color::NEGRO, Vector2D(4, 2));
+        tablero[0][2] = new ClassRey(ClassPieza::Color::ROJO, Vector2D(0, 2));
+        tablero[4][2] = new ClassRey(ClassPieza::Color::AZUL, Vector2D(4, 2));
     }
     else {
-        tablero[0][0] = new ClassRey(ClassPieza::Color::BLANCO, Vector2D(0, 0));
-        tablero[7][0] = new ClassRey(ClassPieza::Color::NEGRO, Vector2D(7, 0));
+        tablero[0][0] = new ClassRey(ClassPieza::Color::ROJO, Vector2D(0, 0));
+        tablero[7][0] = new ClassRey(ClassPieza::Color::AZUL, Vector2D(7, 0));
     }
     //colocar torres   
     if (filas_ == 5) {
-        tablero[0][0] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 0));
-        tablero[0][3] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 3));
-        tablero[4][0] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(4, 0));
-        tablero[4][3] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(4, 3));
+        tablero[0][0] = new ClassTorre(ClassPieza::Color::ROJO, Vector2D(0, 0));
+        tablero[0][3] = new ClassTorre(ClassPieza::Color::ROJO, Vector2D(0, 3));
+        tablero[4][0] = new ClassTorre(ClassPieza::Color::AZUL, Vector2D(4, 0));
+        tablero[4][3] = new ClassTorre(ClassPieza::Color::AZUL, Vector2D(4, 3));
     }
     else {  
-        tablero[0][3] = new ClassTorre(ClassPieza::Color::BLANCO, Vector2D(0, 3));
-        tablero[7][3] = new ClassTorre(ClassPieza::Color::NEGRO, Vector2D(7, 3));
+        tablero[0][3] = new ClassTorre(ClassPieza::Color::ROJO, Vector2D(0, 3));
+        tablero[7][3] = new ClassTorre(ClassPieza::Color::AZUL, Vector2D(7, 3));
     }
     //colocar caballo
     if (filas_ == 8) {
-        tablero[0][2] = new ClassCaballo(ClassPieza::Color::BLANCO, Vector2D(0, 2));
-        tablero[7][2] = new ClassCaballo(ClassPieza::Color::NEGRO, Vector2D(7, 2));
+        tablero[0][2] = new ClassCaballo(ClassPieza::Color::ROJO, Vector2D(0, 2));
+        tablero[7][2] = new ClassCaballo(ClassPieza::Color::AZUL, Vector2D(7, 2));
         //colocar alfil
         if (filas_ == 8) {
-            tablero[0][1] = new ClassAlfil(ClassPieza::Color::BLANCO, Vector2D(0, 2));
-            tablero[7][1] = new ClassAlfil(ClassPieza::Color::NEGRO, Vector2D(7, 2));
+            tablero[0][1] = new ClassAlfil(ClassPieza::Color::ROJO, Vector2D(0, 2));
+            tablero[7][1] = new ClassAlfil(ClassPieza::Color::AZUL, Vector2D(7, 2));
         }
     }
 }

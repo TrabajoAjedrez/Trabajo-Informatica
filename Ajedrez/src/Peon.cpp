@@ -1,6 +1,7 @@
 #include "Peon.h"
 #include "ETSIDI.h"
 
+using namespace std;
 ClassPeon::ClassPeon(Color color, Vector2D posicion) 
 	: ClassPieza(Pieza_t::Peon, color, posicion) 
 {
@@ -14,7 +15,7 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 	
 	vector<Vector2D> movimientos;
 	int direccion;
-	if (color == Color::BLANCO) {
+	if (color == Color::AZUL) {
 		direccion = -1;
 	}
 	else {
@@ -55,23 +56,24 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 void ClassPeon::dibuja(float x, float y) {
 	glPushMatrix();
 	glTranslated(x, y, 0.1);
-	if (color == Color::BLANCO)
+	if (color == Color::AZUL)
 		sprite.draw();
+	
 	else
 		sprite2.draw();
 	glPopMatrix();
 }
 
 void ClassPeon::anima() {
-	if (color == Color::BLANCO) {
+	if (color == Color::AZUL) {
 		if (sprite.getState() == 0)
 			sprite.setState(0, false);
 		sprite.draw();
 	}
 	else {
-		if (sprite.getState() == 0)
+		if (sprite2.getState() == 0)
 			sprite2.setState(0, false);
-		sprite.draw();
+		sprite2.draw();
 	}
 	sprite.loop();
 	sprite2.loop();

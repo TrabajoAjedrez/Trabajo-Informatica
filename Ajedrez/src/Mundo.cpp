@@ -176,7 +176,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
 		default: tipoTexto = "pieza desconocida"; break;
 		}
-		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::BLANCO) ? "blanco" : "negro";
+		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
 		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
 	}
 	else {
