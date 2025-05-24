@@ -36,10 +36,6 @@ void OnMouseClick(int button, int state, int x, int y) {
 		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
 	}
 }
-void OnMouseClickR(int button, int state, int x, int y) {
-	ratonObj.click(button, state, x, y);  // imprime coordenadas normalizadas
-}
-
 
 // Sirve Verificar las coordenadas del ratón
 //void OnMouseClickR(int button, int state, int x, int y) {
@@ -84,9 +80,16 @@ int main(int argc, char* argv[])
 	glutTimerFunc(25, OnTimer, 0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
 
-	glutKeyboardFunc(OnKeyboardDown);
+	glutMouseFunc([](int button, int state, int x, int y) {
+		if (ObjMundo) {
+			int filas = ObjMundo->getFilas();
+			int columnas = ObjMundo->getColumnas();
 
-
+			//Obtenemos la casilla pulsada por el raton
+			Vector2D casillaSeleccionada = ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
+			ObjMundo->seleccionarCasilla(casillaSeleccionada); // Llama al método de selección de casilla en el mundo
+		}
+	});
 
 	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
 
