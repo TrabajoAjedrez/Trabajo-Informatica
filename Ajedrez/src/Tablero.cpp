@@ -65,7 +65,7 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-            float x = (columnas_-j);
+            float x = j+1;
             float z = (filas_-i);
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
