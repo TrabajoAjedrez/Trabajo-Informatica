@@ -59,6 +59,8 @@ public:
     ////
     void moverPieza();
     ClassPieza* getPieza(const Vector2D& pos) const;
+    // Verifica si una casilla está dentro de los límites del tablero
+    bool estaDentro(const Vector2D& casilla) const;
 
 };
 

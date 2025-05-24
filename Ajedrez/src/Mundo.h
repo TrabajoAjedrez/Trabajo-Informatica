@@ -6,7 +6,7 @@
 class ClassMundo {
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
-	raton ratonObj; // crea instancia global del ratón
+	//raton ratonObj; // crea instancia global del ratón
 	Vector2D  casillaSeleccionada;
 	bool haySeleccionActiva = false;
 
@@ -31,7 +31,7 @@ public:
 
 	// Método para seleccionar una casilla // Se podria mejorar
 	void seleccionarCasilla(const Vector2D& clicada);
-	raton& getRaton() { return ratonObj; }
+	//raton& getRaton() { return ratonObj; }
 
 	double x_ojo;
 	double y_ojo;

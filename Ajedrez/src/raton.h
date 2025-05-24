@@ -9,9 +9,11 @@ public:
     raton() {}
 
     // Método para procesar el ratón
-    void click(int button, int state, int x, int y, class ClassMundo* mundo);
+    //void click(int button, int state, int x, int y, class ClassMundo* mundo);
 
-    void mouse(int button, int state, int x, int y, int filas, int columnas, int caso, class ClassMundo* mundo);
+    Vector2D mouse(int button, int state, int x, int y, int filas, int columnas, int caso) const;
+
+
 
 };//raton.h
 
