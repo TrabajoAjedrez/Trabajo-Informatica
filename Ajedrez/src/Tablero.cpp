@@ -134,16 +134,23 @@ void ClassTablero::ImprimirEnPantalla() {
 }
 // Metodos para comprobar posiciones
 bool ClassTablero::esPosicionValida(const Vector2D& pos) const {
-	return pos.x >= 0 && pos.x < columnas_ && pos.y >= 0 && pos.y < filas_; // Comprobar si la posición está dentro de los límites del tablero
+	return pos.x >= 0 && pos.x < filas_ && pos.y >= 0 && pos.y < columnas_; // Comprobar si la posición está dentro de los límites del tablero
 }
 bool ClassTablero::estaOcupada(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return false;
-    return tablero[pos.y][pos.x] != nullptr;
+    return tablero[pos.x][pos.y] != nullptr;
 }
 void ClassTablero::moverPieza(){
 
 }
 ClassPieza* ClassTablero::getPieza(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return nullptr;
-    return tablero[pos.y][pos.x];
+    return tablero[pos.x][pos.y];
 }
+bool ClassTablero::estaDentro(const Vector2D& casilla) const {
+    int fila = casilla.x;
+    int col = casilla.y;
+    return fila >= 0 && fila < getFilas() &&
+        col >= 0 && col < getColumnas();
+}
+

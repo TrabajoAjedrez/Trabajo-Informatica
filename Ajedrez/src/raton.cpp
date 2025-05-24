@@ -1,32 +1,31 @@
 #include "raton.h"
 #include <iostream>
 #include "freeglut.h" // Para GLUT
-// Si quieres incluir <iostream> para std::cout
-#include "Mundo.h" // Asegúrate de que la clase ClassMundo esté definida aquí
+#include "Mundo.h"
 
-void raton::click(int button, int state, int x, int y, ClassMundo* mundo) {
+//void raton::click(int button, int state, int x, int y, ClassMundo* mundo) {
+//    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+//        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
+//        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
+//
+//        float normalizedX = (float)x / windowWidth;
+//        float normalizedY = (float)y / windowHeight;
+//
+//        std::cout << "Coordenadas raton normalizadas: (" << normalizedX << ", " << normalizedY << ")" << std::endl;
+//    }
+//}
+
+Vector2D raton::mouse(int button, int state, int x, int y, int filas, int columnas, int caso) const {
+
+    // Manejo del clic izquierdo del raton
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		// Normalizar las coordenadas del ratón a un rango de 0 a 1
         int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
         int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
         float normalizedX = (float)x / windowWidth;
         float normalizedY = (float)y / windowHeight;
 
-        std::cout << "Coordenadas raton normalizadas: (" << normalizedX << ", " << normalizedY << ")" << std::endl;
-    }
-}
-
-
-void raton::mouse(int button, int state, int x, int y, int filas, int columnas, int caso, ClassMundo* mundo) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
-        float normalizedX = (float)x / windowWidth;
-        float normalizedY = (float)y / windowHeight;
-
-        // ?reas del tablero conocidas
-        // Declarar fuera de los if
+        // Margenes del tablero segun la variante
         float tableroXMin, tableroXMax, tableroYMin, tableroYMax;
 
         // Elegir el tablero según el caso
@@ -44,7 +43,7 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
         }
         else {
             std::cout << "Caso de tablero no reconocido  (click izquierdo) " << std::endl;
-            return;
+			return Vector2D(-1, -1); // Retorna un valor inválido si el caso no es reconocido
         }
 
         // Verificar si el clic está dentro del área del tablero
@@ -54,31 +53,30 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
             // Calcular tamaño de cada casilla
             float anchoCasilla = (tableroXMax - tableroXMin) / columnas;
             float altoCasilla = (tableroYMax - tableroYMin) / filas;
-
             int col = (normalizedX - tableroXMin) / anchoCasilla;
             int row = (normalizedY - tableroYMin) / altoCasilla;
 
             //Ajustes finales por seguridad
             if (row >= 0 && row < filas && col >= 0 && col < columnas) {
-                std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ")  (click izquierdo) " << std::endl;
-
-                mundo->seleccionarCasilla(Vector2D(col, row));
+                std::cout << "Casilla seleccionada: (" << row << ", " << col << ")  (click izquierdo) " << std::endl;
+				return Vector2D(row, col); // Retorna las coordenadas de la casilla seleccionada
             }
 
         }
         else {
             std::cout << "Click fuera del tablero  (click izquierdo) " << std::endl;
+			return Vector2D(-1, -1); // Retorna un valor inválido si el clic está fuera del tablero
         }
     }
+
     if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+        // Normalizar las coordenadas del ratón a un rango de 0 a 1
         int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
         int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-
         float normalizedX = (float)x / windowWidth;
         float normalizedY = (float)y / windowHeight;
 
-        // ?reas del tablero conocidas
-        // Declarar fuera de los if
+        // Margenes del tablero segun la variante
         float tableroXMin, tableroXMax, tableroYMin, tableroYMax;
 
         // Elegir el tablero según el caso
@@ -96,7 +94,7 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
         }
         else {
             std::cout << "Caso de tablero no reconocido (click derecho) " << std::endl;
-            return;
+			return Vector2D(-1, -1); // Retorna un valor inválido si el caso no es reconocido
         }
 
         // Verificar si el clic está dentro del área del tablero
@@ -106,18 +104,19 @@ void raton::mouse(int button, int state, int x, int y, int filas, int columnas, 
             // Calcular tamaño de cada casilla
             float anchoCasilla = (tableroXMax - tableroXMin) / columnas;
             float altoCasilla = (tableroYMax - tableroYMin) / filas;
-
             int col = (normalizedX - tableroXMin) / anchoCasilla;
             int row = (normalizedY - tableroYMin) / altoCasilla;
 
             //Ajustes finales por seguridad
             if (row >= 0 && row < filas && col >= 0 && col < columnas) {
-                std::cout << "Casilla seleccionada: (" << row + 1 << ", " << col + 1 << ") (click derecho) " << std::endl;
+                std::cout << "Casilla seleccionada: (" << row << ", " << col << ") (click derecho) " << std::endl;
+                return Vector2D(row, col); // Retorna las coordenadas de la casilla seleccionada
             }
         }
         else {
             std::cout << "Click fuera del tablero  (click derecho) " << std::endl;
+			return Vector2D(-1, -1); // Retorna un valor inválido si el clic está fuera del tablero
         }
     }
-}//raton.cpp
+}
 
