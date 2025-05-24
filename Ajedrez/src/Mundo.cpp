@@ -205,7 +205,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 				}
 			}
 			if (valido) {
-				ObjTablero->moverPieza();
+				ObjTablero->moverPieza(casillaSeleccionada, clicada);
 			}
 		}
 		haySeleccionActiva = false;
