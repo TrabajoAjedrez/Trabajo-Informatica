@@ -63,24 +63,14 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 }
 // Dibuja las piezas en el tablero
 void ClassTablero::UbicaPieza() {
-
     for (int i = 0; i < filas_; ++i) {
-        for (int j = 0; j < columnas_; ++j) {
-            float x = j * tamCasilla;
-            float z = (filas_ - 1 - i) * tamCasilla;
-            if (tablero[i][j] != nullptr)
-                tablero[i][j]->dibuja(x, z);
-        }
-    }
-
-   /* for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
             float x = (columnas_ - j);
             float z = (filas_ - i);
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
         }
-    }*/
+    }
 }
 
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
