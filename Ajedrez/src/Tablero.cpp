@@ -116,8 +116,8 @@ void ClassTablero::ColocarPiezas() {
         tablero[7][2] = new ClassCaballo(ClassPieza::Color::AZUL, Vector2D(7, 2));
         //colocar alfil
         if (filas_ == 8) {
-            tablero[0][1] = new ClassAlfil(ClassPieza::Color::ROJO, Vector2D(0, 2));
-            tablero[7][1] = new ClassAlfil(ClassPieza::Color::AZUL, Vector2D(7, 2));
+            tablero[0][1] = new ClassAlfil(ClassPieza::Color::ROJO, Vector2D(0, 1));
+            tablero[7][1] = new ClassAlfil(ClassPieza::Color::AZUL, Vector2D(7, 1));
         }
     }
 }

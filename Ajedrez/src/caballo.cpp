@@ -32,4 +32,29 @@ void ClassCaballo::anima() {
 	}
 	sprite.loop();
 	sprite2.loop();
+
+}
+
+
+vector<Vector2D> ClassCaballo::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+
+	vector<Vector2D> movimientos;
+
+	// Todas las combinaciones posibles del movimiento en L del caballo
+	vector<Vector2D> posiblesMovimientos = {
+		{2, 1}, {1, 2}, {-1, 2}, {-2, 1},
+		{-2, -1}, {-1, -2}, {1, -2}, {2, -1}
+	};
+
+	for (const auto& movimiento : posiblesMovimientos) {
+		Vector2D destino = pos + movimiento;
+		if (tablero.esPosicionValida(destino))
+			movimientos.push_back(destino);
+	}
+
+	std::cout << "Movimientos para caballo en " << pos << ":\n";
+	for (const auto& m : movimientos)
+		std::cout << "->" << m << "\n";
+
+	return movimientos;
 }

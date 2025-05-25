@@ -8,7 +8,7 @@
 
 class ClassRey : public ClassPieza {
 
-	ETSIDI::SpriteSequence sprite{ "Imagenes/reyAzul.png",4 };
+	ETSIDI::SpriteSequence sprite{ "Imagenes/reyAzul2.png",4 };
 	ETSIDI::SpriteSequence sprite2{ "Imagenes/reyRojo.png",4 };
 
 public:

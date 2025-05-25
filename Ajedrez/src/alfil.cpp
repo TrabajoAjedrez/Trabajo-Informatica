@@ -1,5 +1,6 @@
 #include "alfil.h"
 #include "ETSIDI.h"
+#include "vector2d.h"
 
 ClassAlfil::ClassAlfil(Color color, Vector2D posicion)
 	: ClassPieza(Pieza_t::Alfil, color, posicion)
@@ -32,4 +33,32 @@ void ClassAlfil::anima() {
 	}
 	sprite.loop();
 	sprite2.loop();
+}
+
+vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tablero) const  {
+
+	vector<Vector2D> movimientos;
+
+	for (int i=1; i < tablero.getColumnas()+1; i++) {
+
+		Vector2D DiagSupDer{ i,i };
+		Vector2D DiagSupIz{ i,-i };
+		Vector2D DiagInfDer{ -i,i };
+		Vector2D DiagInfIz{ -i,-i };
+		if (tablero.esPosicionValida(pos + DiagSupDer))
+			movimientos.push_back(pos + DiagSupDer);
+		if (tablero.esPosicionValida(pos + DiagInfDer))
+			movimientos.push_back(pos + DiagInfDer);
+		if (tablero.esPosicionValida(pos + DiagSupIz))
+			movimientos.push_back(pos + DiagSupIz);
+		if (tablero.esPosicionValida(pos + DiagInfIz))
+			movimientos.push_back(pos + DiagInfIz);
+
+
+
+	}
+	std::cout << "Movimientos para alfil en " << pos << ":\n";
+	for (const auto& m : movimientos)
+		std::cout << "->" << m << "\n";
+	return movimientos;
 }
