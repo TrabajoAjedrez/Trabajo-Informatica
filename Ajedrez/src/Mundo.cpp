@@ -187,10 +187,11 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	if (!haySeleccionActiva) {
 		if (ObjTablero->estaOcupada(clicada)) {
 			ClassPieza* p = ObjTablero->getPieza(clicada);
-			if (p /* && p->getColor() == turnoActual */) {  //Añadir condición de turno aquí
+			if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
 				casillaSeleccionada = clicada;
 				haySeleccionActiva = true;
 			}
+
 		}
 	}
 	else {
@@ -206,6 +207,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			}
 			if (valido) {
 				ObjTablero->moverPieza(casillaSeleccionada, clicada);
+				reglas.set_turno(); // Cambia el turno después de mover
 			}
 		}
 		haySeleccionActiva = false;

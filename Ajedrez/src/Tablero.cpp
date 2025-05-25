@@ -63,15 +63,26 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 }
 // Dibuja las piezas en el tablero
 void ClassTablero::UbicaPieza() {
+
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-            float x = (columnas_-j);
-            float z = (filas_-i);
+            float x = j * tamCasilla;
+            float z = (filas_ - 1 - i) * tamCasilla;
+            if (tablero[i][j] != nullptr)
+                tablero[i][j]->dibuja(x, z);
+        }
+    }
+
+   /* for (int i = 0; i < filas_; ++i) {
+        for (int j = 0; j < columnas_; ++j) {
+            float x = (columnas_ - j);
+            float z = (filas_ - i);
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
         }
-    }
+    }*/
 }
+
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
     //colocar peones
@@ -160,7 +171,7 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
         return;
 
     tablero[destino.x][destino.y] = pieza;
-    pieza->setPos(Vector2D(destino.y, destino.x));
+    pieza->setPos(Vector2D(destino.x, destino.y));
     tablero[origen.x][origen.y] = nullptr;
 
     std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
