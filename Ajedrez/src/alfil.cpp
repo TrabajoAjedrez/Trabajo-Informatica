@@ -40,6 +40,7 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 	vector<Vector2D> movimientos;
 
 	for (int i=1; i < tablero.getColumnas()+1; i++) {
+		//calculo de posiciones
 
 		Vector2D DiagSupDer{ i,i };
 		Vector2D DiagSupIz{ i,-i };

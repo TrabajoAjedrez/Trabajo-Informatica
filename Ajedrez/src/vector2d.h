@@ -22,6 +22,7 @@ public:
 
 };
 
+//inline
 inline Vector2D Vector2D::operator + (const Vector2D& v) const {
-	return { x + v.x , y + v.y };
+	return { x + v.x , y + v.y }; //sumar vectores
 }
