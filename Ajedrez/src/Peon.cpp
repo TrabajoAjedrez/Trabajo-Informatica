@@ -1,4 +1,4 @@
-#include "Peon.h"
+﻿#include "Peon.h"
 #include "ETSIDI.h"
 
 using namespace std;
@@ -21,36 +21,40 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 	else {
 		direccion = 1;
 	}
-	int filaActual = pos.y;
-	int columnaActual = pos.x;
+	int filaActual = pos.x;
+	int columnaActual = pos.y;
 
 	// Movimiento hacia adelante
-	Vector2D adelante(columnaActual, filaActual + direccion);
+	Vector2D adelante(filaActual + direccion, columnaActual);
 	if (tablero.esPosicionValida(adelante) && !tablero.estaOcupada(adelante)) {
 		movimientos.push_back(adelante);
 
-		// Movimiento doble desde la posici�n inicial
+		// Movimiento doble desde la posición inicial
 		//int filaInicial = 2; //Esta variable deberia depender del tipo del color, de momento esta solo para un bando
 		int filaInicial = (color == Color::AZUL) ? tablero.getFilas() - 2 : 1;
 
 		if (filaActual == filaInicial) {
-			Vector2D dobleAdelante(columnaActual, filaActual + 2 * direccion);
+			Vector2D dobleAdelante(filaActual + 2 * direccion, columnaActual);
 			if (tablero.esPosicionValida(dobleAdelante) && !tablero.estaOcupada(dobleAdelante)) {
 				movimientos.push_back(dobleAdelante);
 			}
 		}
 	}
 	// Captura en diagonal izquierda
-	Vector2D diagonalIzquierda(columnaActual - 1, filaActual + direccion);
+	Vector2D diagonalIzquierda(filaActual + direccion, columnaActual - 1);
 	if (tablero.esPosicionValida(diagonalIzquierda) && tablero.estaOcupada(diagonalIzquierda)) {
 		movimientos.push_back(diagonalIzquierda);
 	}
 
 	// Captura en diagonal derecha
-	Vector2D diagonalDerecha(columnaActual + 1, filaActual + direccion);
+	Vector2D diagonalDerecha(filaActual + direccion, columnaActual + 1);
 	if (tablero.esPosicionValida(diagonalDerecha) && tablero.estaOcupada(diagonalDerecha)) {
 		movimientos.push_back(diagonalDerecha);
 	}
+
+	std::cout << "Movimientos para peon en " << pos << ":\n";
+	for (const auto& m : movimientos)
+		std::cout << "->" << m << "\n";
 
 	return movimientos;
 }
