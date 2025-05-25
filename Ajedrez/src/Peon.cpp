@@ -30,7 +30,9 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 		movimientos.push_back(adelante);
 
 		// Movimiento doble desde la posición inicial
-		int filaInicial = 2; //Esta variable deberia depender del tipo del color, de momento esta solo para un bando
+		//int filaInicial = 2; //Esta variable deberia depender del tipo del color, de momento esta solo para un bando
+		int filaInicial = (color == Color::AZUL) ? tablero.getFilas() - 2 : 1;
+
 		if (filaActual == filaInicial) {
 			Vector2D dobleAdelante(columnaActual, filaActual + 2 * direccion);
 			if (tablero.esPosicionValida(dobleAdelante) && !tablero.estaOcupada(dobleAdelante)) {

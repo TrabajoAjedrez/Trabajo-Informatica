@@ -65,13 +65,19 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
+
+            //float x = (columnas_ - j);
+           // float z = (filas_ - i);
+
             float x = j+1;
             float z = (filas_-i);
+
             if (tablero[i][j] != nullptr)
                 tablero[i][j]->dibuja(x, z);  // método que llamará al sprite según color o tipo
         }
     }
 }
+
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
     //colocar peones
@@ -140,9 +146,7 @@ bool ClassTablero::estaOcupada(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return false;
     return tablero[pos.x][pos.y] != nullptr;
 }
-void ClassTablero::moverPieza(){
 
-}
 ClassPieza* ClassTablero::getPieza(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return nullptr;
     return tablero[pos.x][pos.y];
@@ -152,5 +156,20 @@ bool ClassTablero::estaDentro(const Vector2D& casilla) const {
     int col = casilla.y;
     return fila >= 0 && fila < getFilas() &&
         col >= 0 && col < getColumnas();
+}
+void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
+    if (!esPosicionValida(origen) || !esPosicionValida(destino))
+        return;
+
+    ClassPieza* pieza = getPieza(origen);
+    if (!pieza)
+        return;
+
+    tablero[destino.x][destino.y] = pieza;
+    pieza->setPos(Vector2D(destino.x, destino.y));
+    tablero[origen.x][origen.y] = nullptr;
+
+    std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
+        << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
 }
 
