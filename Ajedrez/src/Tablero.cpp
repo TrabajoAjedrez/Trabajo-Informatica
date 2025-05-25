@@ -82,8 +82,8 @@ void ClassTablero::UbicaPieza() {
 void ClassTablero::ColocarPiezas() {
     //colocar peones
     for (int j = 0; j < columnas_; ++j) {
-        tablero[1][j] = new ClassPeon(ClassPieza::Color::ROJO, Vector2D(j, 1));
-        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::AZUL, Vector2D(j, filas_ - 2));
+        tablero[1][j] = new ClassPeon(ClassPieza::Color::ROJO, Vector2D(1, j));
+        tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::AZUL, Vector2D(filas_ - 2, j));
     }
     //colocar reinas
     if (filas_ == 5) {

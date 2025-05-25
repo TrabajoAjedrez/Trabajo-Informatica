@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 class Vector2D {
 public:
 	int x,y;
@@ -9,5 +11,10 @@ public:
 
 	bool operator==(const Vector2D& other) const {
 		return x == other.x && y == other.y;
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Vector2D& v) {
+		os << "(" << v.x << ", " << v.y << ")";
+		return os;
 	}
 };
