@@ -100,6 +100,18 @@ void ClassMundo::dibuja() {
 	// Se dibuja el tablero
 	ObjTablero->dibuja();
 	glPopMatrix();
+
+
+	//creo los string para mostrar en pantalla
+	//recurro a la funcion de reglas en la que paso el tiempo a string
+	string textoTiempo;
+	if(reglas.get_turno() == 0)
+		textoTiempo = "Tiempo rojas: " + reglas.tiempo_string();
+	else if(reglas.get_turno()==1)
+		textoTiempo = "Tiempo azules: " + reglas.tiempo_string();
+
+	imprime_tiempo(textoTiempo.c_str(), 5, 4);//c_str para de string a char*
+	
 }
 
 int ClassMundo::getFilas() const {
@@ -176,4 +188,16 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		}
 		haySeleccionActiva = false;
 	}
+}
+
+
+void ClassMundo::imprime_tiempo(const char* text, float x, float y) {
+	bool turn = reglas.get_turno();
+	if(turn==0)
+		ETSIDI::setTextColor(1, 0, 0);
+	else if(turn==1)
+		ETSIDI::setTextColor(0, 0, 1);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
+	ETSIDI::printxy(text, x, y);
+
 }

@@ -28,6 +28,7 @@ public:
 	void rotarOjo();
 	void mueve();
 	void dibuja();
+	void imprime_tiempo(const char* text, float x, float y);
 
 	// Método para seleccionar una casilla // Se podria mejorar
 	void seleccionarCasilla(const Vector2D& clicada);

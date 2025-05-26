@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 #include "freeglut.h"
 #include "Reglas.h"
 #include "Tablero.h"
@@ -44,12 +46,12 @@ void ClassReglas::set_turno() {//cambio de turno
 }
 
 int ClassReglas::get_tiempo_restante_azules() const {
-	cout << "quedan para las azules" << tiempo_restante_azules << "s"<<endl;
+	//cout << "quedan para las azules" << tiempo_restante_azules << "s"<<endl;
 	return tiempo_restante_azules;
 }
 
 int ClassReglas::get_tiempo_restante_rojas() const {
-	cout << "quedan para las rojas" << tiempo_restante_rojas << "s"<<endl;
+	//cout << "quedan para las rojas" << tiempo_restante_rojas << "s"<<endl;
 	return tiempo_restante_rojas;
 }
 bool ClassReglas::get_turno() const {
@@ -107,4 +109,15 @@ bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassP
         }
     }
     return false;
+}
+
+
+string ClassReglas::tiempo_string() {
+    ostringstream os;//en vez de un flujo como ostream, para almacenar el string
+    if(turno_==0)
+        os << tiempo_restante_rojas;
+    else if(turno_==1)
+        os << tiempo_restante_azules;
+
+    return os.str();
 }

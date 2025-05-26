@@ -32,4 +32,7 @@ public:
 	//para saber si una posicion esta siendo amenazada (necesario para el mov del rey, detectar jaque no vale en este caso)
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
+
+	//pasar el tiempo a string
+	string tiempo_string();
 };
