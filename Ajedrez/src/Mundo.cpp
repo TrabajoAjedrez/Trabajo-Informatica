@@ -52,14 +52,22 @@ void ClassMundo::inicializa(int Variante) {
 
 
 	//cambio de turno
-	reglas.set_turno();
+	//reglas.set_turno();
 }
 
 void ClassMundo::onTimer(int value) {
+	bool turno = reglas.get_turno();
 	if (mundoPtr) {
 		mundoPtr->temporizador();
-		if (reglas.get_tiempo_restante() > 0) {
-			glutTimerFunc(1000, ClassMundo::onTimer, 0);
+		if (turno == 0) {
+			if (reglas.get_tiempo_restante_rojas() > 0) {
+				glutTimerFunc(1000, ClassMundo::onTimer, 0);
+			}
+		}
+		if (turno == 1) {
+			if (reglas.get_tiempo_restante_azules() > 0) {
+				glutTimerFunc(1000, ClassMundo::onTimer, 0);
+			}
 		}
 	}
 	glutPostRedisplay();
