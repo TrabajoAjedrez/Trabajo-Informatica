@@ -25,6 +25,11 @@ public:
 	int get_tiempo_restante_rojas() const;
 	int get_tiempo_restante_azules() const;
 	bool get_turno()const;
+
+	//detectar jaque
 	bool hayJaque(const ClassTablero& tablero, ClassPieza::Color colorRey);
+
+	//para saber si una posicion esta siendo amenazada (necesario para el mov del rey, detectar jaque no vale en este caso)
+	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
 };

@@ -39,13 +39,14 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 
 	vector<Vector2D> movimientos;
 
-	for (int i=1; i < tablero.getColumnas()+1; i++) {
+	for (int i=1; i < tablero.getColumnas()+1; i++) { // se puede mover en diagonal como columnas haya
 		//calculo de posiciones
-
 		Vector2D DiagSupDer{ i,i };
 		Vector2D DiagSupIz{ i,-i };
 		Vector2D DiagInfDer{ -i,i };
 		Vector2D DiagInfIz{ -i,-i };
+
+		//añadir los movimientos al vector
 		if (tablero.esPosicionValida(pos + DiagSupDer))
 			movimientos.push_back(pos + DiagSupDer);
 		if (tablero.esPosicionValida(pos + DiagInfDer))
@@ -58,8 +59,5 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 
 
 	}
-	std::cout << "Movimientos para alfil en " << pos << ":\n";
-	for (const auto& m : movimientos)
-		std::cout << "->" << m << "\n";
 	return movimientos;
 }

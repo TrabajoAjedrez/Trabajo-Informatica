@@ -51,10 +51,5 @@ vector<Vector2D> ClassCaballo::obtenerMovimientosPosibles(const ClassTablero& ta
 		if (tablero.esPosicionValida(destino))
 			movimientos.push_back(destino);
 	}
-
-	std::cout << "Movimientos para caballo en " << pos << ":\n";
-	for (const auto& m : movimientos)
-		std::cout << "->" << m << "\n";
-
 	return movimientos;
 }

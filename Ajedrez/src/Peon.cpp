@@ -52,10 +52,6 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 		movimientos.push_back(diagonalDerecha);
 	}
 
-	std::cout << "Movimientos para peon en " << pos << ":\n";
-	for (const auto& m : movimientos)
-		std::cout << "->" << m << "\n";
-
 	return movimientos;
 }
 

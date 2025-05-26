@@ -90,3 +90,21 @@ bool ClassReglas::hayJaque(const ClassTablero& tablero, ClassPieza::Color colorR
 
     return false;
 }
+
+bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza) {
+    for (int i = 0; i < tablero.getFilas(); ++i) {
+        for (int j = 0; j < tablero.getColumnas(); ++j) {
+            ClassPieza* pieza2 = tablero.getPieza({ i, j });
+            if (pieza2 && pieza2->getColor() != Pieza->getColor() && pieza2->getTipo() != Pieza->getTipo() ) { //Llama a movs posible menos de la pieza que ele pasamos para evitar un bucle infinito
+                auto movimientos = pieza2->obtenerMovimientosPosibles(tablero);
+                for (const auto& mov : movimientos) {
+                    if (mov == pos) {
+                        return true;
+                        std::cout << "Posicion Amenazada: " << pos<< endl;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
