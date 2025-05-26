@@ -9,6 +9,39 @@ ClassTorre::ClassTorre(Color color, Vector2D posicion)
 	sprite2.setCenter(1, 1);
 	sprite2.setSize(1, 1);
 }
+
+std::vector<Vector2D> ClassTorre::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+	std::vector<Vector2D> movimientos;
+	int filas = tablero.getFilas();
+	int columnas = tablero.getColumnas();
+
+	// Direcciones: arriba, abajo, izquierda, derecha
+	const int dx[] = { -1, 1, 0, 0 };
+	const int dy[] = { 0, 0, -1, 1 };
+
+	for (int dir = 0; dir < 4; ++dir) {
+		int x = pos.x + dx[dir];
+		int y = pos.y + dy[dir];
+
+		while (x >= 0 && x < filas && y >= 0 && y < columnas) {
+			Vector2D destino(x, y);
+
+			if (!tablero.estaOcupada(destino)) {
+				movimientos.push_back(destino);  // puede moverse libremente
+			}
+			else {
+				movimientos.push_back(destino);  // puede capturar aunque sea misma color
+				break;  // no puede pasar a través
+			}
+
+			x += dx[dir];
+			y += dy[dir];
+		}
+	}
+
+	return movimientos;
+}
+
 void ClassTorre::dibuja(float x, float y) {
 	glPushMatrix();
 	glTranslated(x, y, 0.1);
