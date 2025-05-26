@@ -55,9 +55,6 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 			movimientos.push_back(pos + DiagSupIz);
 		if (tablero.esPosicionValida(pos + DiagInfIz))
 			movimientos.push_back(pos + DiagInfIz);
-
-
-
 	}
 	return movimientos;
 }
