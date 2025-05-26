@@ -156,6 +156,13 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			}
 			if (valido) {
 				ObjTablero->moverPieza(casillaSeleccionada, clicada);
+				// Verificar jaque después del movimiento
+				if (reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL)) {
+					std::cout << "¡El rey azul está en jaque!" << std::endl;
+				}
+				if (reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO)) {
+					std::cout << "¡El rey rojo está en jaque!" << std::endl;
+				}
 				reglas.set_turno(); // Cambia el turno después de mover
 			}
 		}
