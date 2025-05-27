@@ -28,7 +28,11 @@ public:
 	bool get_turno()const;
 
 	//detectar jaque
+	Vector2D buscarRey(const ClassTablero& tablero, ClassPieza::Color colorRey);
 	bool hayJaque(const ClassTablero& tablero, ClassPieza::Color colorRey);
+	bool hayJaqueMate(const ClassTablero& tablero, ClassPieza::Color colorRey);
+	//tablas
+	bool hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color colorRey, int turno); //deteta rey ahogado
 
 	//para saber si una posicion esta siendo amenazada (necesario para el mov del rey, detectar jaque no vale en este caso)
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 

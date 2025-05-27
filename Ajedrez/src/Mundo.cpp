@@ -11,8 +11,8 @@ static ClassMundo* mundoPtr = nullptr;
 
 void ClassMundo::tecla(unsigned char key) {
 	if (key == 'r') {
-		ObjTablero->reset();
-		reglas.turno_=1;
+		reset();
+
 	}
 }
 void ClassMundo::tecla_especial(unsigned char key) {
@@ -180,12 +180,28 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			if (valido) {
 				ObjTablero->moverPieza(casillaSeleccionada, clicada);
 				// Verificar jaque después del movimiento
-				if (reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL)) {
+				hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
+				hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
+				hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
+				hayJaqueRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
+				hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
+				hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
+				if (hayJaqueAzul) {
 					std::cout << "¡El rey azul está en jaque!" << std::endl;
 				}
-				if (reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO)) {
+				if (hayJaqueRojo) {
 					std::cout << "¡El rey rojo está en jaque!" << std::endl;
 				}
+				if (hayJaqueMateAzul || hayJaqueMateRojo) {
+					cout << "jaque mate" << endl;
+				//reset();
+					
+				}
+				else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) ) {
+					std::cout << "tablas" << endl;
+				//reset();
+				}
+				else
 				reglas.set_turno(); // Cambia el turno después de mover
 			}
 		}
@@ -203,4 +219,15 @@ void ClassMundo::imprime_tiempo(const char* text, float x, float y) {
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
 	ETSIDI::printxy(text, x, y);
 
+}
+
+void ClassMundo::reset() {
+	ObjTablero->reset();
+	hayJaqueAzul = 0;
+	hayJaqueRojo = 0;
+	hayJaqueMateAzul = 0;
+	hayJaqueMateRojo = 0;
+	reglas.turno_ = 1;
+	hayReyAhogadoAzul = 0;
+	hayReyAhogadoRojo = 0;
 }

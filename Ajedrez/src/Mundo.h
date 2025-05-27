@@ -9,7 +9,12 @@ class ClassMundo {
 	//raton ratonObj; // crea instancia global del ratón
 	Vector2D  casillaSeleccionada;
 	bool haySeleccionActiva = false;
-
+	bool hayJaqueAzul = false;
+	bool hayJaqueMateAzul = false;
+	bool hayJaqueRojo = false;
+	bool hayJaqueMateRojo = false;
+	bool hayReyAhogadoAzul = false;
+	bool hayReyAhogadoRojo = false;
 public:
 	// Cosntructor, inicializa el puntero a null
 	ClassMundo() 
@@ -40,5 +45,7 @@ public:
 
 	int getFilas() const;
 	int getColumnas() const;
+
+	void reset(); //poner jaques a 0 y lo que se necesite en resetar en mundo
 
 };
