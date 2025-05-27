@@ -1,10 +1,13 @@
 #pragma once
 #include "Color.h"
+#include "pieza.h"
 
 class ClassCasilla {
 	bool esClara;
 	static float tamCasilla;
 	bool resaltada = false;
+
+	ClassPieza* pieza; //Las casillas ahora contienen piezas
 
 public:
 	ClassCasilla(bool clara = true) : esClara(clara) {}

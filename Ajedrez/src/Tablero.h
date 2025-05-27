@@ -45,8 +45,6 @@ public:
     void dibuja();
     // Establece la posición del tablero
     void setPosicion(float x, float y, float z);
-    // Dibuja una casilla en la posicion (x,z)
-    void dibujarCasilla(float x, float z, bool esClara);
     // Ubica las piezas en el tablero
     void UbicaPieza();
     // Coloca las piezas en el tablero
