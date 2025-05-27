@@ -164,6 +164,9 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
 				casillaSeleccionada = clicada;
 				haySeleccionActiva = true;
+
+				auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
+				ObjTablero->resaltarMovimientos(movimientosPosibles);
 			}
 
 		}
@@ -209,6 +212,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 				reglas.set_turno(); // Cambia el turno después de mover
 			}
 		}
+		ObjTablero->limpiarResaltados();
 		haySeleccionActiva = false;
 	
 	}
