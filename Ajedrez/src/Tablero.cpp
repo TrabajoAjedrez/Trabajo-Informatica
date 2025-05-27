@@ -8,22 +8,17 @@
 #include "alfil.h"
 #include "ETSIDI.h"
 void ClassTablero::dibuja() {
-   
+ 
 	// Colores para las casillas (pueden personalizarse)
-    colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
-    colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
-
     glPushMatrix();
 	glTranslatef(posX, posY, posZ); // Trasladar el tablero a la posición deseada
 	// Bucle para dibujar cada casilla del tablero
+    float tamCasilla = ClassCasilla::getTamCasilla();
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {
-            // Alternar colores de casillas
-            bool esClara = (i + j) % 2 == 0;
             float x = j * tamCasilla;
             float z = i * tamCasilla;
-
-            dibujarCasilla(x, z, esClara);
+            casillasVisuales[i][j].dibujar(x, z);
         }
     }
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
@@ -40,28 +35,14 @@ void ClassTablero::dibuja() {
 
     glPopMatrix();
 }
-// Dibuja una casilla en la posición (x,z) con el color correspondiente
-void ClassTablero::dibujarCasilla(float x, float z, bool esClara) {
-    if (esClara) {
-        glColor3fv(colorClaro);
-    }
-    else {
-        glColor3fv(colorOscuro);
-    }
 
-    glBegin(GL_QUADS);
-    glVertex3f(x, z, 0);
-    glVertex3f(x + tamCasilla, z, 0);
-    glVertex3f(x + tamCasilla, z+tamCasilla,0);
-    glVertex3f(x, z+tamCasilla,0 );
-    glEnd();
-}
 // Establece la posición del tablero en el espacio
 void ClassTablero::setPosicion(float x, float y, float z) {
     posX = x;
     posY = y;
     posZ = z;
-}
+} 
+
 // Dibuja las piezas en el tablero
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
