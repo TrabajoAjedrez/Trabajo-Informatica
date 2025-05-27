@@ -21,12 +21,9 @@ public:
     ClassTablero(Vector2D dim) :
 		columnas_(dim.x), filas_(dim.y), posX(0), posY(0), posZ(0)
     {
-
         ClassCasilla::setTamCasilla(1.0f);
-
 		// Inicializar el tablero
         tablero.resize(filas_, std::vector<ClassPieza*>(columnas_, nullptr));
-
         casillasVisuales.resize(filas_, std::vector<ClassCasilla>(columnas_));
         for (int i = 0; i < filas_; ++i) {
             for (int j = 0; j < columnas_; ++j) {
