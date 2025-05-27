@@ -35,11 +35,41 @@ void ClassAlfil::anima() {
 	sprite2.loop();
 }
 
-vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tablero) const  {
+vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+	vector<Vector2D> movimientos;
+	int filas = tablero.getFilas();
+	int columnas = tablero.getColumnas();
 
+	// Direcciones diagonales: ? ? ? ?
+	const int dx[] = { 1, 1, -1, -1 };
+	const int dy[] = { 1, -1, 1, -1 };
+
+	for (int dir = 0; dir < 4; ++dir) {
+		int x = pos.x + dx[dir];
+		int y = pos.y + dy[dir];
+
+		while (x >= 0 && x < filas && y >= 0 && y < columnas) {
+			Vector2D destino(x, y);
+
+			if (!tablero.esPosicionValida(destino)) break;
+
+			movimientos.push_back(destino);
+
+			if (tablero.estaOcupada(destino)) break;
+
+			x += dx[dir];
+			y += dy[dir];
+		}
+	}
+
+	return movimientos;
+}
+
+/*vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+	
 	vector<Vector2D> movimientos;
 
-	for (int i=1; i < tablero.getColumnas()+1; i++) { // se puede mover en diagonal como columnas haya
+	for (int i = 1; i < tablero.getColumnas() + 1; i++) { // se puede mover en diagonal como columnas haya
 		//calculo de posiciones
 		Vector2D DiagSupDer{ i,i };
 		Vector2D DiagSupIz{ i,-i };
@@ -55,6 +85,8 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 			movimientos.push_back(pos + DiagSupIz);
 		if (tablero.esPosicionValida(pos + DiagInfIz))
 			movimientos.push_back(pos + DiagInfIz);
+
+		return movimientos;
 	}
-	return movimientos;
-}
+}*/
+
