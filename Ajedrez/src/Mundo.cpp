@@ -10,7 +10,10 @@ ClassReglas reglas;
 static ClassMundo* mundoPtr = nullptr;
 
 void ClassMundo::tecla(unsigned char key) {
-
+	if (key == 'r') {
+		ObjTablero->reset();
+		reglas.turno_=1;
+	}
 }
 void ClassMundo::tecla_especial(unsigned char key) {
 

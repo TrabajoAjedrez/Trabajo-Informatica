@@ -35,6 +35,12 @@ public:
         colorClaro[0] = 0.96f; colorClaro[1] = 0.96f; colorClaro[2] = 0.86f;
         colorOscuro[0] = 0.55f; colorOscuro[1] = 0.27f; colorOscuro[2] = 0.07f;
     }
+    //DESTRUCTOR
+    ~ClassTablero() {
+        for (int i = 0; i < filas_; i++)
+            for (int j = 0; j < columnas_; j++)
+                delete tablero[i][j];
+    }
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
@@ -63,5 +69,9 @@ public:
     // Verifica si una casilla está dentro de los límites del tablero
     bool estaDentro(const Vector2D& casilla) const;
 
+    //limpiar tablero
+    void clear();
+    //reiniciar partida
+    void reset();
 };
 

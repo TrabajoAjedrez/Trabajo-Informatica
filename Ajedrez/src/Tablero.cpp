@@ -173,3 +173,19 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
         << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
 }
 
+void ClassTablero::clear() {
+    for (int i = 0; i < filas_; i++) {
+        for (int j = 0; j < columnas_; j++) {
+            //borrar piezas y apuntar puntero a null
+            delete tablero[i][j];
+            tablero[i][j] = nullptr;
+        }
+    }
+
+}
+
+void ClassTablero::reset() {
+    clear();
+    ColocarPiezas();
+
+}
