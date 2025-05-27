@@ -167,9 +167,15 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
 
     tablero[destino.x][destino.y] = pieza;
     pieza->setPos(Vector2D(destino.x, destino.y));
+
+    //
+   // pieza-> ~ClassPieza();
     tablero[origen.x][origen.y] = nullptr;
+    
 
     std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
         << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
+
+
 }
 

@@ -9,6 +9,17 @@ using namespace std;
 ClassReglas reglas; 
 static ClassMundo* mundoPtr = nullptr;
 
+
+int ClassMundo::PreguntarVariante() {
+	int var=1; //al fin y al cabo el enum es de enteros
+	std::cout << "Selecciona la variante de ajedrez:\n";
+	std::cout << "1. Silverman\n";
+	std::cout << "2. Demichess\n";
+	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
+
+	return var;
+}
+
 void ClassMundo::tecla(unsigned char key) {
 
 }
@@ -16,13 +27,16 @@ void ClassMundo::tecla_especial(unsigned char key) {
 
 }
 
-void ClassMundo::inicializa(int Variante) {
+void ClassMundo::inicializa() {
 
 	mundoPtr = this; 
 
 	// Inicializa el tablero según la variante seleccionada
+	int var = PreguntarVariante();
 
-	auto dimensiones = reglas.devolver_forma(Variante);
+	var_ = static_cast<Variante>(var);
+
+	auto dimensiones = reglas.devolver_forma(var);
 
 	ObjTablero = new ClassTablero(dimensiones);
 
@@ -123,7 +137,7 @@ int ClassMundo::getColumnas() const {
 
 }
 
-void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
+void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 
 	//cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
 

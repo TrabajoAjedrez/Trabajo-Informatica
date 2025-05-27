@@ -8,17 +8,11 @@
 raton ratonObj; // crea instancia global del ratón
 
 
-int varianteSeleccionada = 1;
+//int varianteSeleccionada = 1;
 
 
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
-//enum class Variante { SILVERMAN = 1, DEMICHESS } VarianteSelccionada;
 
-//ClassReglas* preglas=nullptr; 
-
-//// Variables para controlar los temporizadores
-//int tiempo_inicial = 0;
-//const int INTERVALO_TEMPORIZADOR = 1000; // 1000ms
 
 //los callback, funciones que seran llamadas automaticamente por la glut
 //cuando sucedan eventos
@@ -27,13 +21,11 @@ void OnDraw(void); //esta funcion sera llamada para dibujar
 void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
 void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecla	
 
-int PreguntarVariante();
-
 void OnMouseClick(int button, int state, int x, int y) {
 	if (ObjMundo) {
 		int filas = ObjMundo->getFilas();
 		int columnas = ObjMundo->getColumnas();
-		ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
+		ratonObj.mouse(button, state, x, y, filas, columnas, ObjMundo);
 	}
 }
 
@@ -52,9 +44,6 @@ int main(int argc, char* argv[])
 	ClassReglas* preglas = &reglas; //preglas apunta a reglas (asignacion)
 
 	
-	int opcion = PreguntarVariante(); //Pedimos la variante de ajedre
-	varianteSeleccionada = opcion;
-
 
 	//Inicializar el gestor de ventanas GLUT
 	//y crear la ventana
@@ -71,9 +60,6 @@ int main(int argc, char* argv[])
 	glMatrixMode(GL_PROJECTION);
 	gluPerspective(40.0, 800 / 600.0f, 0.1, 150);
 
-	//tiempo_inicial = glutGet(GLUT_ELAPSED_TIME); // Guarda el tiempo inicial
-	//preglas = new ClassReglas(); // Crea el objeto reglas
-	//preglas->inicia_temporizador(8); // 8s de prueba
 
 	//Registrar los callbacks
 	glutDisplayFunc(OnDraw);
@@ -86,12 +72,12 @@ int main(int argc, char* argv[])
 			int columnas = ObjMundo->getColumnas();
 
 			//Obtenemos la casilla pulsada por el raton
-			Vector2D casillaSeleccionada = ratonObj.mouse(button, state, x, y, filas, columnas, varianteSeleccionada);
-			ObjMundo->seleccionarCasilla(casillaSeleccionada); // Llama al método de selección de casilla en el mundo
+			Vector2D casillaSeleccionada = ratonObj.mouse(button, state, x, y, filas, columnas, ObjMundo);
+			ObjMundo->mueve_pieza(casillaSeleccionada); // Llama al método de selección de casilla en el mundo
 		}
 	});
 
-	ObjMundo->inicializa(opcion); // Inicializamos el mundo con la variante seleccionada
+	ObjMundo->inicializa(); // Inicializamos el mundo con la variante seleccionada
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();
@@ -122,15 +108,7 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 
 void OnTimer(int value)
 {
-	//int tiempo_actual = glutGet(GLUT_ELAPSED_TIME); // Obtener tiempo transcurrido
 
-	//// Actualizar temporizador cada segundo
-	//if (tiempo_actual - tiempo_inicial >= INTERVALO_TEMPORIZADOR) {
-	//	if (preglas) {
-	//		preglas->actualiza_tiempo();
-	//	}
-	//	tiempo_inicial = tiempo_actual;
-	//}
 
 	if (ObjMundo) {
 		ObjMundo->mueve();
@@ -138,14 +116,4 @@ void OnTimer(int value)
 	
 	glutPostRedisplay();
 	glutTimerFunc(25, OnTimer, 0); //callback de animacion
-}
-//Funcion que pregunta al usuario que variante de ajedrez quiere jugar
-int PreguntarVariante() {
-	int variante;
-	std::cout << "Selecciona la variante de ajedrez:\n";
-	std::cout << "1. Silverman\n";
-	std::cout << "2. Demichess\n";
-	std::cin >> variante;
-
-	return variante;
 }

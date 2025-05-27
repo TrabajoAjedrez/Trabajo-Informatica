@@ -46,7 +46,6 @@ void ClassReglas::set_turno() {//cambio de turno
 }
 
 int ClassReglas::get_tiempo_restante_azules() const {
-	//cout << "quedan para las azules" << tiempo_restante_azules << "s"<<endl;
 	return tiempo_restante_azules;
 }
 
@@ -120,4 +119,17 @@ string ClassReglas::tiempo_string() {
         os << tiempo_restante_azules;
 
     return os.str();
+}
+bool ClassReglas::get_Promocion(const ClassPieza& pieza) {
+
+    //primero el arreglo variante
+    //Vector2D pos;
+    //ClassPieza::Color col;
+    //pos=pieza.getPos();
+    //col = pieza.getColor();
+    ////para las rojas
+    //if (col == ClassPieza::Color::ROJO) {
+    //    
+    //}
+    return 0;
 }
