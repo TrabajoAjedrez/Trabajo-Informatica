@@ -206,6 +206,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			}
 		}
 		haySeleccionActiva = false;
+	
 	}
 }
 
