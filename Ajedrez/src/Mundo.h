@@ -2,6 +2,7 @@
 #include"Tablero.h"
 #include "vector2d.h"
 #include "raton.h"
+#include <vector>
 
 class ClassMundo {
 
@@ -15,6 +16,9 @@ class ClassMundo {
 	bool hayJaqueMateRojo = false;
 	bool hayReyAhogadoAzul = false;
 	bool hayReyAhogadoRojo = false;
+
+
+
 public:
 	// Cosntructor, inicializa el puntero a null
 	ClassMundo() 
