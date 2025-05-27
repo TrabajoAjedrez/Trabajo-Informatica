@@ -1,6 +1,7 @@
 #include "Reina.h"
 #include "ETSIDI.h"
 
+
 ClassReina::ClassReina(Color color, Vector2D posicion)
 	: ClassPieza(Pieza_t::Reina, color, posicion)
 {
@@ -32,4 +33,34 @@ void ClassReina::anima() {
 	}
 	sprite.loop();
 	sprite2.loop();
+}
+
+vector<Vector2D> ClassReina::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
+	vector<Vector2D> movimientos;
+	int filas = tablero.getFilas();
+	int columnas = tablero.getColumnas();
+
+	// Direcciones: diagonales + ortogonales
+	const int dx[] = { 1, 1, -1, -1, -1, 1, 0, 0 };
+	const int dy[] = { 1, -1, 1, -1, 0, 0, -1, 1 };
+
+	for (int dir = 0; dir < 8; ++dir) {
+		int x = pos.x + dx[dir];
+		int y = pos.y + dy[dir];
+
+		while (x >= 0 && x < filas && y >= 0 && y < columnas) {
+			Vector2D destino(x, y);
+
+			if (!tablero.esPosicionValida(destino)) break;
+
+			movimientos.push_back(destino);
+
+			if (tablero.estaOcupada(destino)) break;
+
+			x += dx[dir];
+			y += dy[dir];
+		}
+	}
+
+	return movimientos;
 }
