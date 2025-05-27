@@ -71,6 +71,8 @@ public:
     //reiniciar partida
     void reset();
 
+    void resaltarMovimientos(const std::vector<Vector2D>& movimientos);
+    void limpiarResaltados();
 
 };
 

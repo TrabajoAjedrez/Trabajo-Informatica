@@ -16,8 +16,10 @@ void ClassTablero::dibuja() {
     float tamCasilla = ClassCasilla::getTamCasilla();
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {
+            int filaVisual = getFilas() - 1 - i; //Para que el resaltado se dibuje donde debe
+
             float x = j * tamCasilla;
-            float z = i * tamCasilla;
+            float z = filaVisual * tamCasilla;
             casillasVisuales[i][j].dibujar(x, z);
         }
     }
@@ -170,4 +172,17 @@ void ClassTablero::reset() {
     clear();
     ColocarPiezas();
 
+}
+
+void ClassTablero::resaltarMovimientos(const std::vector<Vector2D>& movimientos) {
+    for (const auto& m : movimientos) {
+        if (estaDentro(m))
+            casillasVisuales[m.x][m.y].setResaltada(true);
+    }
+}
+
+void ClassTablero::limpiarResaltados() {
+    for (auto& fila : casillasVisuales)
+        for (auto& cas : fila)
+            cas.setResaltada(false);
 }
