@@ -3,6 +3,7 @@
 #include "Mundo.h"
 #include "freeglut.h"
 #include "Reglas.h"
+#include "ETSIDI.h"
 
 using namespace std;
 
@@ -148,6 +149,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
 		default: tipoTexto = "pieza desconocida"; break;
 		}
+		ETSIDI::play("sonidos/selec.wav");
 		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
 		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
 	}
@@ -179,6 +181,8 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 			}
 			if (valido) {
 				ObjTablero->moverPieza(casillaSeleccionada, clicada);
+				ETSIDI::play("sonidos/mover.wav");
+
 				// Verificar jaque después del movimiento
 				hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
 				hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);

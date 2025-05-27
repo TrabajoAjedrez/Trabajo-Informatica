@@ -5,6 +5,7 @@
 #include "Reglas.h"
 #include "Tablero.h"
 #include "Pieza.h"
+#include "ETSIDI.h"
 
 using namespace std;
 
@@ -106,6 +107,7 @@ bool ClassReglas::hayJaqueMate(const ClassTablero& tablero, ClassPieza::Color co
 
     if (hayJaque(tablero,colorRey) == true && Nmovs <= 0) {
         cout << "JAQUE MATE!! GANAN" << (colorRey == ClassPieza::Color::AZUL ? "ROJO" : "AZUL") << "!" << endl;
+        ETSIDI::play("sonidos/victoria.wav");
         return true;
     }
     else

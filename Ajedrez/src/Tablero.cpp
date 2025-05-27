@@ -6,6 +6,7 @@
 #include "torre.h"
 #include "caballo.h"
 #include "alfil.h"
+#include "ETSIDI.h"
 void ClassTablero::dibuja() {
    
 	// Colores para las casillas (pueden personalizarse)
@@ -81,6 +82,7 @@ void ClassTablero::UbicaPieza() {
 // Pone los -1 y 1 o lo numeros que representan una pieza en la matriz del tablero
 void ClassTablero::ColocarPiezas() {
     //colocar peones
+    ETSIDI::play("sonidos/inicio.wav");
     for (int j = 0; j < columnas_; ++j) {
         tablero[1][j] = new ClassPeon(ClassPieza::Color::ROJO, Vector2D(1, j));
         tablero[filas_ - 2][j] = new ClassPeon(ClassPieza::Color::AZUL, Vector2D(filas_ - 2, j));
@@ -171,6 +173,8 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
 
     std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
         << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
+ 
+
 }
 
 void ClassTablero::clear() {
