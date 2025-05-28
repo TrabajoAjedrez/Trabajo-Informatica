@@ -187,14 +187,17 @@ string ClassReglas::tiempo_string() {
 
 bool ClassReglas::get_Promocion(const ClassPieza& pieza) {
 
-    //primero el arreglo variante
-    //Vector2D pos;
-    //ClassPieza::Color col;
-    //pos=pieza.getPos();
-    //col = pieza.getColor();
-    ////para las rojas
-    //if (col == ClassPieza::Color::ROJO) {
-    //    
-    //}
-    return 0;
+    Vector2D pos=pieza.getPos();//en que posicion esta
+    ClassPieza::Color col=pieza.getColor(); //que color de peon es
+    
+    if (col == ClassPieza::Color::ROJO && pos.y == 0) //solo me interesa en que fila esta
+    {
+        cout << "promocion!" << endl;
+        return 1;
+    }
+    else if (col == ClassPieza::Color::AZUL && pos.y == 5)
+        return 1;
+    else
+     return 0;
+
 }

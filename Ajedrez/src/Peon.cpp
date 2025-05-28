@@ -1,5 +1,6 @@
 ﻿#include "Peon.h"
 #include "ETSIDI.h"
+#include "Reglas.h" //para la promocion
 
 using namespace std;
 ClassPeon::ClassPeon(Color color, Vector2D posicion) 

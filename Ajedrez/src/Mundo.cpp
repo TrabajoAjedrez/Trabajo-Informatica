@@ -229,6 +229,12 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	
 	}
+
+
+	//promocion peones
+	if (tpieza) {
+		reglas.get_Promocion(*tpieza);
+	}
 }
 
 
