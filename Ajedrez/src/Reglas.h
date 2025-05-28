@@ -2,6 +2,7 @@
 #include "vector2d.h"
 #include "Tablero.h"
 #include "Pieza.h"
+#include <optional>
 
 
 class ClassReglas
@@ -26,6 +27,10 @@ public:
 	Vector2D buscarRey(const ClassTablero& tablero, ClassPieza::Color colorRey);
 	bool hayJaque(const ClassTablero& tablero, ClassPieza::Color colorRey);
 	bool hayJaqueMate(const ClassTablero& tablero, ClassPieza::Color colorRey);
+
+	// Posición del rey en jaque, si lo hay
+	std::optional<std::pair<Vector2D, ClassPieza::Color>> getReyEnJaque(const ClassTablero& tablero);
+
 	//tablas
 	bool hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color colorRey, int turno); //deteta rey ahogado
 

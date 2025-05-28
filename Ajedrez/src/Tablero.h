@@ -41,6 +41,9 @@ public:
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
+    float getPosX() const { return posX; }
+    float getPosZ() const { return posZ; }
+
     // Dibuja el tablero
     void dibuja();
     // Establece la posición del tablero

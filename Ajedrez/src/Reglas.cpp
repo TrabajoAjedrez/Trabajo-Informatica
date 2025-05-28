@@ -113,6 +113,15 @@ bool ClassReglas::hayJaqueMate(const ClassTablero& tablero, ClassPieza::Color co
     else
         return false;
 }
+std::optional<std::pair<Vector2D, ClassPieza::Color>> ClassReglas::getReyEnJaque(const ClassTablero& tablero) {
+    if (hayJaque(tablero, ClassPieza::Color::AZUL)) {
+        return std::make_pair(buscarRey(tablero, ClassPieza::Color::AZUL), ClassPieza::Color::AZUL);
+    }
+    if (hayJaque(tablero, ClassPieza::Color::ROJO)) {
+        return std::make_pair(buscarRey(tablero, ClassPieza::Color::ROJO), ClassPieza::Color::ROJO);
+    }
+    return std::nullopt;
+}
 
 
 bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza) {

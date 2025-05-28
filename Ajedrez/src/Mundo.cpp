@@ -10,6 +10,11 @@ using namespace std;
 ClassReglas reglas; 
 static ClassMundo* mundoPtr = nullptr;
 
+// Para el parpadeo de la exclamacion
+//bool visibleExclamacion = true;
+//int tiempoParpadeo = 500;
+
+
 int ClassMundo::PreguntarVariante() {
 	int var = 1; //al fin y al cabo el enum es de enteros
 	std::cout << "Selecciona la variante de ajedrez:\n";
@@ -29,6 +34,16 @@ void ClassMundo::tecla(unsigned char key) {
 void ClassMundo::tecla_especial(unsigned char key) {
 
 }
+
+void ClassMundo::parpadeoExclamacion(int value) {
+	if (mundoPtr) {
+		mundoPtr->visibleExclamacion = !mundoPtr->visibleExclamacion;
+		glutPostRedisplay();
+		glutTimerFunc(300, ClassMundo::parpadeoExclamacion, 0);
+	}
+}
+
+
 
 void ClassMundo::inicializa() {
 
@@ -66,6 +81,8 @@ void ClassMundo::inicializa() {
 	//temporizador
 	reglas.inicia_temporizador(100000); // Por ejemplo, 8 segundos
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
+	glutTimerFunc(500, ClassMundo::parpadeoExclamacion, 0);
+
 
 
 	//cambio de turno
@@ -106,6 +123,8 @@ void ClassMundo::rotarOjo() {
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
 	ObjTablero->AnimaPiezas();
+	tiempoRebote += 0.05f;
+
 }
 
 void ClassMundo::dibuja() {
@@ -128,8 +147,46 @@ void ClassMundo::dibuja() {
 		textoTiempo = "Tiempo azules: " + reglas.tiempo_string();
 
 	imprime_tiempo(textoTiempo.c_str(), 5, 4);//c_str para de string a char*
-	
+
+
+	if (visibleExclamacion) {
+		auto reyJaque = reglas.getReyEnJaque(*ObjTablero);
+		if (reyJaque.has_value()) {
+			dibujarExclamacionSobreRey(reyJaque->first, reyJaque->second, tiempoRebote);
+		}
+	}
 }
+
+void ClassMundo::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote) {
+	float tamCasilla = ClassCasilla::getTamCasilla();
+
+
+	// Obtener desplazamiento del tablero
+	float offsetX = mundoPtr->ObjTablero->getPosX();
+	float offsetZ = mundoPtr->ObjTablero->getPosZ();
+
+	float x = offsetX + posRey.y * tamCasilla + tamCasilla / 2.0f;
+	float y = offsetZ + (mundoPtr->getFilas() - 1 - posRey.x) * tamCasilla + tamCasilla / 2.0f;
+
+
+	float rebote = 0.1f * sin(tiempoRebote * 3.0f); // rebote animado con función seno
+
+	glDisable(GL_LIGHTING);
+	if (color == ClassPieza::Color::AZUL)
+		glColor3f(0.0f, 0.0f, 1.0f);
+	else
+		glColor3f(1.0f, 0.0f, 0.0f);
+
+	glPushMatrix();
+	glTranslatef(x, y + 0.5f + rebote, 1.0f);
+	glScalef(0.01f, 0.005f, 1.0f); // tamaño del signo
+	glutStrokeCharacter(GLUT_STROKE_ROMAN, '!');
+	glPopMatrix();
+
+	glEnable(GL_LIGHTING);
+}
+
+
 
 int ClassMundo::getFilas() const {
 	return ObjTablero ? ObjTablero->getFilas() : 0;
