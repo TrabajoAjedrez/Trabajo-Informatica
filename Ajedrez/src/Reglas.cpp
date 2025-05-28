@@ -198,15 +198,18 @@ bool ClassReglas::get_Promocion(const ClassPieza& pieza) {
 
     Vector2D pos=pieza.getPos();//en que posicion esta
     ClassPieza::Color col=pieza.getColor(); //que color de peon es
-    
-    if (col == ClassPieza::Color::ROJO && pos.y == 0) //solo me interesa en que fila esta
-    {
-        cout << "promocion!" << endl;
-        return 1;
+    ClassPieza::Pieza_t tipo = pieza.getTipo();
+
+    if (tipo == ClassPieza::Pieza_t::Peon) {
+        if (col == ClassPieza::Color::AZUL && pos.x == 0) //solo me interesa en que fila esta
+            return 1;
+        else if (col == ClassPieza::Color::ROJO && pos.x == 4)
+            return 1;
+        else
+            return 0;
     }
-    else if (col == ClassPieza::Color::AZUL && pos.y == 5)
-        return 1;
+
     else
-     return 0;
+        return 0;
 
 }

@@ -199,6 +199,7 @@ int ClassMundo::getColumnas() const {
 
 void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 
+
 	//cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
 
 	if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
@@ -280,6 +281,20 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 				}
 				else
 				reglas.set_turno(); // Cambia el turno después de mover
+
+
+				//promocion
+
+				ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
+				if (piezaFinal){
+					std::cout << "DEBUG: Posición después de mover: ("
+						<< piezaFinal->getPos().x << ", "
+						<< piezaFinal->getPos().y << ") tipo: "
+						<< piezaFinal->getTipo() << std::endl;
+					if (reglas.get_Promocion(*piezaFinal)) {
+						std::cout << "promocion!" << std::endl;
+					}
+				}
 			}
 		}
 		ObjTablero->limpiarResaltados();
@@ -287,11 +302,6 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 	
 	}
 
-
-	//promocion peones
-	if (tpieza) {
-		reglas.get_Promocion(*tpieza);
-	}
 }
 
 
