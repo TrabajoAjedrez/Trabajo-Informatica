@@ -203,21 +203,21 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 				hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
 				hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
 				hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
-				hayJaqueRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
+				hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
 				hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
 				hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
 				if (hayJaqueAzul) {
-					std::cout << "¡El rey azul está en jaque!" << std::endl;
+					std::cout << "El rey azul esta en jaque!" << std::endl;
 				}
 				if (hayJaqueRojo) {
-					std::cout << "¡El rey rojo está en jaque!" << std::endl;
+					std::cout << "El rey rojo esta en jaque!" << std::endl;
 				}
 				if (hayJaqueMateAzul || hayJaqueMateRojo) {
 					cout << "jaque mate" << endl;
 				//reset();
 					
 				}
-				else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) ) {
+				else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) && !(hayJaqueMateAzul || hayJaqueMateRojo) ) {
 					std::cout << "tablas" << endl;
 				//reset();
 				}
