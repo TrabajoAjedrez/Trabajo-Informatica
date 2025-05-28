@@ -194,16 +194,27 @@ string ClassReglas::tiempo_string() {
     return os.str();
 }
 
-bool ClassReglas::get_Promocion(const ClassPieza& pieza) {
+bool ClassReglas::get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo) {
 
     Vector2D pos=pieza.getPos();//en que posicion esta
     ClassPieza::Color col=pieza.getColor(); //que color de peon es
     ClassPieza::Pieza_t tipo = pieza.getTipo();
 
+    int promo_rojas;//fila promocion rojas
+    int promo_azules;//fila promocion azules
+    if (mundo.var_ == 1) {
+        promo_rojas = 4;
+        promo_azules = 0;
+    }
+    else if (mundo.var_ == 1) {
+        promo_rojas = 8;
+        promo_azules = 0;
+    }
+
     if (tipo == ClassPieza::Pieza_t::Peon) {
-        if (col == ClassPieza::Color::AZUL && pos.x == 0) //solo me interesa en que fila esta
+        if (col == ClassPieza::Color::AZUL && pos.x == promo_azules) //solo me interesa en que fila esta
             return 1;
-        else if (col == ClassPieza::Color::ROJO && pos.x == 4)
+        else if (col == ClassPieza::Color::ROJO && pos.x == promo_rojas)
             return 1;
         else
             return 0;

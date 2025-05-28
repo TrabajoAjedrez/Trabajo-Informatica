@@ -199,7 +199,7 @@ int ClassMundo::getColumnas() const {
 
 void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 
-
+	ClassMundo mundo;
 	//cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
 
 	if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
@@ -291,7 +291,7 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 						<< piezaFinal->getPos().x << ", "
 						<< piezaFinal->getPos().y << ") tipo: "
 						<< piezaFinal->getTipo() << std::endl;
-					if (reglas.get_Promocion(*piezaFinal)) {
+					if (reglas.get_Promocion(*piezaFinal, mundo)) {
 						std::cout << "promocion!" << std::endl;
 					}
 				}

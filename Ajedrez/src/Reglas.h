@@ -2,6 +2,7 @@
 #include "vector2d.h"
 #include "Tablero.h"
 #include "Pieza.h"
+#include "Mundo.h"
 #include <optional>
 
 
@@ -38,7 +39,7 @@ public:
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
 	//PROMOCION
-	bool get_Promocion(const ClassPieza& pieza);//identifica si la pieza esta en posicion de promocion
+	bool get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo);//identifica si la pieza esta en posicion de promocion
 
 
 	//FUNCIONES DE TEMPORIZADORES
