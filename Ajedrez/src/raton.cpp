@@ -15,8 +15,9 @@
 //    }
 //}
 
-Vector2D raton::mouse(int button, int state, int x, int y, int filas, int columnas, int caso) const {
+Vector2D raton::mouse(int button, int state, int x, int y, int filas, int columnas, ClassMundo* mundo) const {
 
+    int caso = mundo->var_;
     // Manejo del clic izquierdo del raton
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		// Normalizar las coordenadas del ratón a un rango de 0 a 1

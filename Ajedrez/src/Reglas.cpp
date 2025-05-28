@@ -47,17 +47,17 @@ void ClassReglas::set_turno() {//cambio de turno
 }
 
 int ClassReglas::get_tiempo_restante_azules() const {
-	//cout << "quedan para las azules" << tiempo_restante_azules << "s"<<endl;
-	return tiempo_restante_azules;
+		return tiempo_restante_azules;
 }
 
 int ClassReglas::get_tiempo_restante_rojas() const {
-	//cout << "quedan para las rojas" << tiempo_restante_rojas << "s"<<endl;
 	return tiempo_restante_rojas;
 }
+
 bool ClassReglas::get_turno() const {
 	return turno_;
 }
+
 Vector2D ClassReglas::buscarRey(const ClassTablero& tablero, ClassPieza::Color colorRey) {
     // Buscar la posición del rey del color dado
     for (int i = 0; i < tablero.getFilas(); ++i) {
@@ -183,4 +183,18 @@ string ClassReglas::tiempo_string() {
         os << tiempo_restante_azules;
 
     return os.str();
+}
+
+bool ClassReglas::get_Promocion(const ClassPieza& pieza) {
+
+    //primero el arreglo variante
+    //Vector2D pos;
+    //ClassPieza::Color col;
+    //pos=pieza.getPos();
+    //col = pieza.getColor();
+    ////para las rojas
+    //if (col == ClassPieza::Color::ROJO) {
+    //    
+    //}
+    return 0;
 }

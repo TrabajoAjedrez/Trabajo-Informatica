@@ -15,16 +15,11 @@ protected:
 public:
 
 	bool turno_ = 1; //será 1 si le toca a las azules, 0 si le toca a las rojas
-	//bool turno_siguiente(bool turno);//avisa de que el jugador ha hecho un movimiento
-
+	
 	//obtener shape segun las reglas de Demi y de Silverman
 	Vector2D devolver_forma(const int& Variante);
 
-	void actualiza_tiempo();  // Solo decrementa el tiempo
 	void set_turno();
-	void inicia_temporizador(int segundos);//inicia en cada turno
-	int get_tiempo_restante_rojas() const;
-	int get_tiempo_restante_azules() const;
 	bool get_turno()const;
 
 	//detectar jaque
@@ -37,7 +32,16 @@ public:
 	//para saber si una posicion esta siendo amenazada (necesario para el mov del rey, detectar jaque no vale en este caso)
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
+	//PROMOCION
+	bool get_Promocion(const ClassPieza& pieza);//identifica si la pieza esta en posicion de promocion
 
+
+	//FUNCIONES DE TEMPORIZADORES
+
+	void actualiza_tiempo();  // Solo decrementa el tiempo
+	void inicia_temporizador(int segundos);//inicia en cada turno
+	int get_tiempo_restante_rojas() const;
+	int get_tiempo_restante_azules() const;
 	//pasar el tiempo a string
 	string tiempo_string();
 };
