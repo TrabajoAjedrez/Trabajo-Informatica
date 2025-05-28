@@ -32,12 +32,7 @@ public:
             }
         }
     }
-    //DESTRUCTOR
-    ~ClassTablero() {
-        for (int i = 0; i < filas_; i++)
-            for (int j = 0; j < columnas_; j++)
-                delete tablero[i][j];
-    }
+    
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }
@@ -77,5 +72,8 @@ public:
     void resaltarMovimientos(const std::vector<Vector2D>& movimientos);
     void limpiarResaltados();
 
+
+    //DESTRUCTOR
+    ~ClassTablero();
 };
 

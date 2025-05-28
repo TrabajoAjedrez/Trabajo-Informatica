@@ -14,4 +14,3 @@ Vector2D ClassPieza::getPos() const { return pos; }
 void ClassPieza::setTipo(Pieza_t t) { tipo = t; }
 void ClassPieza::setColor(Color c) { color = c; }
 void ClassPieza::setPos(Vector2D p) { pos = p; }
-

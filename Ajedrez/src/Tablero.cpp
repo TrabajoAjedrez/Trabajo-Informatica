@@ -189,3 +189,11 @@ void ClassTablero::limpiarResaltados() {
         for (auto& cas : fila)
             cas.setResaltada(false);
 }
+
+
+//destructor. Tablero crea piezas y tablero las destruye (que poetico)
+ClassTablero::~ClassTablero() {
+    for (int i = 0; i < filas_; ++i)
+        for (int j = 0; j < columnas_; ++j)
+            delete tablero[i][j]; 
+}

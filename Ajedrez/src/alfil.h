@@ -20,5 +20,6 @@ public:
 	void anima();
 	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const override;
 
-
+	//destructor alfil
+	~ClassAlfil() override{}
 };

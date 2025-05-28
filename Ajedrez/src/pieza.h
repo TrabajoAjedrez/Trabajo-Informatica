@@ -33,7 +33,7 @@ public:
 	// Métodos para consultar las propiedades privadas
 	Pieza_t getTipo()const;
 	Color getColor()const;
-	Vector2D getPos()const;   //No se sabe si se va a utilizar
+	Vector2D getPos()const;
 	// Métodos para modificar las propiedades privadas
 	void setTipo(Pieza_t t);
 	void setColor(Color c);
@@ -41,4 +41,7 @@ public:
 	virtual void dibuja(float x, float y) = 0 ;  // en la clase base
 	virtual void anima() = 0;
 	virtual vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const  = 0;
+
+	//destructor de pieza
+	virtual ~ClassPieza() = default;
 };
