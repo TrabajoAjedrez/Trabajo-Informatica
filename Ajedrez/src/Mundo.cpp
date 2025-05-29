@@ -157,7 +157,7 @@ void ClassMundo::dibuja() {
 		bool hayJaqueAhora = reyJaque.has_value();
 
 		if (hayJaqueAhora) {
-			dibujarExclamacionSobreRey(reyJaque->first, reyJaque->second, tiempoRebote);
+			ObjTablero->dibujarExclamacionSobreRey(reyJaque->first, reyJaque->second, tiempoRebote);
 
 			if (!estabaEnJaque) {
 				ETSIDI::play("sonidos/alerta.wav");
@@ -166,35 +166,6 @@ void ClassMundo::dibuja() {
 
 		estabaEnJaque = hayJaqueAhora;
 	}
-}
-
-void ClassMundo::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote) {
-	float tamCasilla = ClassCasilla::getTamCasilla();
-
-
-	// Obtener desplazamiento del tablero
-	float offsetX = mundoPtr->ObjTablero->getPosX();
-	float offsetZ = mundoPtr->ObjTablero->getPosZ();
-
-	float x = offsetX + posRey.y * tamCasilla + tamCasilla / 2.0f;
-	float y = offsetZ + (mundoPtr->getFilas() - 1 - posRey.x) * tamCasilla + tamCasilla / 2.0f;
-
-
-	float rebote = 0.1f * sin(tiempoRebote * 3.0f); // rebote animado con función seno
-
-	glDisable(GL_LIGHTING);
-	if (color == ClassPieza::Color::AZUL)
-		glColor3f(0.0f, 0.0f, 1.0f);
-	else
-		glColor3f(1.0f, 0.0f, 0.0f);
-
-	glPushMatrix();
-	glTranslatef(x, y + 0.5f + rebote, 1.0f);
-	glScalef(0.01f, 0.005f, 1.0f); // tamaño del signo
-	glutStrokeCharacter(GLUT_STROKE_ROMAN, '!');
-	glPopMatrix();
-
-	glEnable(GL_LIGHTING);
 }
 
 int ClassMundo::getFilas() const {

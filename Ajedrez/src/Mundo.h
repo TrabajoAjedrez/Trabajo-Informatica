@@ -62,7 +62,6 @@ public:
 	static void onTimer(int value); //para convertir el puntero en metodo
 	void temporizador();
 	void imprime_tiempo(const char* text, float x, float y);
-	void dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote);
 	// Se podria mejorar
 	void seleccionarCasilla(const Vector2D& clicada);
 	//raton& getRaton() { return ratonObj; }

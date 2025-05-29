@@ -74,7 +74,8 @@ public:
 
     void resaltarMovimientos(const std::vector<Vector2D>& movimientos);
     void limpiarResaltados();
-
+    
+    void dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote);
 
     //DESTRUCTOR
     ~ClassTablero();

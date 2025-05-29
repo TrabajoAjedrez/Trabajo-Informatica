@@ -205,6 +205,37 @@ void ClassTablero::limpiarResaltados() {
 }
 
 
+//dibujar la exclamación:
+void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote) {
+    float tamCasilla = ClassCasilla::getTamCasilla();
+
+
+    // Obtener desplazamiento del tablero
+    float offsetX = posX;
+    float offsetZ = posZ;
+
+    float x = offsetX + posRey.y * tamCasilla + tamCasilla / 2.0f;
+    float y = offsetZ + (filas_ - 1 - posRey.x) * tamCasilla + tamCasilla / 2.0f;
+
+
+    float rebote = 0.1f * sin(tiempoRebote * 3.0f); // rebote animado con función seno
+
+    glDisable(GL_LIGHTING);
+    if (color == ClassPieza::Color::AZUL)
+        glColor3f(0.0f, 0.0f, 1.0f);
+    else
+        glColor3f(1.0f, 0.0f, 0.0f);
+
+    glPushMatrix();
+    glTranslatef(x, y + 0.5f + rebote, 1.0f);
+    glScalef(0.01f, 0.005f, 1.0f); // tamaño del signo
+    glutStrokeCharacter(GLUT_STROKE_ROMAN, '!');
+    glPopMatrix();
+
+    glEnable(GL_LIGHTING);
+}
+
+
 //destructor. Tablero crea piezas y tablero las destruye (que poetico)
 ClassTablero::~ClassTablero() {
     for (int i = 0; i < filas_; ++i)
