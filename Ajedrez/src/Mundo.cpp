@@ -168,7 +168,6 @@ void ClassMundo::dibuja() {
 	}
 }
 
-
 int ClassMundo::getFilas() const {
 	return ObjTablero ? ObjTablero->getFilas() : 0;
 }
@@ -178,21 +177,54 @@ int ClassMundo::getColumnas() const {
 
 }
 
-void ClassMundo::mueve_pieza(const Vector2D& clicada) {
+void ClassMundo::actualizaTurno() {
+	reglas.set_turno();
 
-	ClassMundo mundo;
-	//cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
+	std::string textoTurno = reglas.get_turno() ? "AZUL" : "ROJO";
+	std::cout << "Turno del jugador: " << textoTurno << std::endl;
+}
 
-	if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
-		//std::cout << "Click invalido o fuera del tablero\n";
-		return;
-	}
+bool ClassMundo::verificaEstadoDelJuego() {
+	if (!ObjTablero) return false;
 
-	//TESTTTSS
-	ClassPieza* tpieza = ObjTablero->getPieza(clicada);
-	if (tpieza) {
+	// Verificar jaque y mate para ambos colores
+	hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
+	hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
+
+	hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
+	hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
+
+	hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
+	hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_);
+
+	if (hayJaqueMateAzul) std::cout << "Mate al azul\n";
+	if (hayJaqueMateRojo) std::cout << "Mate al rojo\n";
+
+	return hayJaqueMateAzul || hayJaqueMateRojo || hayReyAhogadoAzul || hayReyAhogadoRojo;
+}
+
+
+void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& destino) {
+	if (!intentaMover(origen, destino)) return;
+
+	if (verificaEstadoDelJuego()) return;
+
+	actualizaTurno();
+}
+
+bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
+	if (!ObjTablero) return false;
+	return ObjTablero->moverPieza(origen, destino);
+}
+
+void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
+
+	ClassPieza* pieza = ObjTablero->getPieza(clicada);
+
+	// TESTTTSS
+	if (pieza) {
 		std::string tipoTexto;
-		switch (tpieza->getTipo()) {
+		switch (pieza->getTipo()) {
 		case ClassPieza::Pieza_t::Peon:    tipoTexto = "peon"; break;
 		case ClassPieza::Pieza_t::Torre:   tipoTexto = "torre"; break;
 		case ClassPieza::Pieza_t::Alfil:   tipoTexto = "alfil"; break;
@@ -202,84 +234,145 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 		default: tipoTexto = "pieza desconocida"; break;
 		}
 		ETSIDI::play("sonidos/selec.wav");
-		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
+		std::string colorTexto = (pieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
 		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
 	}
-	else {
-		std::cout << "Casilla vacia (" << clicada.x << ", " << clicada.y << ")\n";
-	}
-	//////
+
+	// Obtener color del turno actual
+	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
 
 	if (!haySeleccionActiva) {
-		if (ObjTablero->estaOcupada(clicada)) {
-			ClassPieza* p = ObjTablero->getPieza(clicada);
-			if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
-				casillaSeleccionada = clicada;
-				haySeleccionActiva = true;
+		// Validar que la pieza pertenece al turno actual
+		if (pieza && pieza->getColor() == turnoActual) {
+			casillaSeleccionada = clicada;
+			haySeleccionActiva = true;
 
-				auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
-				ObjTablero->resaltarMovimientos(movimientosPosibles);
-			}
-
+			auto movimientosPosibles = pieza->obtenerMovimientosPosibles(*ObjTablero);
+			ObjTablero->resaltarMovimientos(movimientosPosibles);
+		}
+		else {
+			std::cout << "No puedes seleccionar una pieza del otro jugador.\n";
 		}
 	}
 	else {
-		ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
-		if (pieza) {
-			auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
-			bool valido = false;
-			for (const auto& m : movimientos) {
-				if (m == clicada) {
-					valido = true;
-					break;
-				}
-			}
-			if (valido) {
-				ObjTablero->moverPieza(casillaSeleccionada, clicada);
-				ETSIDI::play("sonidos/mover.wav");
-
-				// Verificar jaque después del movimiento
-				hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
-				hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
-				hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
-				hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
-				hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
-				hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
-				if (hayJaqueAzul) {
-					std::cout << "El rey azul esta en jaque!" << std::endl;
-				}
-				if (hayJaqueRojo) {
-					std::cout << "El rey rojo esta en jaque!" << std::endl;
-				}
-				if (hayJaqueMateAzul || hayJaqueMateRojo) {
-					cout << "jaque mate" << endl;
-				//reset();
-					
-				}
-				else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) && !(hayJaqueMateAzul || hayJaqueMateRojo) ) {
-					std::cout << "tablas" << endl;
-				//reset();
-				}
-				else
-				reglas.set_turno(); // Cambia el turno después de mover
-
-
-				//promocion
-
-				ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-				if (piezaFinal){
-					if (reglas.get_Promocion(*piezaFinal, mundo)) {
-						std::cout << "promocion!" << std::endl;
-					}
-				}
-			}
+		// Validar que la pieza seleccionada aún pertenece al turno actual
+		ClassPieza* piezaSeleccionada = ObjTablero->getPieza(casillaSeleccionada);
+		if (!piezaSeleccionada || piezaSeleccionada->getColor() != turnoActual) {
+			std::cout << "No puedes mover esa pieza, no es tu turno.\n";
+			haySeleccionActiva = false;
+			ObjTablero->limpiarResaltados();
+			return;
 		}
+
 		ObjTablero->limpiarResaltados();
+		procesaMovimiento(casillaSeleccionada, clicada);
 		haySeleccionActiva = false;
-	
 	}
+	
+	//ClassMundo mundo;
+	////cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
+
+	//if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
+	//	//std::cout << "Click invalido o fuera del tablero\n";
+	//	return;
+	//}
+
+	////TESTTTSS
+	//ClassPieza* tpieza = ObjTablero->getPieza(clicada);
+	//if (tpieza) {
+	//	std::string tipoTexto;
+	//	switch (tpieza->getTipo()) {
+	//	case ClassPieza::Pieza_t::Peon:    tipoTexto = "peon"; break;
+	//	case ClassPieza::Pieza_t::Torre:   tipoTexto = "torre"; break;
+	//	case ClassPieza::Pieza_t::Alfil:   tipoTexto = "alfil"; break;
+	//	case ClassPieza::Pieza_t::Reina:   tipoTexto = "reina"; break;
+	//	case ClassPieza::Pieza_t::Rey:     tipoTexto = "rey"; break;
+	//	case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
+	//	default: tipoTexto = "pieza desconocida"; break;
+	//	}
+	//	ETSIDI::play("sonidos/selec.wav");
+	//	std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
+	//	std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
+	//}
+	//else {
+	//	std::cout << "Casilla vacia (" << clicada.x << ", " << clicada.y << ")\n";
+	//}
+	////////
+
+	//if (!haySeleccionActiva) {
+	//	if (ObjTablero->estaOcupada(clicada)) {
+	//		ClassPieza* p = ObjTablero->getPieza(clicada);
+	//		if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
+	//			casillaSeleccionada = clicada;
+	//			haySeleccionActiva = true;
+
+	//			auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
+	//			ObjTablero->resaltarMovimientos(movimientosPosibles);
+	//		}
+
+	//	}
+	//}
+	// 
+	//else {
+	//	ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
+	//	if (pieza) {
+	//		auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
+	//		bool valido = false;
+	//		for (const auto& m : movimientos) {
+	//			if (m == clicada) {
+	//				valido = true;
+	//				break;
+	//			}
+	//		}
+	// }
+	//		if (valido) {
+	//			ObjTablero->moverPieza(casillaSeleccionada, clicada);
+	// }
+	//			ETSIDI::play("sonidos/mover.wav");
+
+	//			// Verificar jaque después del movimiento
+	//			hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
+	//			hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
+	//			hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
+	//			hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
+	//			hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
+	//			hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
+	//			if (hayJaqueAzul) {
+	//				std::cout << "El rey azul esta en jaque!" << std::endl;
+	//			}
+	//			if (hayJaqueRojo) {
+	//				std::cout << "El rey rojo esta en jaque!" << std::endl;
+	//			}
+	//			if (hayJaqueMateAzul || hayJaqueMateRojo) {
+	//				cout << "jaque mate" << endl;
+	//			//reset();
+	//				
+	//			}
+	//			else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) && !(hayJaqueMateAzul || hayJaqueMateRojo) ) {
+	//				std::cout << "tablas" << endl;
+	//			//reset();
+	//			}
+	//			else
+	//			reglas.set_turno(); // Cambia el turno después de mover
+
+
+	//			//promocion
+
+	//			ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
+	//			if (piezaFinal){
+	//				if (reglas.get_Promocion(*piezaFinal, mundo)) {
+	//					std::cout << "promocion!" << std::endl;
+	//				}
+	//			}
+	//		}
+	//	}
+	//	ObjTablero->limpiarResaltados();
+	//	haySeleccionActiva = false;
+	//
+	//}
 
 }
+
 
 
 void ClassMundo::imprime_tiempo(const char* text, float x, float y) {

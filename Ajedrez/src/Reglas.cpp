@@ -46,6 +46,10 @@ void ClassReglas::set_turno() {//cambio de turno
 	turno_ = !turno_;
 }
 
+ClassPieza::Color ClassReglas::getColorTurno() const {
+    return turno_ ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
+}
+
 int ClassReglas::get_tiempo_restante_azules() const {
 		return tiempo_restante_azules;
 }

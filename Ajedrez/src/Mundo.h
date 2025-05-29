@@ -49,12 +49,21 @@ public:
 	void mueve();
 	void dibuja();
 
+	void procesaMovimiento(const Vector2D& origen, const Vector2D& destino);
+	bool intentaMover(const Vector2D& origen, const Vector2D& destino);
+	bool verificaEstadoDelJuego();
+	void actualizaTurno();
+
+
+
+
+
 	//funciones de tiempo
 	static void onTimer(int value); //para convertir el puntero en metodo
 	void temporizador();
 	void imprime_tiempo(const char* text, float x, float y);
 	// Se podria mejorar
-	void mueve_pieza(const Vector2D& clicada);
+	void seleccionarCasilla(const Vector2D& clicada);
 	//raton& getRaton() { return ratonObj; }
 
 	int getFilas() const;

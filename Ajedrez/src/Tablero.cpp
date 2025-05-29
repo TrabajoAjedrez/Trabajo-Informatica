@@ -142,17 +142,23 @@ bool ClassTablero::estaDentro(const Vector2D& casilla) const {
     return fila >= 0 && fila < getFilas() &&
         col >= 0 && col < getColumnas();
 }
-void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
+
+bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (!esPosicionValida(origen) || !esPosicionValida(destino))
-        return;
+        return false;
 
     ClassPieza* pieza = getPieza(origen);
     if (!pieza)
-        return;
+        return false;
+
+    std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
+    if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {
+        std::cout << "Movimiento inválido para esta pieza." << std::endl;
+        return false;
+    }
 
     //la pieza que voy a comer
     ClassPieza* pieza_des = getPieza(destino);
-
     if (pieza_des) {
         delete pieza_des;
         cout << "pieza comida" << endl;
@@ -165,7 +171,7 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
         << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
  
-
+    return true;
 }
 
 void ClassTablero::clear() {
