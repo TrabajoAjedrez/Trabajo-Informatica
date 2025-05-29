@@ -50,11 +50,8 @@ void ClassMundo::inicializa() {
 	mundoPtr = this; 
 
 	// Inicializa el tablero según la variante seleccionada
-	int var = PreguntarVariante();
 
-	var_ = static_cast<Variante>(var);
-
-	auto dimensiones = reglas.devolver_forma(var);
+	auto dimensiones = reglas.devolver_forma(var_);
 
 	ObjTablero = new ClassTablero(dimensiones);
 

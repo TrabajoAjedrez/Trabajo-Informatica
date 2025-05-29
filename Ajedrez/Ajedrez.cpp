@@ -8,9 +8,6 @@
 raton ratonObj; // crea instancia global del ratón
 
 
-//int varianteSeleccionada = 1;
-
-
 ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
 
 
@@ -38,7 +35,8 @@ void OnMouseClick(int button, int state, int x, int y) {
 
 int main(int argc, char* argv[])
 {
-	ObjMundo = new ClassMundo(); //Creamos el objeto que contiene el mundo
+	int var = ClassMundo::PreguntarVariante(); 
+	ObjMundo = new ClassMundo(0, 0, 0, static_cast<ClassMundo::Variante>(var));
 
 	ClassReglas reglas;
 	ClassReglas* preglas = &reglas; //preglas apunta a reglas (asignacion)
