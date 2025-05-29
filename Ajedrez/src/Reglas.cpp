@@ -72,6 +72,7 @@ Vector2D ClassReglas::buscarRey(const ClassTablero& tablero, ClassPieza::Color c
             }
         }
     }
+    return { -1, -1 };
 }
 bool ClassReglas::hayJaque(const ClassTablero& tablero, ClassPieza::Color colorRey) {
   
@@ -141,7 +142,7 @@ bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassP
             movimientos = { {i+ 1, j-1}, {i+1, j+0}, {i+1, j+1}, {i+0, j-1}, {i+0, j+1}, {i-1,j-1}, {i-1,j+ 0}, {i-1, j+1} }; // el rey tambien amenaza pero no podemos llamar a sus movposibles
             }
             for (const auto& mov : movimientos) {
-                if (mov == pos) {
+                if (tablero.estaDentro(mov) && mov == pos) {
 
                     return true;
                 }
@@ -171,7 +172,7 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
     for (int i = 0; i < tablero.getFilas(); ++i) {
         for (int j = 0; j < tablero.getColumnas(); ++j) {
             ClassPieza* pieza = tablero.getPieza({ i, j });
-            if (pieza && pieza->getColor() != colorRey) {
+            if (pieza && pieza->getColor() == colorRey) {
                 auto movimientos = pieza->obtenerMovimientosPosibles(tablero);
                 for (const auto& mov : movimientos) {
                     Nmovs++;
@@ -180,7 +181,7 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
             }
         }
     if (!hayjaque && Nmovs <= 0 && esturno) {
-        cout << "Rey " << (colorRey == ClassPieza::Color::AZUL ? "ROJO" : "AZUL") << "ahogado. Tablas!" << endl;
+        cout << "Rey " << (colorRey == ClassPieza::Color::AZUL ? "AZUL" : "ROJO") << "ahogado. Tablas!" << endl;
         return true;
     }
     else 

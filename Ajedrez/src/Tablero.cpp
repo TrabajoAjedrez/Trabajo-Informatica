@@ -248,7 +248,5 @@ bool ClassTablero::esPiezaCapturable(const Vector2D& pos) const {
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico)
 ClassTablero::~ClassTablero() {
-    for (int i = 0; i < filas_; ++i)
-        for (int j = 0; j < columnas_; ++j)
-            delete tablero[i][j]; 
+    clear();  // Libera la memoria de todas las piezas; 
 }
