@@ -213,6 +213,12 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 }
 
 bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
+
+	if (!ValidadorDeMovimientos::esMovimientoLegal(*ObjTablero, origen, destino, reglas.getColorTurno())) {
+		std::cout << "Movimiento ilegal: el rey quedaría en jaque.\n";
+		return false;
+	}
+
 	if (!ObjTablero) return false;
 	return ObjTablero->moverPieza(origen, destino);
 }
@@ -358,12 +364,12 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 
 	//			//promocion
 
-	//			ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-	//			if (piezaFinal){
-	//				if (reglas.get_Promocion(*piezaFinal, mundo)) {
-	//					std::cout << "promocion!" << std::endl;
-	//				}
-	//			}
+				//ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
+				//if (piezaFinal){
+				//	if (reglas.get_Promocion(*piezaFinal, mundo)) {
+				//		std::cout << "promocion!" << std::endl;
+				//	}
+				//}
 	//		}
 	//	}
 	//	ObjTablero->limpiarResaltados();

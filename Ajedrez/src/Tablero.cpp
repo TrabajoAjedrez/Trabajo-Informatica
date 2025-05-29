@@ -151,11 +151,11 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (!pieza)
         return false;
 
-    std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
-    if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {
-        std::cout << "Movimiento inválido para esta pieza." << std::endl;
-        return false;
-    }
+    //std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
+    //if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {
+    //    std::cout << "Movimiento inválido para esta pieza." << std::endl;
+    //    return false;
+    //}
 
     ClassPieza* destinoPieza = getPieza(destino);
     if (destinoPieza && destinoPieza->getTipo() == ClassPieza::Pieza_t::Rey) {
