@@ -277,7 +277,6 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	}
 	
-	//ClassMundo mundo;
 	////cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
 
 	//if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
@@ -364,14 +363,14 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	//			reglas.set_turno(); // Cambia el turno después de mover
 
 
-	//			//promocion
+		//promocion
 
-				//ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-				//if (piezaFinal){
-				//	if (reglas.get_Promocion(*piezaFinal, mundo)) {
-				//		std::cout << "promocion!" << std::endl;
-				//	}
-				//}
+	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
+		if (piezaFinal){
+			if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
+				std::cout << "promocion!" << std::endl;
+			}
+		}
 	//		}
 	//	}
 	//	ObjTablero->limpiarResaltados();

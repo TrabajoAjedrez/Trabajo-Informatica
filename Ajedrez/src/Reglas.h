@@ -41,7 +41,7 @@ public:
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
 	//PROMOCION
-	bool get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo);//identifica si la pieza esta en posicion de promocion
+	bool get_Promocion(const ClassPieza& pieza, int var);//identifica si la pieza esta en posicion de promocion
 
 
 	//FUNCIONES DE TEMPORIZADORES

@@ -199,7 +199,7 @@ string ClassReglas::tiempo_string() {
     return os.str();
 }
 
-bool ClassReglas::get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo) {
+bool ClassReglas::get_Promocion(const ClassPieza& pieza, int var) {
 
     Vector2D pos=pieza.getPos();//en que posicion esta
     ClassPieza::Color col=pieza.getColor(); //que color de peon es
@@ -207,11 +207,11 @@ bool ClassReglas::get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo
 
     int promo_rojas;//fila promocion rojas
     int promo_azules;//fila promocion azules
-    if (mundo.var_ == 1) {
+    if (var == 1) {
         promo_rojas = 4;
         promo_azules = 0;
     }
-    else if (mundo.var_ == 2) {
+    else if (var == 2) {
         promo_rojas = 7;
         promo_azules = 0;
     }
