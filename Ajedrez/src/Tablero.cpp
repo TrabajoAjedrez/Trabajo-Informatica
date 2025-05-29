@@ -246,7 +246,7 @@ bool ClassTablero::esPiezaCapturable(const Vector2D& pos) const {
     return p && p->getTipo() != ClassPieza::Pieza_t::Rey;
 }
 
-//destructor. Tablero crea piezas y tablero las destruye (que poetico)
+//destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
 ClassTablero::~ClassTablero() {
-    clear();  // Libera la memoria de todas las piezas; 
+    clear();  // puede hacerlo directamente por clear no hay que limpiarlas una a una
 }

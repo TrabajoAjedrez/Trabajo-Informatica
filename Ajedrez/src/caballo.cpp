@@ -37,19 +37,20 @@ void ClassCaballo::anima() {
 
 
 vector<Vector2D> ClassCaballo::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
-
 	vector<Vector2D> movimientos;
+	const int dx[] = { 2, 1, -1, -2, -2, -1, 1, 2 }; //asi queda mejor la diferencia entre la casilla objetivo y en la que está
+	const int dy[] = { 1, 2, 2, 1, -1, -2, -2, -1 };
 
-	// Todas las combinaciones posibles del movimiento en L del caballo
-	vector<Vector2D> posiblesMovimientos = {
-		{2, 1}, {1, 2}, {-1, 2}, {-2, 1},
-		{-2, -1}, {-1, -2}, {1, -2}, {2, -1}
-	};
+	for (int i = 0; i < 8; ++i) {
+		int x = pos.x + dx[i];
+		int y = pos.y + dy[i];
+		Vector2D destino(x, y);
 
-	for (const auto& movimiento : posiblesMovimientos) {
-		Vector2D destino = pos + movimiento;
-		if (tablero.esPosicionValida(destino))
+		if (tablero.esPosicionValida(destino)) {
+
 			movimientos.push_back(destino);
+		}
 	}
+
 	return movimientos;
 }

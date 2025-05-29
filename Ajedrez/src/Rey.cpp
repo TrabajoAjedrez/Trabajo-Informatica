@@ -37,7 +37,9 @@ void ClassRey::anima() {
 vector<Vector2D> ClassRey::obtenerMovimientosPosibles(const ClassTablero& tablero) const {  
  vector<Vector2D> movimientos;  
  vector<Vector2D> movsPosibles = { {1, -1}, {1, 0}, {1, 1}, {0, -1}, {0, 1}, {-1, -1}, {-1, 0}, {-1, 1} };  
+
  bool amenaza = false;  
+ //devuelve la lista de movimientos no amenazados
  for (const auto& movimiento : movsPosibles) {  
      Vector2D destino = pos + movimiento;  
      amenaza = reglas->PosAmenzada(destino, tablero, const_cast<ClassRey*>(this));  //El rey no puede ir a una posicion amenazada
