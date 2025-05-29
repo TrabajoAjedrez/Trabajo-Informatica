@@ -53,3 +53,7 @@ vector<Vector2D> ClassCaballo::obtenerMovimientosPosibles(const ClassTablero& ta
 	}
 	return movimientos;
 }
+
+ClassPieza* ClassCaballo::clonar() const {
+	return new ClassCaballo(*this);
+}

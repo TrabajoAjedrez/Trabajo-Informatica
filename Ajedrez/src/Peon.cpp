@@ -79,3 +79,7 @@ void ClassPeon::anima() {
 	sprite.loop();
 	sprite2.loop();
 }
+
+ClassPieza* ClassPeon::clonar() const {
+	return new ClassPeon(*this);
+}

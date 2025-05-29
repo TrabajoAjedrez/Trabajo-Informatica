@@ -205,6 +205,15 @@ bool ClassMundo::verificaEstadoDelJuego() {
 
 
 void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& destino) {
+
+	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
+
+	if (!ValidadorDeMovimientos::esMovimientoLegal(*ObjTablero, origen, destino, turnoActual)) {
+		std::cout << "Movimiento invalido: tu rey quedaria en jaque." << std::endl;
+		return;
+	}
+
+
 	if (!intentaMover(origen, destino)) return;
 
 	if (verificaEstadoDelJuego()) return;
@@ -214,10 +223,6 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 
 bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
 
-	if (!ValidadorDeMovimientos::esMovimientoLegal(*ObjTablero, origen, destino, reglas.getColorTurno())) {
-		std::cout << "Movimiento ilegal: el rey quedaría en jaque.\n";
-		return false;
-	}
 
 	if (!ObjTablero) return false;
 	return ObjTablero->moverPieza(origen, destino);

@@ -20,6 +20,8 @@ public:
 	void anima();
 	vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const override;
 
+	ClassPieza* clonar() const override;
+
 	//destructor torre
 	~ClassTorre() override {}
 };
