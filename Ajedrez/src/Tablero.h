@@ -80,7 +80,7 @@ public:
     void dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote);
 
 
-    bool esPiezaCapturable(const Vector2D& pos) const;
+    bool esPiezaCapturable(const Vector2D& pos, ClassPieza::Color color) const;
 
     //DESTRUCTOR
     ~ClassTablero();

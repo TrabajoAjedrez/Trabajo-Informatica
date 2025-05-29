@@ -41,13 +41,13 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 	}
 	// Captura en diagonal izquierda
 	Vector2D diagonalIzquierda(filaActual + direccion, columnaActual - 1);
-	if (tablero.esPosicionValida(diagonalIzquierda) && tablero.esPiezaCapturable(diagonalIzquierda)) {
+	if (tablero.esPosicionValida(diagonalIzquierda) && tablero.esPiezaCapturable(diagonalIzquierda, getColor())) {
 		movimientos.push_back(diagonalIzquierda);
 	}
 
 	// Captura en diagonal derecha
 	Vector2D diagonalDerecha(filaActual + direccion, columnaActual + 1);
-	if (tablero.esPosicionValida(diagonalDerecha) && tablero.esPiezaCapturable(diagonalDerecha)) {
+	if (tablero.esPosicionValida(diagonalDerecha) && tablero.esPiezaCapturable(diagonalDerecha, getColor())) {
 		movimientos.push_back(diagonalDerecha);
 	}
 

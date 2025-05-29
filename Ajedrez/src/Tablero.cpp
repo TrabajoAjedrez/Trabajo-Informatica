@@ -250,7 +250,7 @@ void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza
         glColor3f(1.0f, 0.0f, 0.0f);
 
     glPushMatrix();
-    glTranslatef(x, y + 0.5f + rebote, 1.0f);
+    glTranslatef(x, y + 0.2f + rebote, 1.0f);
     glScalef(0.01f, 0.005f, 1.0f); // tamaño del signo
     glutStrokeCharacter(GLUT_STROKE_ROMAN, '!');
     glPopMatrix();
@@ -258,9 +258,9 @@ void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza
     glEnable(GL_LIGHTING);
 }
 
-bool ClassTablero::esPiezaCapturable(const Vector2D& pos) const {
+bool ClassTablero::esPiezaCapturable(const Vector2D& pos, ClassPieza::Color color) const {
     ClassPieza* p = getPieza(pos);
-    return p && p->getTipo() != ClassPieza::Pieza_t::Rey;
+    return p && !(p->getTipo() == ClassPieza::Pieza_t::Rey && p->getColor() == color);
 }
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
