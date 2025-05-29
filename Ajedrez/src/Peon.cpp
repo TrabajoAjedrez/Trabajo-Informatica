@@ -32,7 +32,7 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 
 		// Movimiento doble desde la posición inicial
 		int filaInicial = (color == Color::AZUL) ? tablero.getFilas() - 2 : 1;
-		if (filaActual == filaInicial) {
+		if (filaActual == filaInicial && tablero.getFilas()==8) { //si las filas son 8 estamso en demi
 			Vector2D dobleAdelante(filaActual + 2 * direccion, columnaActual);
 			if (tablero.esPosicionValida(dobleAdelante) && !tablero.estaOcupada(dobleAdelante)) {
 				movimientos.push_back(dobleAdelante);
