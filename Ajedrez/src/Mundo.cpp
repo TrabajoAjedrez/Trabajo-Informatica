@@ -150,10 +150,21 @@ void ClassMundo::dibuja() {
 
 
 	if (visibleExclamacion) {
+
+		static bool estabaEnJaque = false;
+
 		auto reyJaque = reglas.getReyEnJaque(*ObjTablero);
-		if (reyJaque.has_value()) {
+		bool hayJaqueAhora = reyJaque.has_value();
+
+		if (hayJaqueAhora) {
 			dibujarExclamacionSobreRey(reyJaque->first, reyJaque->second, tiempoRebote);
+
+			if (!estabaEnJaque) {
+				ETSIDI::play("sonidos/alerta.wav");
+			}
 		}
+
+		estabaEnJaque = hayJaqueAhora;
 	}
 }
 
