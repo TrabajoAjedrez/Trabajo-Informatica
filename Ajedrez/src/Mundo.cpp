@@ -261,7 +261,8 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
 		default: tipoTexto = "pieza desconocida"; break;
 		}
-		std::string colorTexto = (pieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
+		ETSIDI::play("sonidos/selec.wav");
+		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
 		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
 	}
 
@@ -269,16 +270,16 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
 
 	if (!haySeleccionActiva) {
-		// Valida que la pieza pertenece al turno actual
-		if (pieza && pieza->getColor() == turnoActual) {
-			casillaSeleccionada = clicada;
-			haySeleccionActiva = true;
-			ETSIDI::play("sonidos/selec.wav");
-			auto movimientosPosibles = pieza->obtenerMovimientosPosibles(*ObjTablero);
-			ObjTablero->resaltarMovimientos(movimientosPosibles);
-		}
-		else {
-			std::cout << "No puedes seleccionar una pieza del otro jugador.\n";
+		if (ObjTablero->estaOcupada(clicada)) {
+			ClassPieza* p = ObjTablero->getPieza(clicada);
+			if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
+				casillaSeleccionada = clicada;
+				haySeleccionActiva = true;
+
+				auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
+				ObjTablero->resaltarMovimientos(movimientosPosibles);
+			}
+
 		}
 	}
 	else {
