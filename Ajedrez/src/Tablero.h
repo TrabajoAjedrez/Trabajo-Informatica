@@ -16,6 +16,7 @@ private:
 
     std::vector<std::vector<ClassCasilla>> casillasVisuales;
 
+
 public:
     // Constructor: tamaño del tablero y tamaño de cada casilla
     ClassTablero(Vector2D dim) :
@@ -71,7 +72,8 @@ public:
 
     void resaltarMovimientos(const std::vector<Vector2D>& movimientos);
     void limpiarResaltados();
-
+    
+    void dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote);
 
     //DESTRUCTOR
     ~ClassTablero();
