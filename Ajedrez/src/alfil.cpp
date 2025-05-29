@@ -65,28 +65,4 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 	return movimientos;
 }
 
-/*vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tablero) const {
-	
-	vector<Vector2D> movimientos;
-
-	for (int i = 1; i < tablero.getColumnas() + 1; i++) { // se puede mover en diagonal como columnas haya
-		//calculo de posiciones
-		Vector2D DiagSupDer{ i,i };
-		Vector2D DiagSupIz{ i,-i };
-		Vector2D DiagInfDer{ -i,i };
-		Vector2D DiagInfIz{ -i,-i };
-
-		//añadir los movimientos al vector
-		if (tablero.esPosicionValida(pos + DiagSupDer))
-			movimientos.push_back(pos + DiagSupDer);
-		if (tablero.esPosicionValida(pos + DiagInfDer))
-			movimientos.push_back(pos + DiagInfDer);
-		if (tablero.esPosicionValida(pos + DiagSupIz))
-			movimientos.push_back(pos + DiagSupIz);
-		if (tablero.esPosicionValida(pos + DiagInfIz))
-			movimientos.push_back(pos + DiagInfIz);
-
-		return movimientos;
-	}
-}*/
 
