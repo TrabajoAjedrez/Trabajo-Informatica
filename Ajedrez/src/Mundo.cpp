@@ -287,10 +287,6 @@ void ClassMundo::mueve_pieza(const Vector2D& clicada) {
 
 				ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
 				if (piezaFinal){
-					std::cout << "DEBUG: Posición después de mover: ("
-						<< piezaFinal->getPos().x << ", "
-						<< piezaFinal->getPos().y << ") tipo: "
-						<< piezaFinal->getTipo() << std::endl;
 					if (reglas.get_Promocion(*piezaFinal, mundo)) {
 						std::cout << "promocion!" << std::endl;
 					}

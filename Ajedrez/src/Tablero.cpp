@@ -150,6 +150,14 @@ void ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (!pieza)
         return;
 
+    //la pieza que voy a comer
+    ClassPieza* pieza_des = getPieza(destino);
+
+    if (pieza_des) {
+        delete pieza_des;
+        cout << "pieza comida" << endl;
+    }
+
     tablero[destino.x][destino.y] = pieza;
     pieza->setPos(Vector2D(destino.x, destino.y));
     tablero[origen.x][origen.y] = nullptr;
