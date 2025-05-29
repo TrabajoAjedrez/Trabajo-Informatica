@@ -210,8 +210,8 @@ bool ClassReglas::get_Promocion(const ClassPieza& pieza, const ClassMundo& mundo
         promo_rojas = 4;
         promo_azules = 0;
     }
-    else if (mundo.var_ == 1) {
-        promo_rojas = 8;
+    else if (mundo.var_ == 2) {
+        promo_rojas = 7;
         promo_azules = 0;
     }
 

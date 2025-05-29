@@ -41,7 +41,7 @@ public:
 		delete ObjTablero;
 	}
 
-	int PreguntarVariante();
+	static int PreguntarVariante();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
 	void inicializa();
