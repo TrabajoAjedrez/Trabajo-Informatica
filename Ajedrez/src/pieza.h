@@ -43,4 +43,6 @@ public:
 	virtual vector<Vector2D> obtenerMovimientosPosibles(const ClassTablero& tablero) const  = 0;
 
 	virtual ~ClassPieza() = default;
+
 };
+
