@@ -249,6 +249,7 @@ bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
 void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 
 	ClassPieza* pieza = ObjTablero->getPieza(clicada);
+
 	// TESTTTSS
 	if (pieza) {
 		std::string tipoTexto;
@@ -262,7 +263,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		default: tipoTexto = "pieza desconocida"; break;
 		}
 		ETSIDI::play("sonidos/selec.wav");
-		std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
+		std::string colorTexto = (pieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
 		std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
 	}
 
@@ -270,20 +271,20 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
 
 	if (!haySeleccionActiva) {
-		if (ObjTablero->estaOcupada(clicada)) {
-			ClassPieza* p = ObjTablero->getPieza(clicada);
-			if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
-				casillaSeleccionada = clicada;
-				haySeleccionActiva = true;
+		// Validar que la pieza pertenece al turno actual
+		if (pieza && pieza->getColor() == turnoActual) {
+			casillaSeleccionada = clicada;
+			haySeleccionActiva = true;
 
-				auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
-				ObjTablero->resaltarMovimientos(movimientosPosibles);
-			}
-
+			auto movimientosPosibles = pieza->obtenerMovimientosPosibles(*ObjTablero);
+			ObjTablero->resaltarMovimientos(movimientosPosibles);
+		}
+		else {
+			std::cout << "No puedes seleccionar una pieza del otro jugador.\n";
 		}
 	}
 	else {
-		// Valida que la pieza seleccionada aun pertenece al turno actual
+		// Validar que la pieza seleccionada aún pertenece al turno actual
 		ClassPieza* piezaSeleccionada = ObjTablero->getPieza(casillaSeleccionada);
 		if (!piezaSeleccionada || piezaSeleccionada->getColor() != turnoActual) {
 			std::cout << "No puedes mover esa pieza, no es tu turno.\n";
