@@ -66,13 +66,15 @@ int main(int argc, char* argv[])
 	glutKeyboardFunc(OnKeyboardDown);
 
 	glutMouseFunc([](int button, int state, int x, int y) {
+		if (state != GLUT_DOWN) return;
+
 		if (ObjMundo) {
 			int filas = ObjMundo->getFilas();
 			int columnas = ObjMundo->getColumnas();
 
 			//Obtenemos la casilla pulsada por el raton
 			Vector2D casillaSeleccionada = ratonObj.mouse(button, state, x, y, filas, columnas, ObjMundo);
-			ObjMundo->mueve_pieza(casillaSeleccionada); // Llama al método de selección de casilla en el mundo
+			ObjMundo->seleccionarCasilla(casillaSeleccionada); // Llama al método de selección de casilla en el mundo
 		}
 	});
 

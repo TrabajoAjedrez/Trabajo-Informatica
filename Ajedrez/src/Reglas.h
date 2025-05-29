@@ -23,6 +23,8 @@ public:
 
 	void set_turno();
 	bool get_turno()const;
+	ClassPieza::Color getColorTurno() const;
+
 
 	//detectar jaque
 	Vector2D buscarRey(const ClassTablero& tablero, ClassPieza::Color colorRey);

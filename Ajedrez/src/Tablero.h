@@ -5,6 +5,7 @@
 #include "Pieza.h"
 #include "Casilla.h"
 
+
 class ClassTablero {
 private:
     int filas_; // Numero de filas del tablero
@@ -15,6 +16,8 @@ private:
     float posX, posY, posZ; // Posición del tablero en el espacio
 
     std::vector<std::vector<ClassCasilla>> casillasVisuales;
+
+
 
 public:
     // Constructor: tamaño del tablero y tamaño de cada casilla
@@ -59,7 +62,7 @@ public:
 
     ////
     //void moverPieza();
-    void moverPieza(const Vector2D& origen, const Vector2D& destino);
+    bool moverPieza(const Vector2D& origen, const Vector2D& destino);
     ClassPieza* getPieza(const Vector2D& pos) const;
     // Verifica si una casilla está dentro de los límites del tablero
     bool estaDentro(const Vector2D& casilla) const;
