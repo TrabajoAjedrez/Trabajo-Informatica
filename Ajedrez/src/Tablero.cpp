@@ -157,6 +157,12 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
         return false;
     }
 
+    ClassPieza* destinoPieza = getPieza(destino);
+    if (destinoPieza && destinoPieza->getTipo() == ClassPieza::Pieza_t::Rey) {
+        std::cout << "No puedes capturar al rey directamente." << std::endl;
+        return false;
+    }
+
     //la pieza que voy a comer
     ClassPieza* pieza_des = getPieza(destino);
     if (pieza_des) {
@@ -235,6 +241,10 @@ void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza
     glEnable(GL_LIGHTING);
 }
 
+bool ClassTablero::esPiezaCapturable(const Vector2D& pos) const {
+    ClassPieza* p = getPieza(pos);
+    return p && p->getTipo() != ClassPieza::Pieza_t::Rey;
+}
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico)
 ClassTablero::~ClassTablero() {

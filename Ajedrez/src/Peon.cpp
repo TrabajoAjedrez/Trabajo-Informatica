@@ -31,9 +31,7 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 		movimientos.push_back(adelante);	
 
 		// Movimiento doble desde la posición inicial
-		//int filaInicial = 2; //Esta variable deberia depender del tipo del color, de momento esta solo para un bando
 		int filaInicial = (color == Color::AZUL) ? tablero.getFilas() - 2 : 1;
-
 		if (filaActual == filaInicial) {
 			Vector2D dobleAdelante(filaActual + 2 * direccion, columnaActual);
 			if (tablero.esPosicionValida(dobleAdelante) && !tablero.estaOcupada(dobleAdelante)) {
@@ -43,13 +41,13 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 	}
 	// Captura en diagonal izquierda
 	Vector2D diagonalIzquierda(filaActual + direccion, columnaActual - 1);
-	if (tablero.esPosicionValida(diagonalIzquierda) && tablero.estaOcupada(diagonalIzquierda)) {
+	if (tablero.esPosicionValida(diagonalIzquierda) && tablero.esPiezaCapturable(diagonalIzquierda)) {
 		movimientos.push_back(diagonalIzquierda);
 	}
 
 	// Captura en diagonal derecha
 	Vector2D diagonalDerecha(filaActual + direccion, columnaActual + 1);
-	if (tablero.esPosicionValida(diagonalDerecha) && tablero.estaOcupada(diagonalDerecha)) {
+	if (tablero.esPosicionValida(diagonalDerecha) && tablero.esPiezaCapturable(diagonalDerecha)) {
 		movimientos.push_back(diagonalDerecha);
 	}
 
