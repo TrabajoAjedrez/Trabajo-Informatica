@@ -22,5 +22,5 @@ public:
 	ClassPieza* clonar() const override;
 
 	//destructor peon
-	~ClassPeon() override { cout << "muere peon"; };
+	~ClassPeon() override {};
 };

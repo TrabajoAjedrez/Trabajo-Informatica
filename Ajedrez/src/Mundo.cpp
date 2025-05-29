@@ -80,10 +80,6 @@ void ClassMundo::inicializa() {
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 	glutTimerFunc(500, ClassMundo::parpadeoExclamacion, 0);
 
-
-
-	//cambio de turno
-	//reglas.set_turno();
 }
 
 void ClassMundo::onTimer(int value) {
@@ -143,8 +139,12 @@ void ClassMundo::dibuja() {
 	else if(reglas.get_turno()==1)
 		textoTiempo = "Tiempo azules: " + reglas.tiempo_string();
 
-	imprime_tiempo(textoTiempo.c_str(), 5, 4);//c_str para de string a char*
+	imprime_tiempo(textoTiempo.c_str(), 5, 5);//c_str para de string a char*
 
+
+	//imprime promocion
+	if (hay_promo == true)
+		mensajePromo();
 
 	if (visibleExclamacion) {
 
@@ -368,7 +368,9 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
 		if (piezaFinal){
 			if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
-				std::cout << "promocion!" << std::endl;
+				hay_promo = true;
+				char seleccion;
+				cin >> seleccion;//c,t o r
 			}
 		}
 	//		}
@@ -402,4 +404,21 @@ void ClassMundo::reset() {
 	reglas.turno_ = 1;
 	hayReyAhogadoAzul = 0;
 	hayReyAhogadoRojo = 0;
+}
+
+void ClassMundo::mensajePromo() {
+	ETSIDI::setTextColor(1, 1, 0);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
+	ETSIDI::printxy("PROMOCION", 5, 4);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
+	ETSIDI::printxy("Elegir pieza:", 5, 3);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
+	if (var_ == 1) {
+		ETSIDI::printxy("  Reina", 5, 2);
+		ETSIDI::printxy("  Torre", 5, 1);
+	}
+	if (var_ == 2) {
+		ETSIDI::printxy("  Caballo", 5, 2);
+		ETSIDI::printxy("  Torre", 5, 1);
+	}
 }

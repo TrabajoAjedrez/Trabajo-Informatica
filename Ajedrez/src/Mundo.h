@@ -12,6 +12,7 @@ public:
 	double y_ojo;
 	double z_ojo;
 	Variante var_;
+	bool hay_promo = false;
 
 protected:
 
@@ -55,7 +56,7 @@ public:
 	bool verificaEstadoDelJuego();
 	void actualizaTurno();
 
-
+	void mensajePromo();
 
 
 
