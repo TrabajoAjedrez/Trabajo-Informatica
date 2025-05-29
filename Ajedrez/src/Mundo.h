@@ -2,6 +2,7 @@
 #include"Tablero.h"
 #include "vector2d.h"
 #include "raton.h"
+#include "ValidadorDeMovimientos.h"
 #include <vector>
 
 class ClassMundo {

@@ -48,3 +48,7 @@ vector<Vector2D> ClassRey::obtenerMovimientosPosibles(const ClassTablero& tabler
  }  
  return movimientos;  
 }
+
+ClassPieza* ClassRey::clonar() const {
+	return new ClassRey(*this);
+}

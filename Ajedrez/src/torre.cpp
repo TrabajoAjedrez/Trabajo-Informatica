@@ -66,3 +66,7 @@ void ClassTorre::anima() {
 	sprite.loop();
 	sprite2.loop();
 }
+
+ClassPieza* ClassTorre::clonar() const {
+	return new ClassTorre(*this);
+}

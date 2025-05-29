@@ -7,6 +7,22 @@
 #include "caballo.h"
 #include "alfil.h"
 #include "ETSIDI.h"
+
+ClassTablero::ClassTablero(const ClassTablero& otro) {
+    filas_ = otro.filas_;
+    columnas_ = otro.columnas_;
+
+    tablero.resize(filas_, std::vector<ClassPieza*>(columnas_, nullptr));
+
+    for (int i = 0; i < filas_; ++i) {
+        for (int j = 0; j < columnas_; ++j) {
+            if (otro.tablero[i][j]) {
+                tablero[i][j] = otro.tablero[i][j]->clonar();
+            }
+        }
+    }
+}
+
 void ClassTablero::dibuja() {
  
 	// Colores para las casillas (pueden personalizarse)
@@ -150,6 +166,7 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     ClassPieza* pieza = getPieza(origen);
     if (!pieza)
         return false;
+
 
     std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
     if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {

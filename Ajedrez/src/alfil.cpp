@@ -65,4 +65,8 @@ vector<Vector2D> ClassAlfil::obtenerMovimientosPosibles(const ClassTablero& tabl
 	return movimientos;
 }
 
+ClassPieza* ClassAlfil::clonar() const {
+	return new ClassAlfil(*this);
+}
+
 

@@ -36,6 +36,8 @@ public:
         }
     }
     
+    ClassTablero(const ClassTablero& otro); // Constructor copia
+
 	// Métodos para obtener información del tablero
 	int getFilas() const { return filas_; }
 	int getColumnas() const { return columnas_; }

@@ -64,3 +64,7 @@ vector<Vector2D> ClassReina::obtenerMovimientosPosibles(const ClassTablero& tabl
 
 	return movimientos;
 }
+
+ClassPieza* ClassReina::clonar() const {
+	return new ClassReina(*this);
+}
