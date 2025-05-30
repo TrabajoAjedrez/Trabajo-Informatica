@@ -6,7 +6,7 @@ bool ValidadorDeMovimientos::esMovimientoLegal(const ClassTablero& tableroOrigin
     const Vector2D& origen,
     const Vector2D& destino,
     ClassPieza::Color turno) {
-    // Copia del tablero (asegúrate de que tienes constructor copia bien definido)
+    // Copia del tablero
     ClassTablero tablero = tableroOriginal;
 
     // Obtener pieza a mover
