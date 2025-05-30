@@ -27,8 +27,12 @@ void ClassTablero::dibuja( int TipoTablero) {
  
 	// Colores para las casillas (pueden personalizarse)
     glPushMatrix();
+
     if (TipoTablero == 1)
-    {
+        setPosicion(0, 0, 0);
+    else
+        setPosicion(2, -2, 0);
+
         glTranslatef(posX, posY, posZ); // Trasladar el tablero a la posición deseada
         // Bucle para dibujar cada casilla del tablero
         float tamCasilla = ClassCasilla::getTamCasilla();
@@ -41,22 +45,7 @@ void ClassTablero::dibuja( int TipoTablero) {
                 casillasVisuales[i][j].dibujar(x, z);
             }
         }
-    }
-    if (TipoTablero == 2)
-    {
-        glTranslatef(2, -2, 0); // Trasladar el tablero a la posición deseada
-        // Bucle para dibujar cada casilla del tablero
-        float tamCasilla = ClassCasilla::getTamCasilla();
-        for (int i = 0; i < filas_; i++) {
-            for (int j = 0; j < columnas_; j++) {
-                int filaVisual = getFilas() - 1 - i; //Para que el resaltado se dibuje donde debe
 
-                float x = j * tamCasilla;
-                float z = filaVisual * tamCasilla;
-                casillasVisuales[i][j].dibujar(x, z);
-            }
-        }
-    }
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
     // Dibujar borde del tablero
