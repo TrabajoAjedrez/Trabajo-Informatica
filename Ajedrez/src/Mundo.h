@@ -1,11 +1,19 @@
 #pragma once
-#include"Tablero.h"
+#include "Tablero.h"
 #include "vector2d.h"
 #include "raton.h"
 #include "ValidadorDeMovimientos.h"
 #include <vector>
+#include "Reglas.h"
+
+
 
 class ClassMundo {
+/*private:
+	ClassTablero tablero;
+	ClassReglas reglas;
+	IA ia;
+	*/
 public:
 	enum Variante { Silverman4x5, Demi };
 	double x_ojo;
@@ -17,6 +25,7 @@ public:
 protected:
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
+
 	//raton ratonObj; // crea instancia global del ratón
 	Vector2D  casillaSeleccionada;
 	bool haySeleccionActiva = false; //por que no son public?

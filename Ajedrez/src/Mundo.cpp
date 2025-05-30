@@ -4,21 +4,29 @@
 #include "freeglut.h"
 #include "Reglas.h"
 #include "ETSIDI.h"
+#include "IA.h"
 
 using namespace std;
 
 ClassReglas reglas; 
 static ClassMundo* mundoPtr = nullptr;
 
-// Para el parpadeo de la exclamacion
-//bool visibleExclamacion = true;
-//int tiempoParpadeo = 500;
+IA miIA(IA::elegirEstrategiaAleatoria()); 
+// Para probar una en concreto, puedes usar:
+// IA miIA(IA::TipoIA::Agresiva); // O cualquier otro tipo de IA
+// IA miIA(IA::TipoIA::Defensiva); // O cualquier otro tipo de IA
+// IA miIA(IA::TipoIA::Tactica); // O cualquier otro tipo de IA
+// IA miIA(IA::TipoIA::Aleatoria); // O cualquier otro tipo de IA
+// IA miIA(IA::TipoIA::Adaptativa); // O cualquier otro tipo de IA
+
+
+
 
 
 int ClassMundo::PreguntarVariante() {
 	int var = 1; //al fin y al cabo el enum es de enteros
 	std::cout << "Selecciona la variante de ajedrez:\n";
-	std::cout << "1. Silverman\n";
+	std::cout << "1. Silverman\n";	
 	std::cout << "2. Demichess\n";
 	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
 
@@ -86,7 +94,28 @@ void ClassMundo::onTimer(int value) {
 	bool turno = reglas.get_turno();
 	if (mundoPtr) {
 		mundoPtr->temporizador();
-		if (turno == 0) {
+
+
+		if (!turno) { // Turno de las rojas
+			miIA.ejecutarMovimiento(mundoPtr->ObjTablero, reglas);
+		}
+
+		if ((turno && reglas.get_tiempo_restante_azules() > 0) ||
+			(!turno && reglas.get_tiempo_restante_rojas() > 0)) {
+			glutTimerFunc(1000, ClassMundo::onTimer, 0);
+		}
+
+        /*bool turno = reglas.get_turno();
+		if (!turno) { // Turno de las rojas
+			iaRoja.ejecutarMovimiento(mundoPtr->ObjTablero, mundoPtr->reglas);
+		}
+
+		if ((turno && mundoPtr->reglas.get_tiempo_restante_azules() > 0) ||
+			(!turno && mundoPtr->reglas.get_tiempo_restante_rojas() > 0)) {
+			glutTimerFunc(1000, ClassMundo::onTimer, 0);
+		}*/
+
+		/*if (turno == 0) {
 			if (reglas.get_tiempo_restante_rojas() > 0) {
 				glutTimerFunc(1000, ClassMundo::onTimer, 0);
 			}
@@ -95,7 +124,7 @@ void ClassMundo::onTimer(int value) {
 			if (reglas.get_tiempo_restante_azules() > 0) {
 				glutTimerFunc(1000, ClassMundo::onTimer, 0);
 			}
-		}
+		}*/
 	}
 	glutPostRedisplay();
 }

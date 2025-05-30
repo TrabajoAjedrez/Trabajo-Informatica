@@ -138,6 +138,7 @@
     <ClCompile Include="src\alfil.cpp" />
     <ClCompile Include="src\caballo.cpp" />
     <ClCompile Include="src\Casilla.cpp" />
+    <ClCompile Include="src\IA.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Peon.cpp" />
     <ClCompile Include="src\raton.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="src\alfil.h" />
     <ClInclude Include="src\caballo.h" />
     <ClInclude Include="src\Casilla.h" />
+    <ClInclude Include="src\IA.h" />
     <ClInclude Include="src\Color.h" />
     <ClInclude Include="src\Peon.h" />
     <ClInclude Include="src\raton.h" />
