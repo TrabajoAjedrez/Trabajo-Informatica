@@ -264,8 +264,8 @@ bool ClassTablero::esPiezaCapturable(const Vector2D& pos, ClassPieza::Color colo
 }
 
 //nueva pieza por promocion
-void ClassTablero::promocionarPieza(const ClassPieza& pieza, int var) {
-    char seleccion;
+void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int var) {
+    // char seleccion;
     Vector2D posPromo = pieza.getPos();
     ClassPieza::Color colPromo = pieza.getColor();
 
@@ -277,34 +277,37 @@ void ClassTablero::promocionarPieza(const ClassPieza& pieza, int var) {
     //crear la nueva pieza
     ClassPieza* nuevaPieza = nullptr;
 
-    do {
-        cout << "introduce inicial    ";
-        cin >> seleccion;
-        cout << endl;
-        switch (seleccion) {
-        case 't':
-            if (var == 2)
-                break;
-            else {
-                nuevaPieza = new ClassTorre(colPromo, posPromo);
-                break;
-            }
-        case 'c':
-            if (var == 1)
-                break;
-            else {
-                nuevaPieza = new ClassCaballo(colPromo, posPromo);
-                break;
-            }
-        case 'r':
+    switch (seleccion) {
+    case 'd':
+        if (var == 2)
+            break;
+        else {
             nuevaPieza = new ClassReina(colPromo, posPromo);
             break;
-        default:
+        }
+    case 'c':
+        if (var == 1)
+            break;
+        else {
+            nuevaPieza = new ClassCaballo(colPromo, posPromo);
             break;
         }
-    } while (!nuevaPieza);
+    case 't':
+        nuevaPieza = new ClassTorre(colPromo, posPromo);
+        break;
+    case 'a':
+        if (var == 1)
+            break;
+        else {
+            nuevaPieza = new ClassAlfil(colPromo, posPromo);
+            break;
+        }
+    default:
+        break;
+    }
 
     tablero[posPromo.x][posPromo.y] = nuevaPieza;
+
 }
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?

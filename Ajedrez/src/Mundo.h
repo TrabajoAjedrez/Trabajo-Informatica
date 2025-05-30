@@ -13,6 +13,7 @@ public:
 	double z_ojo;
 	Variante var_;
 	bool hay_promo = false;
+	ClassPieza* piezaPromo = nullptr;
 
 protected:
 
