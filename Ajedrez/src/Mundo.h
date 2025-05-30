@@ -69,6 +69,7 @@ protected:
 	bool hayJaqueMateRojo = false;
 	bool hayReyAhogadoAzul = false;
 	bool hayReyAhogadoRojo = false;
+	bool hayempate = false;  //el empte puede ser por rey ahogado o que solo queden los reyes
 
 	float tiempoRebote = 0.0f;
 	bool visibleExclamacion = true;

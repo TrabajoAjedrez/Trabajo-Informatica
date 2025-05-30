@@ -339,10 +339,15 @@ bool ClassMundo::verificaEstadoDelJuego() {
 	hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
 	hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_);
 
+	if (hayReyAhogadoAzul || hayReyAhogadoRojo || reglas.empateReyes(*ObjTablero)) {
+		std::cout << "Tablas!.\n";
+		ETSIDI::play("sonidos/tablas.wav");
+		hayempate = true;
+	}
 	if (hayJaqueMateAzul) std::cout << "Mate al azul\n";
 	if (hayJaqueMateRojo) std::cout << "Mate al rojo\n";
 
-	return hayJaqueMateAzul || hayJaqueMateRojo || hayReyAhogadoAzul || hayReyAhogadoRojo;
+	return hayJaqueMateAzul || hayJaqueMateRojo || hayempate;
 }
 
 

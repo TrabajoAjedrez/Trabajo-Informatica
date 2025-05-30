@@ -187,7 +187,6 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
     }
     if (!hayjaque && Nmovs <= 0 && esturno) {
         cout << "Rey " << (colorRey == ClassPieza::Color::AZUL ? "AZUL" : "ROJO") << " ahogado. Tablas!" << endl;
-        ETSIDI::play("sonidos/tablas.wav");
         return true;
     }
     else
@@ -235,4 +234,28 @@ bool ClassReglas::get_Promocion(const ClassPieza& pieza, int var) {
     else
         return 0;
 
+}
+
+bool ClassReglas::empateReyes(const ClassTablero& tablero) const {
+	int piezasAzules = 0; //que no sean reyes
+	int piezasRojas = 0;
+	for (int i = 0; i < tablero.getFilas(); ++i) {
+		for (int j = 0; j < tablero.getColumnas(); ++j) {
+			ClassPieza* pieza = tablero.getPieza({ i, j });
+			if (pieza && pieza->getTipo() != ClassPieza::Pieza_t::Rey) {
+				if (pieza->getColor() == ClassPieza::Color::AZUL) {
+					piezasAzules++;
+				}
+				else if (pieza->getColor() == ClassPieza::Color::ROJO) {
+					piezasRojas++;
+				}
+			}
+		}
+	}
+    if (piezasAzules == 0 && piezasRojas == 0) {
+		cout << "Empate por solo dos reyes!" << endl;
+		return true;
+	}
+	else
+		return false;
 }
