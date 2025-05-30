@@ -165,7 +165,10 @@ int main(int argc, char* argv[])
 
 							//std::cout << "jugar" << std::endl;
 							coordinador->estado = Coordinador::JUEGO;
-							coordinador->ObjMundo->inicializa(coordinador->menu.getTipoJuego(), coordinador->menu.getLugar(), coordinador->menu.getTipoTablero());
+							coordinador->ObjMundo->setTipoJuego(coordinador->menu.getTipoJuego());
+							coordinador->ObjMundo->setLugar(coordinador->menu.getLugar());
+							coordinador->ObjMundo->setTipoTablero(coordinador->menu.getTipoTablero());
+							coordinador->ObjMundo->inicializa();
 
 						}
 					}

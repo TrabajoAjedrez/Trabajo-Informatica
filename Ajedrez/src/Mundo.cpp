@@ -51,7 +51,7 @@ void ClassMundo::parpadeoExclamacion(int value) {
 
 
 
-void ClassMundo::inicializa(int TipoJuego, int Lugar, int TipoTablero)
+void ClassMundo::inicializa()
 {
 
 	mundoPtr = this; 
@@ -143,6 +143,33 @@ void ClassMundo::dibuja() {
 	// Se dibuja el tablero
 	ObjTablero->dibuja();
 	glPopMatrix();
+
+	// Dibujo del fondo
+	float AwX = -4.0f;
+	float AwY = -4.0f;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/campo.png").id);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 1);
+	if (TipoTablero == 1)
+	{
+		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+		glTexCoord2d(1, 1);  glVertex2d(12 + AwX, 0 + AwY);
+		glTexCoord2d(1, 0);  glVertex2d(12 + AwX, 12 + AwY);
+		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 12 + AwY);
+	}
+	else if (TipoTablero == 2)
+	{
+		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+		glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY);
+		glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY);
+		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY);
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
 
 	//creo los string para mostrar en pantalla

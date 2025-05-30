@@ -14,7 +14,40 @@ public:
 	Variante var_;
 	bool hay_promo = false;
 	ClassPieza* piezaPromo = nullptr;
+	int TipoJuego;
+	int Lugar;
+	int TipoTablero;
 
+	void setTipoJuego(int a)
+	{
+		TipoJuego = a;
+	}
+	void setLugar(int a)
+	{
+		Lugar = a;
+	}
+	void setTipoTablero(int a)
+	{
+		TipoTablero = a;
+	}
+
+
+
+
+
+
+	int getTipoJuego()
+	{
+		return(TipoJuego);
+	}
+	int getLugar()
+	{
+		return(Lugar);
+	}
+	int getTipoTablero()
+	{
+		return(TipoTablero);
+	}
 protected:
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
@@ -47,7 +80,7 @@ public:
 	static int PreguntarVariante();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
-	void inicializa(int TipoJuego, int Lugar, int TipoTablero);
+	void inicializa();
 	void rotarOjo();
 	void mueve();
 	void dibuja();

@@ -42,6 +42,7 @@ void ClassTablero::dibuja() {
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
     // Dibujar borde del tablero
+    /*
     glColor3f(0.1f, 0.1f, 0.1f);
     glLineWidth(2.0f);
     glBegin(GL_LINE_LOOP);
@@ -50,7 +51,7 @@ void ClassTablero::dibuja() {
     glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
     glVertex3f(0, 0.01f, filas_ * tamCasilla);
     glEnd();
-
+    */
     glPopMatrix();
 }
 
