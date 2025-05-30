@@ -142,7 +142,10 @@ bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassP
             movimientos = { {i+ 1, j-1}, {i+1, j+0}, {i+1, j+1}, {i+0, j-1}, {i+0, j+1}, {i-1,j-1}, {i-1,j+ 0}, {i-1, j+1} }; // el rey tambien amenaza pero no podemos llamar a sus movposibles
             }
             else if (pieza2 && pieza2->getTipo() == ClassPieza::Peon && pieza2->getColor() != Pieza->getColor()) {
-                movimientos = { {i + 1, j - 1}, {i + 1, j + 1} }; //el peon solo come en diagonal sus movsPosibles son tods no solo los de comer
+                if(pieza2->getColor()==ClassPieza::Color::ROJO)
+                movimientos = { {i +1, j -1}, {i + 1, j + 1} }; //el peon solo come en diagonal sus movsPosibles son tods no solo los de comer
+                else if (pieza2->getColor() == ClassPieza::Color::AZUL)
+                    movimientos = { {i - 1, j - 1}, {i - 1, j + 1} }; 
 
             }
             for (const auto& mov : movimientos) {
