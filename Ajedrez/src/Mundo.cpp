@@ -173,7 +173,7 @@ void ClassMundo::dibuja() {
 
 	glPushMatrix();
 	// Se dibuja el tablero
-	ObjTablero->dibuja();
+	ObjTablero->dibuja(TipoTablero);
 	glPopMatrix();
 
 	// Dibujo del fondo

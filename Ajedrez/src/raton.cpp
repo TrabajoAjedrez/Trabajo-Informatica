@@ -40,10 +40,10 @@ Vector2D raton::mouse(int button, int state, int x, int y, int filas, int column
         else if (caso == 2) {
             std::cout << "caso 2" << endl;
 
-            tableroXMin = 0.2425f;
-            tableroXMax = 0.49875f;
-            tableroYMin = 0.0f;
-            tableroYMax = 0.67f;
+            tableroXMin = 0.3725f;
+            tableroXMax = 0.6275;
+            tableroYMin = 0.16f;
+            tableroYMax = 0.835f;
         }
         else {
             std::cout << "Caso de tablero no reconocido  (click izquierdo) " << std::endl;
@@ -69,6 +69,7 @@ Vector2D raton::mouse(int button, int state, int x, int y, int filas, int column
         }
         else {
             std::cout << "Click fuera del tablero  (click izquierdo) " << std::endl;
+            //std::cout << normalizedX << ", " << normalizedY << std::endl;
 			return Vector2D(-1, -1); // Retorna un valor inválido si el clic está fuera del tablero
         }
     }
@@ -91,10 +92,10 @@ Vector2D raton::mouse(int button, int state, int x, int y, int filas, int column
             tableroYMax = 0.77333f;
         }
         else if (caso == 2) {
-            tableroXMin = 0.2425f;
-            tableroXMax = 0.49875f;
-            tableroYMin = 0.0f;
-            tableroYMax = 0.67f;
+            tableroXMin = 0.3725f;
+            tableroXMax = 0.6275;
+            tableroYMin = 0.16f;
+            tableroYMax = 0.835f;
         }
         else {
             std::cout << "Caso de tablero no reconocido (click derecho) " << std::endl;

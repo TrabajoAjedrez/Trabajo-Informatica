@@ -45,7 +45,7 @@ public:
     float getPosZ() const { return posZ; }
 
     // Dibuja el tablero
-    void dibuja();
+    void dibuja(int TipoTablero);
     // Establece la posición del tablero
     void setPosicion(float x, float y, float z);
     // Dibuja una casilla en la posicion (x,z)
