@@ -14,6 +14,8 @@ public:
 	Variante var_;
 	bool hay_promo = false;
 
+	ClassPieza* piezaPromo = nullptr;
+
 protected:
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
