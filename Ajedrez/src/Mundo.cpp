@@ -63,7 +63,7 @@ void ClassMundo::inicializa()
 {
 
 	mundoPtr = this; 
-
+	
 	// Inicializa el tablero según la variante seleccionada
 	// Inicializa el tablero según la variante seleccionada
 	//int var = PreguntarVariante();
@@ -105,21 +105,23 @@ void ClassMundo::inicializa()
 }
 
 void ClassMundo::onTimer(int value) {
+	
 	bool turno = reglas.get_turno();
 	if (mundoPtr) {
 		mundoPtr->temporizador();
 
-
+		if (mundoPtr->TipoJuego == 2) 
+		{
 		if (!turno) { // Turno de las rojas
 			miIA.ejecutarMovimiento(mundoPtr->ObjTablero, reglas);
 		}
-
+	}
 		if ((turno && reglas.get_tiempo_restante_azules() > 0) ||
 			(!turno && reglas.get_tiempo_restante_rojas() > 0)) {
 			glutTimerFunc(1000, ClassMundo::onTimer, 0);
 		}
-
-        /*bool turno = reglas.get_turno();
+		/*
+        bool turno = reglas.get_turno();
 		if (!turno) { // Turno de las rojas
 			iaRoja.ejecutarMovimiento(mundoPtr->ObjTablero, mundoPtr->reglas);
 		}
@@ -127,9 +129,9 @@ void ClassMundo::onTimer(int value) {
 		if ((turno && mundoPtr->reglas.get_tiempo_restante_azules() > 0) ||
 			(!turno && mundoPtr->reglas.get_tiempo_restante_rojas() > 0)) {
 			glutTimerFunc(1000, ClassMundo::onTimer, 0);
-		}*/
+		}
 
-		/*if (turno == 0) {
+		if (turno == 0) {
 			if (reglas.get_tiempo_restante_rojas() > 0) {
 				glutTimerFunc(1000, ClassMundo::onTimer, 0);
 			}
@@ -138,7 +140,8 @@ void ClassMundo::onTimer(int value) {
 			if (reglas.get_tiempo_restante_azules() > 0) {
 				glutTimerFunc(1000, ClassMundo::onTimer, 0);
 			}
-		}*/
+		}
+		*/
 	}
 	glutPostRedisplay();
 }
@@ -174,31 +177,103 @@ void ClassMundo::dibuja() {
 	glPopMatrix();
 
 	// Dibujo del fondo
-	float AwX = -4.0f;
-	float AwY = -4.0f;
+	if (Lugar == 1)
+	{
+		float AwX = -5.0f;
+		float AwY = -2.0f;
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/campo.png").id);
-	glDisable(GL_LIGHTING);
-	glBegin(GL_POLYGON);
-	glColor3f(1, 1, 1);
-	if (TipoTablero == 1)
-	{
-		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
-		glTexCoord2d(1, 1);  glVertex2d(12 + AwX, 0 + AwY);
-		glTexCoord2d(1, 0);  glVertex2d(12 + AwX, 12 + AwY);
-		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 12 + AwY);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/castillo.png").id);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_POLYGON);
+		glColor3f(1, 1, 1);
+		if (TipoTablero == 1)
+		{
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+			glTexCoord2d(1, 1);  glVertex2d(14 + AwX, 0 + AwY);
+			glTexCoord2d(1, 0);  glVertex2d(14 + AwX, 14 + AwY);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 14 + AwY);
+		}
+		else if (TipoTablero == 2)
+		{
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY - 4);
+			glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY - 4);
+			glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY - 4);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY - 4);
+		}
+		glEnd();
+		glEnable(GL_LIGHTING);
+		glDisable(GL_TEXTURE_2D);
 	}
-	else if (TipoTablero == 2)
+	if (Lugar == 2)
 	{
-		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
-		glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY);
-		glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY);
-		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY);
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/mazmorra.png").id);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_POLYGON);
+		glColor3f(1, 1, 1);
+		if (TipoTablero == 1)
+		{
+			float AwX = -3.0f;
+			float AwY = -3.0f;
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+			glTexCoord2d(1, 1);  glVertex2d(10 + AwX, 0 + AwY);
+			glTexCoord2d(1, 0);  glVertex2d(10 + AwX, 10 + AwY);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 10 + AwY);
+		}
+		else if (TipoTablero == 2)
+		{
+			float AwX = -5.0f;
+			float AwY = -2.0f;
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY - 4);
+			glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY - 4);
+			glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY - 4);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY - 4);
+		}
+		glEnd();
+		glEnable(GL_LIGHTING);
+		glDisable(GL_TEXTURE_2D);
 	}
-	glEnd();
-	glEnable(GL_LIGHTING);
-	glDisable(GL_TEXTURE_2D);
+	if (Lugar == 3)
+	{
+		float AwX = -4.0f;
+		float AwY = -4.0f;
+
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/campo.png").id);
+		glDisable(GL_LIGHTING);
+		glBegin(GL_POLYGON);
+		glColor3f(1, 1, 1);
+		if (TipoTablero == 1)
+		{
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+			glTexCoord2d(1, 1);  glVertex2d(12 + AwX, 0 + AwY);
+			glTexCoord2d(1, 0);  glVertex2d(12 + AwX, 12 + AwY);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 12 + AwY);
+		}
+		else if (TipoTablero == 2)
+		{
+			glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+			glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY);
+			glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY);
+			glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY);
+		}
+		glEnd();
+		glEnable(GL_LIGHTING);
+		glDisable(GL_TEXTURE_2D);
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 	//creo los string para mostrar en pantalla
