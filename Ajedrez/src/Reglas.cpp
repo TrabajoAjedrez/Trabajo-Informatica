@@ -195,12 +195,15 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
 
 
 
-string ClassReglas::tiempo_string() {
+string ClassReglas::tiempo_string_rojas() {
     ostringstream os;//en vez de un flujo como ostream, para almacenar el string
-    if(turno_==0)
-        os << tiempo_restante_rojas;
-    else if(turno_==1)
-        os << tiempo_restante_azules;
+    os << tiempo_restante_rojas;
+
+    return os.str();
+}
+string ClassReglas::tiempo_string_azules() {
+    ostringstream os;//en vez de un flujo como ostream, para almacenar el string
+    os << tiempo_restante_azules;
 
     return os.str();
 }

@@ -55,5 +55,6 @@ public:
 	bool empateReyes(const ClassTablero& tablero) const;
 
 	//pasar el tiempo a string
-	string tiempo_string();
+	string tiempo_string_rojas();
+	string tiempo_string_azules();
 };

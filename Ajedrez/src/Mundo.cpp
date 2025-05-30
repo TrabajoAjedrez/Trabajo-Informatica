@@ -278,14 +278,16 @@ void ClassMundo::dibuja() {
 
 	//creo los string para mostrar en pantalla
 	//recurro a la funcion de reglas en la que paso el tiempo a string
-	string textoTiempo;
-	if(reglas.get_turno() == 0)
-		textoTiempo = "Tiempo rojas: " + reglas.tiempo_string();
+	//string textoTiempo;
+	string textoRojas = "Tiempo rojas: " + reglas.tiempo_string_rojas();
+	string textoAzules = "Tiempo azules: " + reglas.tiempo_string_azules();
+	/*if(reglas.get_turno() == 0)
+		textoTiempo 
 	else if(reglas.get_turno()==1)
-		textoTiempo = "Tiempo azules: " + reglas.tiempo_string();
+		textoTiempo ;*/
 
-	imprime_tiempo(textoTiempo.c_str(), 5, 5);//c_str para de string a char*
-
+	imprime_tiempo(textoRojas.c_str(),5);//c_str para de string a char*
+	imprime_tiempo(textoAzules.c_str(), 4);
 
 	//imprime promocion
 	if (hay_promo == true)
@@ -444,13 +446,18 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 
 
 
-void ClassMundo::imprime_tiempo(const char* text, float x, float y) {
+void ClassMundo::imprime_tiempo(const char* text, float y) {
 	bool turn = reglas.get_turno();
 	if(turn==0)
 		ETSIDI::setTextColor(1, 0, 0);
 	else if(turn==1)
 		ETSIDI::setTextColor(0, 0, 1);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
+	float x;
+	if (var_ == 1)
+		x = 5;
+	else if (var_ == 2)
+		x = 7;
 	ETSIDI::printxy(text, x, y);
 
 }

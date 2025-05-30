@@ -107,7 +107,7 @@ public:
 	//funciones de tiempo
 	static void onTimer(int value); //para convertir el puntero en metodo
 	void temporizador();
-	void imprime_tiempo(const char* text, float x, float y);
+	void imprime_tiempo(const char* text,float y);
 	// Se podria mejorar
 	void seleccionarCasilla(const Vector2D& clicada);
 	//raton& getRaton() { return ratonObj; }
