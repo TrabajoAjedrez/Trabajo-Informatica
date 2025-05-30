@@ -45,11 +45,19 @@ void ClassMundo::parpadeoExclamacion(int value) {
 
 
 
-void ClassMundo::inicializa() {
+void ClassMundo::inicializa(int TipoJuego, int Lugar, int TipoTablero)
+{
 
 	mundoPtr = this; 
 
 	// Inicializa el tablero según la variante seleccionada
+	// Inicializa el tablero según la variante seleccionada
+	//int var = PreguntarVariante();
+	int var = TipoTablero;
+
+	var_ = static_cast<Variante>(var);
+
+	//std::cout << var_ << endl;
 
 	auto dimensiones = reglas.devolver_forma(var_);
 

@@ -46,7 +46,7 @@ public:
 	static int PreguntarVariante();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
-	void inicializa();
+	void inicializa(int TipoJuego, int Lugar, int TipoTablero);
 	void rotarOjo();
 	void mueve();
 	void dibuja();

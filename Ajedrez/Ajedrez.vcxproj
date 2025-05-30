@@ -139,6 +139,8 @@
     <ClCompile Include="src\caballo.cpp" />
     <ClCompile Include="src\Casilla.cpp" />
     <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\Coordinador.cpp" />
+    <ClCompile Include="src\MENU.cpp" />
     <ClCompile Include="src\Peon.cpp" />
     <ClCompile Include="src\raton.cpp" />
     <ClCompile Include="src\Reglas.cpp" />
@@ -156,6 +158,8 @@
     <ClInclude Include="src\caballo.h" />
     <ClInclude Include="src\Casilla.h" />
     <ClInclude Include="src\Color.h" />
+    <ClInclude Include="src\Coordinador.h" />
+    <ClInclude Include="src\MENU.h" />
     <ClInclude Include="src\Peon.h" />
     <ClInclude Include="src\raton.h" />
     <ClInclude Include="src\Reglas.h" />
