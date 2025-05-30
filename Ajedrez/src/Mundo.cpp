@@ -30,7 +30,13 @@ void ClassMundo::tecla(unsigned char key) {
 		reset();
 
 	}
+
+	if (hay_promo && (key == 'd' || key == 't' || key == 'c') || key == 'a') {
+		ObjTablero->promocionarPieza(*piezaPromo, key, static_cast<int>(var_));
+		hay_promo = false;
+	}
 }
+
 void ClassMundo::tecla_especial(unsigned char key) {
 
 }
@@ -285,25 +291,18 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	}
 	
-	
 
 		//promocion
 
 	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-		if (piezaFinal){
-			if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
-				hay_promo = true;
-				ObjTablero->promocionarPieza(*piezaFinal, static_cast<int>(var_));
-				//necesita la informacion del peon
-				hay_promo = false;
-			}
+
+	if (piezaFinal) {
+		if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
+			hay_promo = true;
+			piezaPromo = piezaFinal;
 		}
-	//		}
-	//	}
-	//	ObjTablero->limpiarResaltados();
-	//	haySeleccionActiva = false;
-	//
-	//}
+	}
+	//llamo a la promocion en tecla
 
 }
 
@@ -339,11 +338,12 @@ void ClassMundo::mensajePromo() {
 	ETSIDI::printxy("Elegir pieza:", 5, 3);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
 	if (var_ == 1) {
-		ETSIDI::printxy("  Reina: r", 5, 2);
+		ETSIDI::printxy("  Dama:  d", 5, 2);
 		ETSIDI::printxy("  Torre: t", 5, 1);
 	}
 	if (var_ == 2) {
-		ETSIDI::printxy("  Caballo: c", 5, 2);
-		ETSIDI::printxy("  Torre: t", 5, 1);
+		ETSIDI::printxy("  Alfil: a", 5, 2); 
+		ETSIDI::printxy("  Caballo: c", 5, 1);
+		ETSIDI::printxy("  Torre: t", 5, 0);
 	}
 }
