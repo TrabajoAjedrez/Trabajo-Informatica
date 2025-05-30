@@ -31,12 +31,15 @@ Vector2D raton::mouse(int button, int state, int x, int y, int filas, int column
 
         // Elegir el tablero según el caso
         if (caso == 1) {
+        std::cout << "caso 1" << endl;
             tableroXMin = 0.2925f;
             tableroXMax = 0.70625f;
             tableroYMin = 0.085f;
             tableroYMax = 0.77333f;
         }
         else if (caso == 2) {
+            std::cout << "caso 2" << endl;
+
             tableroXMin = 0.2425f;
             tableroXMax = 0.49875f;
             tableroYMin = 0.0f;

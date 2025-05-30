@@ -82,6 +82,9 @@ public:
 
     bool esPiezaCapturable(const Vector2D& pos, ClassPieza::Color color) const;
 
+    //creacion de piezas en promocion
+    void promocionarPieza(const ClassPieza& pieza,char seleccion, int var);
+
     //DESTRUCTOR
     ~ClassTablero();
 };

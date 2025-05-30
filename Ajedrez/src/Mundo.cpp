@@ -38,7 +38,13 @@ void ClassMundo::tecla(unsigned char key) {
 		reset();
 
 	}
+
+	if (hay_promo && (key == 'd' || key == 't' || key == 'c') || key == 'a') {
+		ObjTablero->promocionarPieza(*piezaPromo, key, static_cast<int>(var_));
+		hay_promo = false;
+	}
 }
+
 void ClassMundo::tecla_especial(unsigned char key) {
 
 }
@@ -53,11 +59,19 @@ void ClassMundo::parpadeoExclamacion(int value) {
 
 
 
-void ClassMundo::inicializa() {
+void ClassMundo::inicializa()
+{
 
 	mundoPtr = this; 
 
 	// Inicializa el tablero según la variante seleccionada
+	// Inicializa el tablero según la variante seleccionada
+	//int var = PreguntarVariante();
+	int var = TipoTablero;
+
+	var_ = static_cast<Variante>(var);
+
+	//std::cout << var_ << endl;
 
 	auto dimensiones = reglas.devolver_forma(var_);
 
@@ -158,6 +172,33 @@ void ClassMundo::dibuja() {
 	// Se dibuja el tablero
 	ObjTablero->dibuja();
 	glPopMatrix();
+
+	// Dibujo del fondo
+	float AwX = -4.0f;
+	float AwY = -4.0f;
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/campo.png").id);
+	glDisable(GL_LIGHTING);
+	glBegin(GL_POLYGON);
+	glColor3f(1, 1, 1);
+	if (TipoTablero == 1)
+	{
+		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+		glTexCoord2d(1, 1);  glVertex2d(12 + AwX, 0 + AwY);
+		glTexCoord2d(1, 0);  glVertex2d(12 + AwX, 12 + AwY);
+		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 12 + AwY);
+	}
+	else if (TipoTablero == 2)
+	{
+		glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
+		glTexCoord2d(1, 1);  glVertex2d(18 + AwX, 0 + AwY);
+		glTexCoord2d(1, 0);  glVertex2d(18 + AwX, 18 + AwY);
+		glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 18 + AwY);
+	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
 
 	//creo los string para mostrar en pantalla
@@ -306,108 +347,18 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	}
 	
-	////cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
-
-	//if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
-	//	//std::cout << "Click invalido o fuera del tablero\n";
-	//	return;
-	//}
-
-	////TESTTTSS
-	//ClassPieza* tpieza = ObjTablero->getPieza(clicada);
-	//if (tpieza) {
-	//	std::string tipoTexto;
-	//	switch (tpieza->getTipo()) {
-	//	case ClassPieza::Pieza_t::Peon:    tipoTexto = "peon"; break;
-	//	case ClassPieza::Pieza_t::Torre:   tipoTexto = "torre"; break;
-	//	case ClassPieza::Pieza_t::Alfil:   tipoTexto = "alfil"; break;
-	//	case ClassPieza::Pieza_t::Reina:   tipoTexto = "reina"; break;
-	//	case ClassPieza::Pieza_t::Rey:     tipoTexto = "rey"; break;
-	//	case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
-	//	default: tipoTexto = "pieza desconocida"; break;
-	//	}
-	//	ETSIDI::play("sonidos/selec.wav");
-	//	std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
-	//	std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
-	//}
-	//else {
-	//	std::cout << "Casilla vacia (" << clicada.x << ", " << clicada.y << ")\n";
-	//}
-	////////
-
-	//if (!haySeleccionActiva) {
-	//	if (ObjTablero->estaOcupada(clicada)) {
-	//		ClassPieza* p = ObjTablero->getPieza(clicada);
-	//		if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
-	//			casillaSeleccionada = clicada;
-	//			haySeleccionActiva = true;
-
-	//			auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
-	//			ObjTablero->resaltarMovimientos(movimientosPosibles);
-	//		}
-
-	//	}
-	//}
-	// 
-	//else {
-	//	ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
-	//	if (pieza) {
-	//		auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
-	//		bool valido = false;
-	//		for (const auto& m : movimientos) {
-	//			if (m == clicada) {
-	//				valido = true;
-	//				break;
-	//			}
-	//		}
-	// }
-	//		if (valido) {
-	//			ObjTablero->moverPieza(casillaSeleccionada, clicada);
-	// }
-	//			ETSIDI::play("sonidos/mover.wav");
-
-	//			// Verificar jaque después del movimiento
-	//			hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
-	//			hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
-	//			hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
-	//			hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
-	//			hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
-	//			hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
-	//			if (hayJaqueAzul) {
-	//				std::cout << "El rey azul esta en jaque!" << std::endl;
-	//			}
-	//			if (hayJaqueRojo) {
-	//				std::cout << "El rey rojo esta en jaque!" << std::endl;
-	//			}
-	//			if (hayJaqueMateAzul || hayJaqueMateRojo) {
-	//				cout << "jaque mate" << endl;
-	//			//reset();
-	//				
-	//			}
-	//			else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) && !(hayJaqueMateAzul || hayJaqueMateRojo) ) {
-	//				std::cout << "tablas" << endl;
-	//			//reset();
-	//			}
-	//			else
-	//			reglas.set_turno(); // Cambia el turno después de mover
-
 
 		//promocion
 
 	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-		if (piezaFinal){
-			if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
-				hay_promo = true;
-				char seleccion;
-				cin >> seleccion;//c,t o r
-			}
+
+	if (piezaFinal) {
+		if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
+			hay_promo = true;
+			piezaPromo = piezaFinal;
 		}
-	//		}
-	//	}
-	//	ObjTablero->limpiarResaltados();
-	//	haySeleccionActiva = false;
-	//
-	//}
+	}
+	//llamo a la promocion en tecla
 
 }
 
@@ -443,11 +394,12 @@ void ClassMundo::mensajePromo() {
 	ETSIDI::printxy("Elegir pieza:", 5, 3);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
 	if (var_ == 1) {
-		ETSIDI::printxy("  Reina", 5, 2);
-		ETSIDI::printxy("  Torre", 5, 1);
+		ETSIDI::printxy("  Dama:  d", 5, 2);
+		ETSIDI::printxy("  Torre: t", 5, 1);
 	}
 	if (var_ == 2) {
-		ETSIDI::printxy("  Caballo", 5, 2);
-		ETSIDI::printxy("  Torre", 5, 1);
+		ETSIDI::printxy("  Alfil: a", 5, 2); 
+		ETSIDI::printxy("  Caballo: c", 5, 1);
+		ETSIDI::printxy("  Torre: t", 5, 0);
 	}
 }

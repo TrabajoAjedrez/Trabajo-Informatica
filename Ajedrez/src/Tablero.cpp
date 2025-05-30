@@ -42,6 +42,7 @@ void ClassTablero::dibuja() {
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
     // Dibujar borde del tablero
+    /*
     glColor3f(0.1f, 0.1f, 0.1f);
     glLineWidth(2.0f);
     glBegin(GL_LINE_LOOP);
@@ -50,7 +51,7 @@ void ClassTablero::dibuja() {
     glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
     glVertex3f(0, 0.01f, filas_ * tamCasilla);
     glEnd();
-
+    */
     glPopMatrix();
 }
 
@@ -261,6 +262,53 @@ void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza
 bool ClassTablero::esPiezaCapturable(const Vector2D& pos, ClassPieza::Color color) const {
     ClassPieza* p = getPieza(pos);
     return p && !(p->getTipo() == ClassPieza::Pieza_t::Rey && p->getColor() == color);
+}
+
+//nueva pieza por promocion
+void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int var) {
+    // char seleccion;
+    Vector2D posPromo = pieza.getPos();
+    ClassPieza::Color colPromo = pieza.getColor();
+
+    //lo primero es eliminar el peon
+    delete tablero[posPromo.x][posPromo.y];
+    tablero[posPromo.x][posPromo.y] = nullptr;
+
+
+    //crear la nueva pieza
+    ClassPieza* nuevaPieza = nullptr;
+
+    switch (seleccion) {
+    case 'd':
+        if (var == 2)
+            break;
+        else {
+            nuevaPieza = new ClassReina(colPromo, posPromo);
+            break;
+        }
+    case 'c':
+        if (var == 1)
+            break;
+        else {
+            nuevaPieza = new ClassCaballo(colPromo, posPromo);
+            break;
+        }
+    case 't':
+        nuevaPieza = new ClassTorre(colPromo, posPromo);
+        break;
+    case 'a':
+        if (var == 1)
+            break;
+        else {
+            nuevaPieza = new ClassAlfil(colPromo, posPromo);
+            break;
+        }
+    default:
+        break;
+    }
+
+    tablero[posPromo.x][posPromo.y] = nuevaPieza;
+
 }
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
