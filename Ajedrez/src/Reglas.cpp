@@ -134,12 +134,16 @@ bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassP
     for (int i = 0; i < tablero.getFilas(); ++i) {
         for (int j = 0; j < tablero.getColumnas(); ++j) {
             ClassPieza* pieza2 = tablero.getPieza({ i, j });
-            if (pieza2 && pieza2->getColor() != Pieza->getColor() && !(pieza2->getTipo() == Pieza->getTipo())) { //Llama a movs posible menos de la pieza que ele pasamos para evitar un bucle infinito
+            if (pieza2 && pieza2->getColor() != Pieza->getColor() && pieza2->getTipo() != Pieza->getTipo()&& pieza2->getTipo()!=ClassPieza::Peon) { // evitamos el rey y el peon
                  movimientos = pieza2->obtenerMovimientosPosibles(tablero);
              
             }
             else if (pieza2 && pieza2->getTipo() == Pieza->getTipo() && pieza2->getColor() != Pieza->getColor()) {
             movimientos = { {i+ 1, j-1}, {i+1, j+0}, {i+1, j+1}, {i+0, j-1}, {i+0, j+1}, {i-1,j-1}, {i-1,j+ 0}, {i-1, j+1} }; // el rey tambien amenaza pero no podemos llamar a sus movposibles
+            }
+            else if (pieza2 && pieza2->getTipo() == ClassPieza::Peon && pieza2->getColor() != Pieza->getColor()) {
+                movimientos = { {i + 1, j - 1}, {i + 1, j + 1} }; //el peon solo come en diagonal sus movsPosibles son tods no solo los de comer
+
             }
             for (const auto& mov : movimientos) {
                 if (tablero.estaDentro(mov) && mov == pos) {
@@ -152,7 +156,7 @@ bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassP
     return false;
 }
 
-bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color colorRey, int turno) { 
+bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color colorRey, int turno) {
 
     bool hayjaque = hayJaque(tablero, colorRey);
     Vector2D posRey = buscarRey(tablero, colorRey);
@@ -161,12 +165,12 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
 
     vector<Vector2D> movimientos;
     int Nmovs = 0;
-    
-    bool esturno = false; //el rey ahogado tiene que ser cuando toca mover
 
-    if (colorRey == ClassPieza::Color::AZUL && turno == 1)
+    bool esturno = false; //el rey ahogado tiene que ser una vez haya movido el oponente
+
+    if (colorRey == ClassPieza::Color::AZUL && turno == 0)
         esturno = true;
-    if (colorRey == ClassPieza::Color::ROJO && turno == 0)
+    if (colorRey == ClassPieza::Color::ROJO && turno == 1)
         esturno = true;
 
     for (int i = 0; i < tablero.getFilas(); ++i) {
@@ -174,19 +178,19 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
             ClassPieza* pieza = tablero.getPieza({ i, j });
             if (pieza && pieza->getColor() == colorRey) {
                 auto movimientos = pieza->obtenerMovimientosPosibles(tablero);
-                for (const auto& mov : movimientos) {
-                    Nmovs++;
-                    }
-                }
+                Nmovs += movimientos.size();
             }
         }
+    }
     if (!hayjaque && Nmovs <= 0 && esturno) {
-        cout << "Rey " << (colorRey == ClassPieza::Color::AZUL ? "AZUL" : "ROJO") << "ahogado. Tablas!" << endl;
+        cout << "Rey " << (colorRey == ClassPieza::Color::AZUL ? "AZUL" : "ROJO") << " ahogado. Tablas!" << endl;
+        ETSIDI::play("sonidos/tablas.wav");
         return true;
     }
-    else 
+    else
         return false;
 }
+
 
 
 string ClassReglas::tiempo_string() {
