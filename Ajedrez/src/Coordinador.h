@@ -9,7 +9,7 @@
 
 class Coordinador {
 public:
-    enum EstadoJuego { MENU, JUEGO /*, PAUSA, GAMEOVER, ... */ };
+    enum EstadoJuego { MENU, JUEGO, GAMEOVER, YOUWIN };
     EstadoJuego estado;
     ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
     int TipoJuego;
@@ -18,8 +18,7 @@ public:
     int nivel;
     Menu menu;
 
-
-
+   
     Coordinador();              // <-- Constructor
     ~Coordinador();             // <-- Destructor
 

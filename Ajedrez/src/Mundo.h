@@ -26,6 +26,7 @@ public:
 	int Lugar;
 	int TipoTablero;
 
+
 	void setTipoJuego(int a)
 	{
 		TipoJuego = a;
@@ -102,7 +103,8 @@ public:
 
 	void mensajePromo();
 
-
+	bool getHayJaqueMateAzul() { return hayJaqueMateAzul; }
+	bool getHayJaqueMateRojo() { return hayJaqueMateRojo; }
 
 	//funciones de tiempo
 	static void onTimer(int value); //para convertir el puntero en metodo

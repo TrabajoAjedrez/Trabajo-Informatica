@@ -16,6 +16,11 @@ protected:
 	int tiempo_restante_rojas = 0;
 public:
 
+
+	int gettiempo_restante_azules() const { return tiempo_restante_azules; }
+
+
+
 	bool turno_ = 1; //será 1 si le toca a las azules, 0 si le toca a las rojas
 	
 	//obtener shape segun las reglas de Demi y de Silverman
