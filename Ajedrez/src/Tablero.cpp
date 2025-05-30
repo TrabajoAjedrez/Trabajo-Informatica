@@ -263,6 +263,50 @@ bool ClassTablero::esPiezaCapturable(const Vector2D& pos, ClassPieza::Color colo
     return p && !(p->getTipo() == ClassPieza::Pieza_t::Rey && p->getColor() == color);
 }
 
+//nueva pieza por promocion
+void ClassTablero::promocionarPieza(const ClassPieza& pieza, int var) {
+    char seleccion;
+    Vector2D posPromo = pieza.getPos();
+    ClassPieza::Color colPromo = pieza.getColor();
+
+    //lo primero es eliminar el peon
+    delete tablero[posPromo.x][posPromo.y];
+    tablero[posPromo.x][posPromo.y] = nullptr;
+
+
+    //crear la nueva pieza
+    ClassPieza* nuevaPieza = nullptr;
+
+    do {
+        cout << "introduce inicial    ";
+        cin >> seleccion;
+        cout << endl;
+        switch (seleccion) {
+        case 't':
+            if (var == 2)
+                break;
+            else {
+                nuevaPieza = new ClassTorre(colPromo, posPromo);
+                break;
+            }
+        case 'c':
+            if (var == 1)
+                break;
+            else {
+                nuevaPieza = new ClassCaballo(colPromo, posPromo);
+                break;
+            }
+        case 'r':
+            nuevaPieza = new ClassReina(colPromo, posPromo);
+            break;
+        default:
+            break;
+        }
+    } while (!nuevaPieza);
+
+    tablero[posPromo.x][posPromo.y] = nuevaPieza;
+}
+
 //destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
 ClassTablero::~ClassTablero() {
     clear();  // puede hacerlo directamente por clear no hay que limpiarlas una a una

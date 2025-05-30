@@ -277,91 +277,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	}
 	
-	////cout << "Clic en la casilla (" << clicada.x << ", " << clicada.y << ")\n";
-
-	//if (clicada.x < 0 || clicada.y < 0 || !ObjTablero->estaDentro(clicada)) {
-	//	//std::cout << "Click invalido o fuera del tablero\n";
-	//	return;
-	//}
-
-	////TESTTTSS
-	//ClassPieza* tpieza = ObjTablero->getPieza(clicada);
-	//if (tpieza) {
-	//	std::string tipoTexto;
-	//	switch (tpieza->getTipo()) {
-	//	case ClassPieza::Pieza_t::Peon:    tipoTexto = "peon"; break;
-	//	case ClassPieza::Pieza_t::Torre:   tipoTexto = "torre"; break;
-	//	case ClassPieza::Pieza_t::Alfil:   tipoTexto = "alfil"; break;
-	//	case ClassPieza::Pieza_t::Reina:   tipoTexto = "reina"; break;
-	//	case ClassPieza::Pieza_t::Rey:     tipoTexto = "rey"; break;
-	//	case ClassPieza::Pieza_t::Caballo: tipoTexto = "caballo"; break;
-	//	default: tipoTexto = "pieza desconocida"; break;
-	//	}
-	//	ETSIDI::play("sonidos/selec.wav");
-	//	std::string colorTexto = (tpieza->getColor() == ClassPieza::Color::AZUL) ? "azul" : "rojo";
-	//	std::cout << "Estas clicando un " << tipoTexto << " " << colorTexto << "\n";
-	//}
-	//else {
-	//	std::cout << "Casilla vacia (" << clicada.x << ", " << clicada.y << ")\n";
-	//}
-	////////
-
-	//if (!haySeleccionActiva) {
-	//	if (ObjTablero->estaOcupada(clicada)) {
-	//		ClassPieza* p = ObjTablero->getPieza(clicada);
-	//		if (p && ((reglas.get_turno() && p->getColor() == ClassPieza::Color::AZUL) || (!reglas.get_turno() && p->getColor() == ClassPieza::Color::ROJO))) {
-	//			casillaSeleccionada = clicada;
-	//			haySeleccionActiva = true;
-
-	//			auto movimientosPosibles = p->obtenerMovimientosPosibles(*ObjTablero);
-	//			ObjTablero->resaltarMovimientos(movimientosPosibles);
-	//		}
-
-	//	}
-	//}
-	// 
-	//else {
-	//	ClassPieza* pieza = ObjTablero->getPieza(casillaSeleccionada);
-	//	if (pieza) {
-	//		auto movimientos = pieza->obtenerMovimientosPosibles(*ObjTablero);
-	//		bool valido = false;
-	//		for (const auto& m : movimientos) {
-	//			if (m == clicada) {
-	//				valido = true;
-	//				break;
-	//			}
-	//		}
-	// }
-	//		if (valido) {
-	//			ObjTablero->moverPieza(casillaSeleccionada, clicada);
-	// }
-	//			ETSIDI::play("sonidos/mover.wav");
-
-	//			// Verificar jaque después del movimiento
-	//			hayJaqueAzul = reglas.hayJaque(*ObjTablero, ClassPieza::Color::AZUL);
-	//			hayJaqueRojo = reglas.hayJaque(*ObjTablero, ClassPieza::Color::ROJO);
-	//			hayJaqueMateAzul = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::AZUL);
-	//			hayJaqueMateRojo = reglas.hayJaqueMate(*ObjTablero, ClassPieza::Color::ROJO);
-	//			hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_); //la funcion analiza si el bando rival ya no le qiedan movimientos
-	//			hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
-	//			if (hayJaqueAzul) {
-	//				std::cout << "El rey azul esta en jaque!" << std::endl;
-	//			}
-	//			if (hayJaqueRojo) {
-	//				std::cout << "El rey rojo esta en jaque!" << std::endl;
-	//			}
-	//			if (hayJaqueMateAzul || hayJaqueMateRojo) {
-	//				cout << "jaque mate" << endl;
-	//			//reset();
-	//				
-	//			}
-	//			else if ((hayReyAhogadoAzul|| hayReyAhogadoRojo) && !(hayJaqueMateAzul || hayJaqueMateRojo) ) {
-	//				std::cout << "tablas" << endl;
-	//			//reset();
-	//			}
-	//			else
-	//			reglas.set_turno(); // Cambia el turno después de mover
-
+	
 
 		//promocion
 
@@ -369,8 +285,9 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		if (piezaFinal){
 			if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
 				hay_promo = true;
-				char seleccion;
-				cin >> seleccion;//c,t o r
+				ObjTablero->promocionarPieza(*piezaFinal, static_cast<int>(var_));
+				//necesita la informacion del peon
+				hay_promo = false;
 			}
 		}
 	//		}
@@ -414,11 +331,11 @@ void ClassMundo::mensajePromo() {
 	ETSIDI::printxy("Elegir pieza:", 5, 3);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
 	if (var_ == 1) {
-		ETSIDI::printxy("  Reina", 5, 2);
-		ETSIDI::printxy("  Torre", 5, 1);
+		ETSIDI::printxy("  Reina: r", 5, 2);
+		ETSIDI::printxy("  Torre: t", 5, 1);
 	}
 	if (var_ == 2) {
-		ETSIDI::printxy("  Caballo", 5, 2);
-		ETSIDI::printxy("  Torre", 5, 1);
+		ETSIDI::printxy("  Caballo: c", 5, 2);
+		ETSIDI::printxy("  Torre: t", 5, 1);
 	}
 }
