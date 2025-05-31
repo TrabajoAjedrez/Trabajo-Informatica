@@ -43,5 +43,6 @@ private:
     int evaluarMovimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas);
     int evaluarMovimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas);
     int evaluarMovimientoTactico(ClassTablero* tablero, ClassReglas& reglas);
+    bool capturaPropiaVentajosa(ClassTablero* tablero, ClassReglas& reglas, const Vector2D& origen, const Vector2D& destino);
 };
 

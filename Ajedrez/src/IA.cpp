@@ -1,4 +1,5 @@
 #include "IA.h"
+#include "historialmovimientos.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -86,9 +87,642 @@ TipoIA IA::elegirEstrategiaAleatoria() {
 	
 	return static_cast<TipoIA>(dis(gen));
 }
-
-
 bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	ClassPieza::Color enemigo = (turno == ClassPieza::Color::AZUL) ? ClassPieza::Color::ROJO : ClassPieza::Color::AZUL;
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					if (esPropia && !reyEnJaque)
+						continue;
+
+					int score = 0;
+
+					// Bonificación por captura al paso
+					Vector2D casillaEnPasante = tablero->getCasillaObjetivoEnPasante();
+					ClassPieza::Color colorPeonEnPasante = tablero->getColorPeonVulnerableEnPasante();
+
+					if (pieza->getTipo() == ClassPieza::Peon &&
+						destino == casillaEnPasante &&
+						objetivo == nullptr &&
+						colorPeonEnPasante != turno) {
+						score -= 6;
+					}
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					// Bonificación por jaque
+					if (reglasTemp.hayJaque(copia, enemigo)) {
+						score -= 25;
+					}
+
+					// Bonificación por jaque mate
+					if (reglasTemp.hayJaqueMate(copia, enemigo)) {
+						score -= 100;
+					}
+
+					// Penalización por repetición
+					if (HistorialMovimientos::esRepetido(origen, destino)) {
+						score += 15;
+					}
+
+					// Bonificación por capturar pieza enemiga valiosa
+					if (objetivo && objetivo->getColor() != turno) {
+						switch (objetivo->getTipo()) {
+						case ClassPieza::Reina: score -= 20; break;
+						case ClassPieza::Torre: score -= 10; break;
+						case ClassPieza::Alfil:
+						case ClassPieza::Caballo: score -= 5; break;
+						case ClassPieza::Peon: score -= 2; break;
+						default: break;
+						}
+					}
+
+					// Penalización leve si es una captura propia (solo permitida en jaque)
+					if (esPropia) {
+						score += 8;
+					}
+
+					movimientosEvaluados.emplace_back(origen, destino, score);
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+				return std::get<2>(a) < std::get<2>(b);
+			});
+
+	Vector2D origen = std::get<0>(*mejor);
+	Vector2D destino = std::get<1>(*mejor);
+
+	if (tablero->moverPieza(origen, destino)) {
+		HistorialMovimientos::registrarMovimiento(origen, destino);
+		reglas.set_turno();
+		std::cout << "IA Agresiva movió de " << origen << " a " << destino
+			<< " con score: " << std::get<2>(*mejor) << std::endl;
+		return true;
+	}
+}
+
+std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+return false;
+}
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					// Solo permitir capturas propias si estamos en jaque
+					if (esPropia && !reyEnJaque)
+						continue;
+
+					int score = 0;
+
+					// Bonificación por captura al paso
+					Vector2D casillaEnPasante = tablero->getCasillaObjetivoEnPasante();
+					ClassPieza::Color colorPeonEnPasante = tablero->getColorPeonVulnerableEnPasante();
+
+					if (pieza->getTipo() == ClassPieza::Peon &&
+						destino == casillaEnPasante &&
+						objetivo == nullptr &&
+						colorPeonEnPasante != turno) {
+						score -= 6; // bonificación por captura al paso
+					}
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					// Penalizar si el movimiento es repetido
+					if (HistorialMovimientos::esRepetido(origen, destino)) {
+						score += 15;
+					}
+
+					// Bonificación por capturar pieza enemiga valiosa
+					if (objetivo && objetivo->getColor() != turno) {
+						switch (objetivo->getTipo()) {
+						case ClassPieza::Reina: score -= 20; break;
+						case ClassPieza::Torre: score -= 10; break;
+						case ClassPieza::Alfil:
+						case ClassPieza::Caballo: score -= 5; break;
+						case ClassPieza::Peon: score -= 2; break;
+						default: break;
+						}
+					}
+
+					// Penalización leve si es una captura propia (solo permitida en jaque)
+					if (esPropia) {
+						score += 8;
+					}
+
+					movimientosEvaluados.emplace_back(origen, destino, score);
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+			   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			HistorialMovimientos::registrarMovimiento(origen, destino);
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					// Solo permitir capturas propias si estamos en jaque
+					if (esPropia && !reyEnJaque)
+						continue;
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					int score = 0;
+
+					// Penalizar si el movimiento es repetido
+					if (HistorialMovimientos::esRepetido(origen, destino)) {
+						score += 15;
+					}
+
+					// Bonificación por capturar pieza enemiga valiosa
+					if (objetivo && objetivo->getColor() != turno) {
+						switch (objetivo->getTipo()) {
+						case ClassPieza::Reina: score -= 20; break;
+						case ClassPieza::Torre: score -= 10; break;
+						case ClassPieza::Alfil:
+						case ClassPieza::Caballo: score -= 5; break;
+						case ClassPieza::Peon: score -= 2; break;
+						default: break;
+						}
+					}
+
+					// Penalización leve si es una captura propia (solo permitida en jaque)
+					if (esPropia) {
+						score += 8;
+					}
+
+					movimientosEvaluados.emplace_back(origen, destino, score);
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+			   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			HistorialMovimientos::registrarMovimiento(origen, destino);
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosSalvadores;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosCaptura;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosNormales;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					// Solo permitir capturas propias si estamos en jaque
+					if (esPropia && !reyEnJaque)
+						continue;
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					if (reyEnJaque) {
+						// Si el rey puede capturar una pieza enemiga que lo amenaza y no queda amenazado
+						if (pieza->getTipo() == ClassPieza::Rey && objetivo && objetivo->getColor() != turno) {
+							if (!reglasTemp.PosAmenzada(destino, copia, copia.getPieza(destino))) {
+								movimientosSalvadores.insert(movimientosSalvadores.begin(), { origen, destino });
+								continue;
+							}
+						}
+
+						// Permitir capturas propias si salvan al rey
+						movimientosSalvadores.push_back({ origen, destino });
+					}
+					else if (objetivo && objetivo->getColor() != turno) {
+						movimientosCaptura.push_back({ origen, destino });
+					}
+					else {
+						movimientosNormales.push_back({ origen, destino });
+					}
+				}
+			}
+		}
+	}
+
+	// 1. Si estamos en jaque, priorizar cualquier movimiento que lo evite
+	if (!movimientosSalvadores.empty()) {
+		auto [origen, destino] = movimientosSalvadores.front();
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva salió del jaque moviendo de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 2. Si no hay jaque, priorizar capturas enemigas
+	for (const auto& [origen, destino] : movimientosCaptura) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 3. Si no hay capturas, hacer un movimiento normal
+	for (const auto& [origen, destino] : movimientosNormales) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosSalvadores;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosCaptura;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosNormales;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+
+					if (reyEnJaque) {
+						// Si el rey puede capturar una pieza enemiga que lo amenaza y no queda amenazado
+						if (pieza->getTipo() == ClassPieza::Rey && objetivo && objetivo->getColor() != turno) {
+							if (!reglasTemp.PosAmenzada(destino, copia, copia.getPieza(destino))) {
+								// Captura segura del atacante: priorizar
+								movimientosSalvadores.insert(movimientosSalvadores.begin(), { origen, destino });
+								continue;
+							}
+						}
+
+						// Cualquier movimiento legal que saque del jaque
+						movimientosSalvadores.push_back({ origen, destino });
+					}
+					else if (objetivo && objetivo->getColor() != turno) {
+						movimientosCaptura.push_back({ origen, destino });
+					}
+					else {
+						movimientosNormales.push_back({ origen, destino });
+					}
+				}
+			}
+		}
+	}
+
+	// 1. Si estamos en jaque, priorizar cualquier movimiento que lo evite
+	if (!movimientosSalvadores.empty()) {
+		auto [origen, destino] = movimientosSalvadores.front();
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva salió del jaque moviendo de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 2. Si no hay jaque, priorizar capturas
+	for (const auto& [origen, destino] : movimientosCaptura) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 3. Si no hay capturas, hacer un movimiento normal
+	for (const auto& [origen, destino] : movimientosNormales) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosSalvadores;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosCaptura;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosNormales;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					ClassTablero copia = *tablero;
+					copia.moverPieza(origen, destino);
+					ClassReglas reglasTemp;
+
+					if (reglasTemp.hayJaque(copia, turno)) continue;
+
+					ClassPieza* objetivo = tablero->getPieza(destino);
+
+					if (reyEnJaque) {
+						// Si estamos en jaque, cualquier movimiento legal que lo evite es válido
+						movimientosSalvadores.emplace_back(origen, destino);
+					}
+					else if (objetivo && objetivo->getColor() != turno) {
+						movimientosCaptura.emplace_back(origen, destino);
+					}
+					else {
+						movimientosNormales.emplace_back(origen, destino);
+					}
+				}
+			}
+		}
+	}
+
+	// 1. Si estamos en jaque, priorizar cualquier movimiento que lo evite
+	if (!movimientosSalvadores.empty()) {
+		auto [origen, destino] = movimientosSalvadores.front();
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva salió del jaque moviendo de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 2. Si no hay jaque, priorizar capturas
+	for (const auto& [origen, destino] : movimientosCaptura) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// 3. Si no hay capturas, hacer un movimiento normal
+	for (const auto& [origen, destino] : movimientosNormales) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosCaptura;
+	std::vector<std::pair<Vector2D, Vector2D>> movimientosNormales;
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					if (objetivo && objetivo->getColor() != turno) {
+						// Simular captura
+						ClassTablero copia = *tablero;
+						if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+							continue;
+
+						copia.moverPieza(origen, destino);
+						ClassReglas reglasTemp;
+						Vector2D posRey = reglasTemp.buscarRey(copia, turno);
+						ClassPieza* rey = copia.getPieza(posRey);
+
+						// Si el rey queda vulnerable, solo permitir si la pieza capturada es valiosa
+						bool reyAmenazado = rey && reglasTemp.PosAmenzada(posRey, copia, rey);
+						bool capturaValiosa = objetivo->getTipo() == ClassPieza::Reina ||
+							objetivo->getTipo() == ClassPieza::Torre;
+
+						if (!reyAmenazado || capturaValiosa) {
+							movimientosCaptura.emplace_back(origen, destino);
+						}
+					}
+					else if (!objetivo) {
+						// Movimiento normal
+						if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+							movimientosNormales.emplace_back(origen, destino);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Priorizar capturas
+	for (const auto& [origen, destino] : movimientosCaptura) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	// Si no hay capturas, hacer un movimiento normal
+	for (const auto& [origen, destino] : movimientosNormales) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva movió de " << origen << " a " << destino << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	int mejorScore = 1000;
+	std::pair<Vector2D, Vector2D> mejorMovimiento = { {-1, -1}, {-1, -1} };
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+
+					// Permitir capturas propias solo si son ventajosas
+					if (objetivo && objetivo->getColor() == turno) {
+						if (!capturaPropiaVentajosa(tablero, reglas, origen, destino))
+							continue;
+					}
+
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
+
+					// Simular el movimiento y evaluarlo
+					ClassTablero copia = *tablero;
+					if (!copia.moverPieza(origen, destino)) continue;
+
+					ClassReglas reglasTemp;
+					int score = evaluarMovimientoAgresivo(&copia, reglasTemp);
+
+					if (score < mejorScore) {
+						mejorScore = score;
+						mejorMovimiento = { origen, destino };
+					}
+				}
+			}
+		}
+	}
+
+	if (mejorMovimiento.first.x != -1) {
+		if (tablero->moverPieza(mejorMovimiento.first, mejorMovimiento.second)) {
+			reglas.set_turno();
+			std::cout << "IA Agresiva mejorada movió de " << mejorMovimiento.first
+				<< " a " << mejorMovimiento.second << " con score: " << mejorScore << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Agresiva mejorada no encontró movimientos válidos." << std::endl;
+	return false;
+}*/
+
+
+/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
 	std::vector<std::pair<Vector2D, Vector2D>> movimientosRey;
@@ -169,124 +803,6 @@ bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
 	return false;
 }
 
-
-// Come piezas y el rey solo se mueve en jaque
-/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
-
-	// 1. Buscar capturas con cualquier pieza (excepto rey si no está en jaque)
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D origen(i, j);
-			ClassPieza* pieza = tablero->getPieza(origen);
-
-			if (pieza && pieza->getColor() == turno) {
-				if (pieza->getTipo() == ClassPieza::Pieza_t::Rey && !reyEnJaque)
-					continue; // No mover el rey si no está en jaque
-
-				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
-				for (const auto& destino : movimientos) {
-					ClassPieza* objetivo = tablero->getPieza(destino);
-					if (objetivo && objetivo->getColor() != turno) {
-						if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-							if (tablero->moverPieza(origen, destino)) {
-								reglas.set_turno();
-								std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
-								return true;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// 2. Si no hay capturas, permitir mover el rey solo si está en jaque
-	if (reyEnJaque) {
-		for (int i = 0; i < tablero->getFilas(); ++i) {
-			for (int j = 0; j < tablero->getColumnas(); ++j) {
-				Vector2D origen(i, j);
-				ClassPieza* pieza = tablero->getPieza(origen);
-
-				if (pieza && pieza->getColor() == turno && pieza->getTipo() == ClassPieza::Pieza_t::Rey) {
-					auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
-					for (const auto& destino : movimientos) {
-						if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-							if (tablero->moverPieza(origen, destino)) {
-								reglas.set_turno();
-								std::cout << "IA Agresiva movió el rey de " << origen << " a " << destino << " para escapar del jaque." << std::endl;
-								return true;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// 3. Si no hay capturas ni rey en jaque, intentar movimiento aleatorio
-	return movimientoAleatorio(tablero, reglas);
-}*/
-
-
-// Intenta comer pero no puede mover el rey
-/*bool IA::movimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D origen(i, j);
-			ClassPieza* pieza = tablero->getPieza(origen);
-
-			if (pieza && pieza->getColor() == turno && pieza->getTipo() != ClassPieza::Pieza_t::Rey) {
-				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
-
-				for (const auto& destino : movimientos) {
-					ClassPieza* objetivo = tablero->getPieza(destino);
-					if (objetivo && objetivo->getColor() != turno) {
-						if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-							if (tablero->moverPieza(origen, destino)) {
-								reglas.set_turno();
-								std::cout << "IA Agresiva capturó de " << origen << " a " << destino << std::endl;
-								return true;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Si no hay capturas, hacer cualquier movimiento válido
-	return movimientoAleatorio(tablero, reglas);
-}*/
-
-/*bool IA::movimientoAleatorio(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-	std::vector<std::pair<Vector2D, Vector2D>> movimientosValidos;
-
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D origen(i, j);
-			ClassPieza* pieza = tablero->getPieza(origen);
-
-			if (pieza && pieza->getColor() == turno && pieza->getTipo() != ClassPieza::Pieza_t::Rey) {
-				auto posibles = pieza->obtenerMovimientosPosibles(*tablero);
-				for (const auto& destino : posibles) {
-					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-						movimientosValidos.emplace_back(origen, destino);
-					}
-				}
-			}
-		}
-	}
-
-	if (!movimientosValidos.empty()) {
-		static std::random_device rd;
-		static std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(0, movimientosValidos.size() - 1);
-
 		auto [origen, destino] = movimientosValidos[dis(gen)];
 		if (tablero->moverPieza(origen, destino)) {
 			reglas.set_turno();
@@ -339,8 +855,325 @@ bool IA::movimientoAleatorio(ClassTablero* tablero, ClassReglas& reglas) {
 	std::cout << "IA Aleatoria no encontró movimientos válidos." << std::endl;
 	return false;
 }
-
 bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	auto esPiezaValiosa = [](ClassPieza::Pieza_t tipo) {
+		return tipo == ClassPieza::Pieza_t::Reina ||
+			tipo == ClassPieza::Pieza_t::Torre ||
+			tipo == ClassPieza::Pieza_t::Alfil;
+		};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				bool estaAmenazada = reglas.PosAmenzada(origen, *tablero, pieza);
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					if (objetivo && objetivo->getColor() == turno) continue;
+
+					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+						int score = 0;
+
+						// Bonificación por captura al paso
+						Vector2D casillaEnPasante = tablero->getCasillaObjetivoEnPasante();
+						ClassPieza::Color colorPeonEnPasante = tablero->getColorPeonVulnerableEnPasante();
+
+						if (pieza->getTipo() == ClassPieza::Peon &&
+							destino == casillaEnPasante &&
+							objetivo == nullptr &&
+							colorPeonEnPasante != turno) {
+							score -= 6; // bonificación por captura al paso
+						}
+
+						ClassTablero copia = *tablero;
+						copia.moverPieza(origen, destino);
+						ClassReglas reglasTemp;
+
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						if (HistorialMovimientos::esRepetido(origen, destino)) {
+							score += 15;
+						}
+
+						for (int x = 0; x < copia.getFilas(); ++x) {
+							for (int y = 0; y < copia.getColumnas(); ++y) {
+								Vector2D pos(x, y);
+								ClassPieza* p = copia.getPieza(pos);
+								if (p && p->getColor() == turno && esPiezaValiosa(p->getTipo())) {
+									if (reglasTemp.PosAmenzada(pos, copia, p)) {
+										score += 10;
+									}
+								}
+							}
+						}
+
+						if (estaAmenazada && !reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score -= 5;
+						}
+
+						if (objetivo && objetivo->getColor() != turno &&
+							reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += 15;
+						}
+
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 2;
+						}
+
+						Vector2D posRey = reglasTemp.buscarRey(copia, turno);
+						ClassPieza* rey = copia.getPieza(posRey);
+						if (rey && reglasTemp.PosAmenzada(posRey, copia, rey)) {
+							score += 20;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
+					}
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+		   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			HistorialMovimientos::registrarMovimiento(origen, destino);
+			reglas.set_turno();
+			std::cout << "IA Defensiva mejorada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Defensiva mejorada no encontró movimientos seguros." << std::endl;
+	return false;
+}
+
+/*
+bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	auto esPiezaValiosa = [](ClassPieza::Pieza_t tipo) {
+		return tipo == ClassPieza::Pieza_t::Reina ||
+			   tipo == ClassPieza::Pieza_t::Torre ||
+			   tipo == ClassPieza::Pieza_t::Alfil;
+	};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			   (pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+	};
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				bool estaAmenazada = reglas.PosAmenzada(origen, *tablero, pieza);
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					if (objetivo && objetivo->getColor() == turno) continue;
+
+					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+						ClassTablero copia = *tablero;
+						copia.moverPieza(origen, destino);
+						ClassReglas reglasTemp;
+
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						int score = 0;
+
+						// Penalizar si el movimiento es repetido
+						if (HistorialMovimientos::esRepetido(origen, destino)) {
+							score += 15;
+						}
+
+						// Penalizar si deja piezas valiosas en peligro
+						for (int x = 0; x < copia.getFilas(); ++x) {
+							for (int y = 0; y < copia.getColumnas(); ++y) {
+								Vector2D pos(x, y);
+								ClassPieza* p = copia.getPieza(pos);
+								if (p && p->getColor() == turno && esPiezaValiosa(p->getTipo())) {
+									if (reglasTemp.PosAmenzada(pos, copia, p)) {
+										score += 10;
+									}
+								}
+							}
+						}
+
+						// Bonificación si mueve una pieza amenazada a un lugar seguro
+						if (estaAmenazada && !reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score -= 5;
+						}
+
+						// Penalización si captura pero queda en peligro
+						if (objetivo && objetivo->getColor() != turno &&
+							reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += 15;
+						}
+
+						// Bonificación por controlar el centro
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 2;
+						}
+
+						// Penalización si el rey queda vulnerable tras el movimiento
+						Vector2D posRey = reglasTemp.buscarRey(copia, turno);
+						ClassPieza* rey = copia.getPieza(posRey);
+						if (rey && reglasTemp.PosAmenzada(posRey, copia, rey)) {
+							score += 20;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
+					}
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+			   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			HistorialMovimientos::registrarMovimiento(origen, destino);
+			reglas.set_turno();
+			std::cout << "IA Defensiva mejorada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Defensiva mejorada no encontró movimientos seguros." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	auto esPiezaValiosa = [](ClassPieza::Pieza_t tipo) {
+		return tipo == ClassPieza::Pieza_t::Reina ||
+			tipo == ClassPieza::Pieza_t::Torre ||
+			tipo == ClassPieza::Pieza_t::Alfil;
+		};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				bool estaAmenazada = reglas.PosAmenzada(origen, *tablero, pieza);
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					if (objetivo && objetivo->getColor() == turno) continue;
+
+					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+						ClassTablero copia = *tablero;
+						copia.moverPieza(origen, destino);
+						ClassReglas reglasTemp;
+
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						int score = 0;
+
+						// Penalizar si deja piezas valiosas en peligro
+						for (int x = 0; x < copia.getFilas(); ++x) {
+							for (int y = 0; y < copia.getColumnas(); ++y) {
+								Vector2D pos(x, y);
+								ClassPieza* p = copia.getPieza(pos);
+								if (p && p->getColor() == turno && esPiezaValiosa(p->getTipo())) {
+									if (reglasTemp.PosAmenzada(pos, copia, p)) {
+										score += 10;
+									}
+								}
+							}
+						}
+
+						// Bonificación si mueve una pieza amenazada a un lugar seguro
+						if (estaAmenazada && !reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score -= 5;
+						}
+
+						// Penalización si captura pero queda en peligro
+						if (objetivo && objetivo->getColor() != turno &&
+							reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += 15;
+						}
+
+						// Bonificación por controlar el centro
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 2;
+						}
+
+						// NUEVO: Penalización si el rey queda vulnerable tras el movimiento
+						Vector2D posRey = reglasTemp.buscarRey(copia, turno);
+						ClassPieza* rey = copia.getPieza(posRey);
+						if (rey && reglasTemp.PosAmenzada(posRey, copia, rey)) {
+							score += 20;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
+					}
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+			   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen =  std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			std::cout << "IA Defensiva mejorada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Defensiva mejorada no encontró movimientos seguros." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
 
@@ -430,15 +1263,30 @@ bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 
 	std::cout << "IA Defensiva mejorada no encontró movimientos seguros." << std::endl;
 	return false;
-}
-
-//defiende bien el rey , pero no come piezas y repite movimientos sin sentido si no atacas
-/*bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
+}*/
+bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
+	ClassPieza::Color enemigo = (turno == ClassPieza::Color::AZUL) ? ClassPieza::Color::ROJO : ClassPieza::Color::AZUL;
 	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
 
-	auto esPiezaValiosa = [](ClassPieza::Pieza_t tipo) {
-		return tipo == ClassPieza::Pieza_t::Reina || tipo == ClassPieza::Pieza_t::Torre || tipo == ClassPieza::Pieza_t::Alfil; };
+	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int {
+		switch (tipo) {
+		case ClassPieza::Pieza_t::Peon:    return 1;
+		case ClassPieza::Pieza_t::Caballo: return 3;
+		case ClassPieza::Pieza_t::Alfil:   return 3;
+		case ClassPieza::Pieza_t::Torre:   return 5;
+		case ClassPieza::Pieza_t::Reina:   return 9;
+		case ClassPieza::Pieza_t::Rey:     return 100;
+		default: return 0;
+		}
+		};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
 
 	for (int i = 0; i < tablero->getFilas(); ++i) {
 		for (int j = 0; j < tablero->getColumnas(); ++j) {
@@ -450,29 +1298,245 @@ bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 
 				for (const auto& destino : movimientos) {
 					ClassPieza* objetivo = tablero->getPieza(destino);
-					if (objetivo && objetivo->getColor() == turno) continue;
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					if (esPropia && !reyEnJaque) {
+						if (valorPieza(objetivo->getTipo()) >= valorPieza(pieza->getTipo()))
+							continue;
+					}
 
 					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-						// Simular el movimiento
 						ClassTablero copia = *tablero;
 						copia.moverPieza(origen, destino);
 
 						ClassReglas reglasTemp;
-						bool enJaque = reglasTemp.hayJaque(copia, turno);
-						if (enJaque) continue;
+						if (reglasTemp.hayJaque(copia, turno)) continue;
 
-						// Evaluar score: penalizar si deja piezas valiosas en peligro
 						int score = 0;
-						for (int x = 0; x < copia.getFilas(); ++x) {
-							for (int y = 0; y < copia.getColumnas(); ++y) {
-								Vector2D pos(x, y);
-								ClassPieza* p = copia.getPieza(pos);
-								if (p && p->getColor() == turno && esPiezaValiosa(p->getTipo())) {
-									if (reglasTemp.PosAmenzada(pos, copia, p)) {
-										score -= 10;
+
+						// Bonificación por jaque
+						if (reglasTemp.hayJaque(copia, enemigo)) {
+							score -= 25;
+						}
+
+						// Bonificación por jaque mate
+						if (reglasTemp.hayJaqueMate(copia, enemigo)) {
+							score -= 100;
+						}
+
+						if (objetivo && objetivo->getColor() != turno) {
+							score -= valorPieza(objetivo->getTipo()) * 10;
+						}
+
+						if (objetivo && valorPieza(pieza->getTipo()) > valorPieza(objetivo->getTipo())) {
+							score += 5;
+						}
+
+						if (reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += valorPieza(pieza->getTipo()) * 5;
+						}
+
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 3;
+						}
+
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							int filaInicial = (turno == ClassPieza::Color::AZUL) ? tablero->getFilas() - 2 : 1;
+							if (origen.x == filaInicial && std::abs(destino.x - origen.x) == 2) {
+								score -= 3;
+							}
+						}
+
+						if ((pieza->getTipo() == ClassPieza::Pieza_t::Caballo || pieza->getTipo() == ClassPieza::Pieza_t::Alfil) &&
+							((turno == ClassPieza::Color::AZUL && origen.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && origen.x <= 1))) {
+							score -= 4;
+						}
+
+						if (pieza->getTipo() != ClassPieza::Pieza_t::Peon &&
+							((turno == ClassPieza::Color::AZUL && destino.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && destino.x <= 1))) {
+							score += 2;
+						}
+
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							for (int dx = -1; dx <= 1; ++dx) {
+								for (int dy = -1; dy <= 1; ++dy) {
+									Vector2D pos = origen + Vector2D(dx, dy);
+									if (tablero->esPosicionValida(pos)) {
+										ClassPieza* bloqueada = tablero->getPieza(pos);
+										if (bloqueada && bloqueada->getColor() == turno &&
+											(bloqueada->getTipo() == ClassPieza::Pieza_t::Torre ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Alfil ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Reina)) {
+											score -= 4;
+										}
 									}
 								}
 							}
+						}
+
+						int amenazas = 0;
+						auto amenazasPosibles = pieza->obtenerMovimientosPosibles(copia);
+						for (const auto& pos : amenazasPosibles) {
+							ClassPieza* p = copia.getPieza(pos);
+							if (p && p->getColor() != turno) amenazas++;
+						}
+						if (amenazas >= 2) score -= 6;
+
+						if (std::find(historialTactico.begin(), historialTactico.end(), std::make_pair(origen, destino)) != historialTactico.end()) {
+							score += 15;
+						}
+
+						if (esPropia && reglas.PosAmenzada(destino, *tablero, objetivo)) {
+							score -= 5;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
+					}
+				}
+			}
+		}
+	}
+
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+		[](const auto& a, const auto& b) {
+		   return std::get<2>(a) < std::get<2>(b);
+			});
+
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			historialTactico.push_back({ origen, destino });
+			if (historialTactico.size() > 10) historialTactico.pop_front();
+			std::cout << "IA Táctica avanzada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Táctica avanzada no encontró movimientos útiles." << std::endl;
+	return false;
+}
+
+/*bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int {
+		switch (tipo) {
+		case ClassPieza::Pieza_t::Peon:    return 1;
+		case ClassPieza::Pieza_t::Caballo: return 3;
+		case ClassPieza::Pieza_t::Alfil:   return 3;
+		case ClassPieza::Pieza_t::Torre:   return 5;
+		case ClassPieza::Pieza_t::Reina:   return 9;
+		case ClassPieza::Pieza_t::Rey:     return 100;
+		default: return 0;
+		}
+		};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					if (esPropia && !reyEnJaque) {
+						if (valorPieza(objetivo->getTipo()) >= valorPieza(pieza->getTipo()))
+							continue;
+					}
+
+					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+						ClassTablero copia = *tablero;
+						copia.moverPieza(origen, destino);
+
+						ClassReglas reglasTemp;
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						int score = 0;
+
+						if (objetivo && objetivo->getColor() != turno) {
+							score -= valorPieza(objetivo->getTipo()) * 10;
+						}
+
+						if (objetivo && valorPieza(pieza->getTipo()) > valorPieza(objetivo->getTipo())) {
+							score += 5;
+						}
+
+						if (reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += valorPieza(pieza->getTipo()) * 5;
+						}
+
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 3;
+						}
+
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							int filaInicial = (turno == ClassPieza::Color::AZUL) ? tablero->getFilas() - 2 : 1;
+							if (origen.x == filaInicial && std::abs(destino.x - origen.x) == 2) {
+								score -= 3;
+							}
+						}
+
+						if ((pieza->getTipo() == ClassPieza::Pieza_t::Caballo || pieza->getTipo() == ClassPieza::Pieza_t::Alfil) &&
+							((turno == ClassPieza::Color::AZUL && origen.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && origen.x <= 1))) {
+							score -= 4;
+						}
+
+						if (pieza->getTipo() != ClassPieza::Pieza_t::Peon &&
+							((turno == ClassPieza::Color::AZUL && destino.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && destino.x <= 1))) {
+							score += 2;
+						}
+
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							for (int dx = -1; dx <= 1; ++dx) {
+								for (int dy = -1; dy <= 1; ++dy) {
+									Vector2D pos = origen + Vector2D(dx, dy);
+									if (tablero->esPosicionValida(pos)) {
+										ClassPieza* bloqueada = tablero->getPieza(pos);
+										if (bloqueada && bloqueada->getColor() == turno &&
+											(bloqueada->getTipo() == ClassPieza::Pieza_t::Torre ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Alfil ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Reina)) {
+											score -= 4;
+										}
+									}
+								}
+							}
+						}
+
+						int amenazas = 0;
+						auto amenazasPosibles = pieza->obtenerMovimientosPosibles(copia);
+						for (const auto& pos : amenazasPosibles) {
+							ClassPieza* p = copia.getPieza(pos);
+							if (p && p->getColor() != turno) amenazas++;
+						}
+						if (amenazas >= 2) score -= 6;
+
+						if (std::find(historialTactico.begin(), historialTactico.end(), std::make_pair(origen, destino)) != historialTactico.end()) {
+							score += 15;
+						}
+
+						if (esPropia && reglas.PosAmenzada(destino, *tablero, objetivo)) {
+							score -= 5;
 						}
 
 						movimientosEvaluados.emplace_back(origen, destino, score);
@@ -485,29 +1549,48 @@ bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 	if (!movimientosEvaluados.empty()) {
 		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
 			[](const auto& a, const auto& b) {
-				return std::get<2>(a) < std::get<2>(b);
+			   return std::get<2>(a) < std::get<2>(b);
 			});
-		
 
 		Vector2D origen = std::get<0>(*mejor);
 		Vector2D destino = std::get<1>(*mejor);
 
 		if (tablero->moverPieza(origen, destino)) {
 			reglas.set_turno();
-			std::cout << "IA Defensiva movió de " << origen << " a " << destino << " con score defensivo: " << std::get<2>(*mejor) << std::endl;
+			historialTactico.push_back({ origen, destino });
+			if (historialTactico.size() > 10) historialTactico.pop_front();
+			std::cout << "IA Táctica avanzada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
 			return true;
 		}
 	}
 
-	std::cout << "IA Defensiva no encontró movimientos seguros." << std::endl;
+	std::cout << "IA Táctica avanzada no encontró movimientos útiles." << std::endl;
 	return false;
 }*/
 
-
-
-/*bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
+/*bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
-	std::vector<std::pair<Vector2D, Vector2D>> movimientosSeguros;
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
+
+	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int {
+		switch (tipo) {
+		case ClassPieza::Pieza_t::Peon:    return 1;
+		case ClassPieza::Pieza_t::Caballo: return 3;
+		case ClassPieza::Pieza_t::Alfil:   return 3;
+		case ClassPieza::Pieza_t::Torre:   return 5;
+		case ClassPieza::Pieza_t::Reina:   return 9;
+		case ClassPieza::Pieza_t::Rey:     return 100;
+		default: return 0;
+		}
+		};
+
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
 
 	for (int i = 0; i < tablero->getFilas(); ++i) {
 		for (int j = 0; j < tablero->getColumnas(); ++j) {
@@ -519,68 +1602,271 @@ bool IA::movimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 
 				for (const auto& destino : movimientos) {
 					ClassPieza* objetivo = tablero->getPieza(destino);
-					bool esCapturaPropia = objetivo && objetivo->getColor() == turno;
-					if (esCapturaPropia) continue;
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					// Permitir capturar pieza propia si estamos en jaque o si puede ser ventajoso
+					if (esPropia && !reyEnJaque) {
+						if (valorPieza(objetivo->getTipo()) >= valorPieza(pieza->getTipo()))
+							continue;
+					}
 
 					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-						// Simular el movimiento para ver si deja en peligro
 						ClassTablero copia = *tablero;
 						copia.moverPieza(origen, destino);
 
 						ClassReglas reglasTemp;
-						if (!reglasTemp.hayJaque(copia, turno)) {
-							movimientosSeguros.emplace_back(origen, destino);
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						int score = 0;
+
+						// Valor de la pieza capturada
+						if (objetivo && objetivo->getColor() != turno) {
+							score -= valorPieza(objetivo->getTipo()) * 10;
 						}
+
+						// Penalización si la pieza que se mueve es más valiosa que la que se captura
+						if (objetivo && valorPieza(pieza->getTipo()) > valorPieza(objetivo->getTipo())) {
+							score += 5;
+						}
+
+						// Penalización si la pieza queda amenazada
+						if (reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += valorPieza(pieza->getTipo()) * 5;
+						}
+
+						// Bonificación por controlar el centro
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 3;
+						}
+
+						// Bonificación por avance doble de peón
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							int filaInicial = (turno == ClassPieza::Color::AZUL) ? tablero->getFilas() - 2 : 1;
+							if (origen.x == filaInicial && std::abs(destino.x - origen.x) == 2) {
+								score -= 3;
+							}
+						}
+
+						// Bonificación por desarrollar piezas menores
+						if ((pieza->getTipo() == ClassPieza::Pieza_t::Caballo || pieza->getTipo() == ClassPieza::Pieza_t::Alfil) &&
+							((turno == ClassPieza::Color::AZUL && origen.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && origen.x <= 1))) {
+							score -= 4;
+						}
+
+						// Penalización por retroceder sin progreso
+						if (pieza->getTipo() != ClassPieza::Pieza_t::Peon &&
+							((turno == ClassPieza::Color::AZUL && destino.x >= tablero->getFilas() - 2) ||
+								(turno == ClassPieza::Color::ROJO && destino.x <= 1))) {
+							score += 2;
+						}
+
+						// Bonificación por desbloquear piezas
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							for (int dx = -1; dx <= 1; ++dx) {
+								for (int dy = -1; dy <= 1; ++dy) {
+									Vector2D pos = origen + Vector2D(dx, dy);
+									if (tablero->esPosicionValida(pos)) {
+										ClassPieza* bloqueada = tablero->getPieza(pos);
+										if (bloqueada && bloqueada->getColor() == turno &&
+											(bloqueada->getTipo() == ClassPieza::Pieza_t::Torre ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Alfil ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Reina)) {
+											score -= 4;
+										}
+									}
+								}
+							}
+						}
+
+						// Bonificación por amenazar múltiples piezas enemigas
+						int amenazas = 0;
+						auto amenazasPosibles = pieza->obtenerMovimientosPosibles(copia);
+						for (const auto& pos : amenazasPosibles) {
+							ClassPieza* p = copia.getPieza(pos);
+							if (p && p->getColor() != turno) amenazas++;
+						}
+						if (amenazas >= 2) score -= 6;
+
+						// Penalización por repetir movimientos recientes
+						if (std::find(historialTactico.begin(), historialTactico.end(), std::make_pair(origen, destino)) != historialTactico.end()) {
+							score += 15;
+						}
+
+						// Bonificación si la captura propia evita jaque futuro
+						if (esPropia && reglas.PosAmenzada(destino, *tablero, objetivo)) {
+							score -= 5;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
 					}
 				}
 			}
 		}
 	}
 
-	if (!movimientosSeguros.empty()) {
-		static std::random_device rd;
-		static std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dis(0, movimientosSeguros.size() - 1);
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+			[](const auto& a, const auto& b) {
+		   return std::get<2>(a) < std::get<2>(b);
+			});
 
-		auto [origen, destino] = movimientosSeguros[dis(gen)];
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
+
 		if (tablero->moverPieza(origen, destino)) {
 			reglas.set_turno();
-			std::cout << "IA Defensiva movió de " << origen << " a " << destino << std::endl;
+			historialTactico.push_back({ origen, destino });
+			if (historialTactico.size() > 10) historialTactico.pop_front();
+			std::cout << "IA Táctica avanzada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
 			return true;
 		}
 	}
 
-	std::cout << "IA Defensiva no encontró movimientos seguros." << std::endl;
+	std::cout << "IA Táctica avanzada no encontró movimientos útiles." << std::endl;
 	return false;
 }*/
 
-
-	/*if (!tablero || tipo != TipoIA::FIJA) return false;
-
+/*bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
-	if (turno != ClassPieza::Color::ROJO) return false;
+	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
 
-	while (indice < movimientos.size()) {
-		auto [origen, destino] = movimientos[indice];
+	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int {
+		switch (tipo) {
+		case ClassPieza::Pieza_t::Peon:    return 1;
+		case ClassPieza::Pieza_t::Caballo: return 3;
+		case ClassPieza::Pieza_t::Alfil:   return 3;
+		case ClassPieza::Pieza_t::Torre:   return 5;
+		case ClassPieza::Pieza_t::Reina:   return 9;
+		case ClassPieza::Pieza_t::Rey:     return 100;
+		default: return 0;
+		}
+		};
 
-		if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-			if (tablero->moverPieza(origen, destino)) {
-				reglas.set_turno();
-				++indice;
-				std::cout << "IA (" << static_cast<int>(tipo) << ") movió de " << origen << " a " << destino << std::endl;
-				return true;
+	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
+		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
+			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
+		};
+
+	bool reyEnJaque = reglas.hayJaque(*tablero, turno);
+
+	for (int i = 0; i < tablero->getFilas(); ++i) {
+		for (int j = 0; j < tablero->getColumnas(); ++j) {
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+
+				for (const auto& destino : movimientos) {
+					ClassPieza* objetivo = tablero->getPieza(destino);
+					bool esPropia = objetivo && objetivo->getColor() == turno;
+
+					// Permitir capturar pieza propia si estamos en jaque o si puede ser ventajoso
+					if (esPropia && !reyEnJaque) {
+						// Solo permitir si la pieza propia es de menor valor o desbloquea algo
+						if (valorPieza(objetivo->getTipo()) >= valorPieza(pieza->getTipo()))
+							continue;
+					}
+
+					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
+						ClassTablero copia = *tablero;
+						copia.moverPieza(origen, destino);
+
+						ClassReglas reglasTemp;
+						if (reglasTemp.hayJaque(copia, turno)) continue;
+
+						int score = 0;
+
+						// Valor de la pieza capturada
+						if (objetivo && objetivo->getColor() != turno) {
+							score -= valorPieza(objetivo->getTipo()) * 10;
+						}
+
+						// Penalización si la pieza que se mueve es más valiosa que la que se captura
+						if (objetivo && valorPieza(pieza->getTipo()) > valorPieza(objetivo->getTipo())) {
+							score += 5;
+						}
+
+						// Penalización si la pieza queda amenazada
+						if (reglasTemp.PosAmenzada(destino, copia, pieza)) {
+							score += valorPieza(pieza->getTipo()) * 5;
+						}
+
+						// Bonificación por controlar el centro
+						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
+							score -= 3;
+						}
+
+						// Bonificación por desbloquear piezas
+						if (pieza->getTipo() == ClassPieza::Pieza_t::Peon) {
+							for (int dx = -1; dx <= 1; ++dx) {
+								for (int dy = -1; dy <= 1; ++dy) {
+									Vector2D pos = origen + Vector2D(dx, dy);
+									if (tablero->esPosicionValida(pos)) {
+										ClassPieza* bloqueada = tablero->getPieza(pos);
+										if (bloqueada && bloqueada->getColor() == turno &&
+											(bloqueada->getTipo() == ClassPieza::Pieza_t::Torre ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Alfil ||
+												bloqueada->getTipo() == ClassPieza::Pieza_t::Reina)) {
+											score -= 4;
+										}
+									}
+								}
+							}
+						}
+
+						// Bonificación por amenazar múltiples piezas enemigas
+						int amenazas = 0;
+						auto amenazasPosibles = pieza->obtenerMovimientosPosibles(copia);
+						for (const auto& pos : amenazasPosibles) {
+							ClassPieza* p = copia.getPieza(pos);
+							if (p && p->getColor() != turno) amenazas++;
+						}
+						if (amenazas >= 2) score -= 6;
+
+						// Penalización por repetir movimientos recientes
+						if (std::find(historialTactico.begin(), historialTactico.end(), std::make_pair(origen, destino)) != historialTactico.end()) {
+							score += 15;
+						}
+
+						// Bonificación si la captura propia evita jaque futuro
+						if (esPropia && reglas.PosAmenzada(destino, *tablero, objetivo)) {
+							score -= 5;
+						}
+
+						movimientosEvaluados.emplace_back(origen, destino, score);
+					}
+				}
 			}
 		}
-
-		++indice;
 	}
 
-	std::cout << "IA (" << static_cast<int>(tipo) << ") no tiene más movimientos válidos." << std::endl;
-	return false;*/
+	if (!movimientosEvaluados.empty()) {
+		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
+		  [](const auto& a, const auto& b) {
+		   return std::get<2>(a) < std::get<2>(b);
+			});
 
-	// Cuarta versión IA táctica mejorada
+		Vector2D origen = std::get<0>(*mejor);
+		Vector2D destino = std::get<1>(*mejor);
 
-bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
+		if (tablero->moverPieza(origen, destino)) {
+			reglas.set_turno();
+			historialTactico.push_back({ origen, destino });
+			if (historialTactico.size() > 10) historialTactico.pop_front();
+			std::cout << "IA Táctica avanzada movió de " << origen << " a " << destino
+				<< " con score: " << std::get<2>(*mejor) << std::endl;
+			return true;
+		}
+	}
+
+	std::cout << "IA Táctica avanzada no encontró movimientos útiles." << std::endl;
+	return false;
+}*/
+
+/*bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
 
@@ -835,207 +2121,352 @@ bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
 	std::cout << "IA Táctica avanzada no encontró movimientos útiles." << std::endl;
 	return false;
 }*/
-
-
-	// Segunda versión táctica mejorada (mejor hasta ahora)
-/*
-bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
-
-	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int {
-		switch (tipo) {
-		case ClassPieza::Pieza_t::Peon:    return 1;
-		case ClassPieza::Pieza_t::Caballo: return 3;
-		case ClassPieza::Pieza_t::Alfil:   return 3;
-		case ClassPieza::Pieza_t::Torre:   return 5;
-		case ClassPieza::Pieza_t::Reina:   return 9;
-		case ClassPieza::Pieza_t::Rey:     return 100;
-		default: return 0;
-		}
-		};
-
-	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
-		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
-			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
-		};
-
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D origen(i, j);
-			ClassPieza* pieza = tablero->getPieza(origen);
-
-			if (pieza && pieza->getColor() == turno) {
-				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
-
-				for (const auto& destino : movimientos) {
-					ClassPieza* objetivo = tablero->getPieza(destino);
-					if (objetivo && objetivo->getColor() == turno) continue;
-
-					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-						ClassTablero copia = *tablero;
-						copia.moverPieza(origen, destino);
-
-						ClassReglas reglasTemp;
-						if (reglasTemp.hayJaque(copia, turno)) continue;
-
-						int score = 0;
-
-						// Valor de la pieza capturada
-						if (objetivo && objetivo->getColor() != turno) {
-							score -= valorPieza(objetivo->getTipo()) * 10;
-						}
-
-						// Penalización si la pieza que se mueve es más valiosa que la que se captura
-						if (objetivo && valorPieza(pieza->getTipo()) > valorPieza(objetivo->getTipo())) {
-							score += 5;
-						}
-
-						// Bonificación por controlar el centro
-						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
-							score -= 3;
-						}
-
-						// Penalización si la pieza queda amenazada
-						if (reglasTemp.PosAmenzada(destino, copia, pieza)) {
-							score += valorPieza(pieza->getTipo()) * 5;
-						}
-
-						// Bonificación por aumentar movilidad futura
-						int movilidad = 0;
-						for (int x = 0; x < copia.getFilas(); ++x) {
-							for (int y = 0; y < copia.getColumnas(); ++y) {
-								ClassPieza* p = copia.getPieza({ x, y });
-								if (p && p->getColor() == turno) {
-									movilidad += p->obtenerMovimientosPosibles(copia).size();
-								}
-							}
-						}
-						score -= movilidad / 2;
-
-						movimientosEvaluados.emplace_back(origen, destino, score);
-					}
-				}
-			}
-		}
-	}
-
-	if (!movimientosEvaluados.empty()) {
-		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
-			[](const auto& a, const auto& b) {
-				return std::get<2>(a) < std::get<2>(b);
-			});
-
-		Vector2D origen = std::get<0>(*mejor);
-		Vector2D destino = std::get<1>(*mejor);
-
-		if (tablero->moverPieza(origen, destino)) {
-			reglas.set_turno();
-			std::cout << "IA Táctica mejorada movió de " << origen << " a " << destino
-				<< " con score: " << std::get<2>(*mejor) << std::endl;
-			return true;
-		}
-	}
-
-	std::cout << "IA Táctica mejorada no encontró movimientos útiles." << std::endl;
-	return false;
-}*/
-
-// Primera versión táctica
-/*bool IA::movimientoTactico(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-	std::vector<std::tuple<Vector2D, Vector2D, int>> movimientosEvaluados;
-
-	auto esPiezaValiosa = [](ClassPieza::Pieza_t tipo) {
-		return tipo == ClassPieza::Pieza_t::Reina ||
-			tipo == ClassPieza::Pieza_t::Torre;
-		};
-
-	auto esCentro = [](const Vector2D& pos, int filas, int columnas) {
-		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
-			(pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
-		};
-
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D origen(i, j);
-			ClassPieza* pieza = tablero->getPieza(origen);
-
-			if (pieza && pieza->getColor() == turno) {
-				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
-
-				for (const auto& destino : movimientos) {
-					ClassPieza* objetivo = tablero->getPieza(destino);
-					if (objetivo && objetivo->getColor() == turno) continue;
-
-					if (ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno)) {
-						ClassTablero copia = *tablero;
-						copia.moverPieza(origen, destino);
-
-						ClassReglas reglasTemp;
-						if (reglasTemp.hayJaque(copia, turno)) continue;
-
-						int score = 0;
-
-						// Bonificación por capturar pieza enemiga
-						if (objetivo && objetivo->getColor() != turno) {
-							score -= 5;
-						}
-
-						// Penalización si deja piezas valiosas en peligro
-						for (int x = 0; x < copia.getFilas(); ++x) {
-							for (int y = 0; y < copia.getColumnas(); ++y) {
-								Vector2D pos(x, y);
-								ClassPieza* p = copia.getPieza(pos);
-								if (p && p->getColor() == turno && esPiezaValiosa(p->getTipo())) {
-									if (reglasTemp.PosAmenzada(pos, copia, p)) {
-										score += 10;
-									}
-								}
-							}
-						}
-
-						// Bonificación por controlar el centro
-						if (esCentro(destino, tablero->getFilas(), tablero->getColumnas())) {
-							score -= 3;
-						}
-
-						// Bonificación por mover una pieza que estaba bloqueada (opcional, aquí no se puede saber si estaba bloqueada)
-						// if (pieza->getTipo() != ClassPieza::Pieza_t::Peon && origen == destino) {
-						// 	score += 5;
-						// }
-
-						movimientosEvaluados.emplace_back(origen, destino, score);
-					}
-				}
-			}
-		}
-	}
-
-	if (!movimientosEvaluados.empty()) {
-		auto mejor = std::min_element(movimientosEvaluados.begin(), movimientosEvaluados.end(),
-			[](const auto& a, const auto& b) {
-				return std::get<2>(a) < std::get<2>(b);
-			});
-
-		Vector2D origen = std::get<0>(*mejor);
-		Vector2D destino = std::get<1>(*mejor);
-
-		if (tablero->moverPieza(origen, destino)) {
-			reglas.set_turno();
-			std::cout << "IA Táctica movió de " << origen << " a " << destino
-				<< " con score táctico: " << std::get<2>(*mejor) << std::endl;
-			return true;
-		}
-	}
-
-	std::cout << "IA Táctica no encontró movimientos útiles." << std::endl;
-	return false;
-}*/
-
-// IA adaptativa cuarta versión, utiliza las tres estrategias anteriores y evalúa cuál es la mejor en cada turno
-
 bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+
+	struct EvaluacionEstrategia {
+		TipoIA tipo;
+		int score;
+	};
+
+	std::vector<EvaluacionEstrategia> evaluaciones;
+
+	// Evaluar cada estrategia (ya incluyen jaque y mate en sus evaluaciones)
+	int scoreAgresivo = evaluarMovimientoAgresivo(tablero, reglas);
+	int scoreDefensivo = evaluarMovimientoDefensivo(tablero, reglas);
+	int scoreTactico = evaluarMovimientoTactico(tablero, reglas);
+
+	evaluaciones.push_back({ TipoIA::Agresiva, scoreAgresivo });
+	evaluaciones.push_back({ TipoIA::Defensiva, scoreDefensivo });
+	evaluaciones.push_back({ TipoIA::Tactica, scoreTactico });
+
+	// Historial para evitar repeticiones
+	static std::deque<TipoIA> historial;
+	const int maxHistorial = 5;
+
+	for (auto& eval : evaluaciones) {
+		if (std::find(historial.begin(), historial.end(), eval.tipo) != historial.end()) {
+			eval.score += 10; // Penalización por repetición
+		}
+	}
+
+	// Elegir la mejor estrategia
+	auto mejor = std::min_element(evaluaciones.begin(), evaluaciones.end(),
+	  [](const EvaluacionEstrategia& a, const EvaluacionEstrategia& b) {
+	   return a.score < b.score;
+		});
+
+	// Guardar en historial
+	historial.push_back(mejor->tipo);
+	if (historial.size() > maxHistorial) historial.pop_front();
+
+	std::cout << "[IA Adaptativa] Evaluaciones -> "
+		<< "Agresiva: " << scoreAgresivo << ", "
+		<< "Defensiva: " << scoreDefensivo << ", "
+		<< "Táctica: " << scoreTactico << std::endl;
+
+	// Ejecutar la estrategia elegida
+	bool exito = false;
+
+	switch (mejor->tipo) {
+	case TipoIA::Agresiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Agresivo" << std::endl;
+		exito = movimientoAgresivo(tablero, reglas);
+		break;
+	case TipoIA::Defensiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Defensivo" << std::endl;
+		exito = movimientoDefensivo(tablero, reglas);
+		break;
+	case TipoIA::Tactica:
+		std::cout << "[IA Adaptativa] Modo elegido: Táctico" << std::endl;
+		exito = movimientoTactico(tablero, reglas);
+		break;
+	default:
+		std::cout << "[IA Adaptativa] Modo elegido: Aleatorio (fallback)" << std::endl;
+		exito = movimientoAleatorio(tablero, reglas);
+		break;
+	}
+
+	// Verificar si se debe promocionar una pieza
+	if (exito) {
+		for (int i = 0; i < tablero->getFilas(); ++i) {
+			for (int j = 0; j < tablero->getColumnas(); ++j) {
+				Vector2D pos(i, j);
+				ClassPieza* pieza = tablero->getPieza(pos);
+				if (pieza && pieza->getTipo() == ClassPieza::Peon && pieza->getColor() == turno) {
+					int filaPromo = (turno == ClassPieza::Color::AZUL) ? 0 : tablero->getFilas() - 1;
+					if (pieza->getPos().x == filaPromo) {
+						int filas = tablero->getFilas();
+						int columnas = tablero->getColumnas();
+						int variante = (filas == 5 && columnas == 4) ? 1 : 2;
+						char seleccion = (variante == 1) ? 'd' : 't'; // Silverman -> Reina, Demi -> Torre
+
+						if (mejor->tipo == TipoIA::Tactica) {
+							scoreTactico -= 20;
+						}
+
+						tablero->promocionarPieza(*pieza, seleccion, variante);
+						std::cout << "[IA Adaptativa] Promoción automática realizada a "
+							<< ((seleccion == 'd') ? "Reina" : "Torre") << std::endl;
+					}
+				}
+			}
+		}
+	}
+
+	return exito;
+}
+
+/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+
+	struct EvaluacionEstrategia {
+		TipoIA tipo;
+		int score;
+	};
+
+	std::vector<EvaluacionEstrategia> evaluaciones;
+
+	// Evaluar cada estrategia
+	int scoreAgresivo = evaluarMovimientoAgresivo(tablero, reglas);
+	int scoreDefensivo = evaluarMovimientoDefensivo(tablero, reglas);
+	int scoreTactico = evaluarMovimientoTactico(tablero, reglas);
+
+	evaluaciones.push_back({ TipoIA::Agresiva, scoreAgresivo });
+	evaluaciones.push_back({ TipoIA::Defensiva, scoreDefensivo });
+	evaluaciones.push_back({ TipoIA::Tactica, scoreTactico });
+
+	// Historial para evitar repeticiones
+	static std::deque<TipoIA> historial;
+	const int maxHistorial = 5;
+
+	for (auto& eval : evaluaciones) {
+		if (std::find(historial.begin(), historial.end(), eval.tipo) != historial.end()) {
+			eval.score += 10; // Penalización por repetición
+		}
+	}
+
+	// Elegir la mejor estrategia
+	auto mejor = std::min_element(evaluaciones.begin(), evaluaciones.end(),
+		[](const EvaluacionEstrategia& a, const EvaluacionEstrategia& b) {
+	   return a.score < b.score;
+		});
+
+	// Guardar en historial
+	historial.push_back(mejor->tipo);
+	if (historial.size() > maxHistorial) historial.pop_front();
+
+	std::cout << "[IA Adaptativa] Evaluaciones -> "
+		<< "Agresiva: " << scoreAgresivo << ", "
+		<< "Defensiva: " << scoreDefensivo << ", "
+		<< "Táctica: " << scoreTactico << std::endl;
+
+	// Ejecutar la estrategia elegida
+	bool exito = false;
+
+	switch (mejor->tipo) {
+	case TipoIA::Agresiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Agresivo" << std::endl;
+		exito = movimientoAgresivo(tablero, reglas);
+		break;
+	case TipoIA::Defensiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Defensivo" << std::endl;
+		exito = movimientoDefensivo(tablero, reglas);
+		break;
+	case TipoIA::Tactica:
+		std::cout << "[IA Adaptativa] Modo elegido: Táctico" << std::endl;
+		exito = movimientoTactico(tablero, reglas);
+		break;
+	default:
+		std::cout << "[IA Adaptativa] Modo elegido: Aleatorio (fallback)" << std::endl;
+		exito = movimientoAleatorio(tablero, reglas);
+		break;
+	}
+
+	// Verificar si se debe promocionar una pieza
+	if (exito) {
+		for (int i = 0; i < tablero->getFilas(); ++i) {
+			for (int j = 0; j < tablero->getColumnas(); ++j) {
+				Vector2D pos(i, j);
+				ClassPieza* pieza = tablero->getPieza(pos);
+				if (pieza && pieza->getTipo() == ClassPieza::Peon && pieza->getColor() == turno) {
+					int filaPromo = (turno == ClassPieza::Color::AZUL) ? 0 : tablero->getFilas() - 1;
+					if (pieza->getPos().x == filaPromo) {
+						int filas = tablero->getFilas();
+						int columnas = tablero->getColumnas();
+						int variante = (filas == 5 && columnas == 4) ? 1 : 2;
+						char seleccion = (variante == 1) ? 'd' : 't'; // Silverman -> Reina, Demi -> Torre
+
+						// Bonificación por promoción inminente
+						if (mejor->tipo == TipoIA::Tactica) {
+							scoreTactico -= 20;
+						}
+
+						tablero->promocionarPieza(*pieza, seleccion, variante);
+						std::cout << "[IA Adaptativa] Promoción automática realizada a "
+							<< ((seleccion == 'd') ? "Reina" : "Torre") << std::endl;
+					}
+				}
+			}
+		}
+	}
+
+	return exito;
+}*/
+
+/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+
+	struct EvaluacionEstrategia {
+		TipoIA tipo;
+		int score;
+	};
+
+	std::vector<EvaluacionEstrategia> evaluaciones;
+
+	// Evaluar cada estrategia
+	int scoreAgresivo = evaluarMovimientoAgresivo(tablero, reglas);
+	int scoreDefensivo = evaluarMovimientoDefensivo(tablero, reglas);
+	int scoreTactico = evaluarMovimientoTactico(tablero, reglas);
+
+	evaluaciones.push_back({ TipoIA::Agresiva, scoreAgresivo });
+	evaluaciones.push_back({ TipoIA::Defensiva, scoreDefensivo });
+	evaluaciones.push_back({ TipoIA::Tactica, scoreTactico });
+
+	// Historial para evitar repeticiones
+	static std::deque<TipoIA> historial;
+	const int maxHistorial = 5;
+
+	for (auto& eval : evaluaciones) {
+		if (std::find(historial.begin(), historial.end(), eval.tipo) != historial.end()) {
+			eval.score += 10; // Penalización por repetición
+		}
+	}
+
+	// Elegir la mejor estrategia
+	auto mejor = std::min_element(evaluaciones.begin(), evaluaciones.end(),
+      [](const EvaluacionEstrategia& a, const EvaluacionEstrategia& b) {
+	   return a.score < b.score;
+		});
+
+	// Guardar en historial
+	historial.push_back(mejor->tipo);
+	if (historial.size() > maxHistorial) historial.pop_front();
+
+	std::cout << "[IA Adaptativa] Evaluaciones -> "
+		<< "Agresiva: " << scoreAgresivo << ", "
+		<< "Defensiva: " << scoreDefensivo << ", "
+		<< "Táctica: " << scoreTactico << std::endl;
+
+	// Ejecutar la estrategia elegida
+	bool exito = false;
+	Vector2D origen, destino;
+
+	switch (mejor->tipo) {
+	case TipoIA::Agresiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Agresivo" << std::endl;
+		exito = movimientoAgresivo(tablero, reglas);
+		break;
+	case TipoIA::Defensiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Defensivo" << std::endl;
+		exito = movimientoDefensivo(tablero, reglas);
+		break;
+	case TipoIA::Tactica:
+		std::cout << "[IA Adaptativa] Modo elegido: Táctico" << std::endl;
+		exito = movimientoTactico(tablero, reglas);
+		break;
+	default:
+		std::cout << "[IA Adaptativa] Modo elegido: Aleatorio (fallback)" << std::endl;
+		exito = movimientoAleatorio(tablero, reglas);
+		break;
+	}
+
+	// Verificar si se debe promocionar una pieza
+	if (exito) {
+		for (int i = 0; i < tablero->getFilas(); ++i) {
+			for (int j = 0; j < tablero->getColumnas(); ++j) {
+				Vector2D pos(i, j);
+				ClassPieza* pieza = tablero->getPieza(pos);
+				if (pieza && pieza->getTipo() == ClassPieza::Peon && pieza->getColor() == turno) {
+					int filaPromo = (turno == ClassPieza::Color::AZUL) ? 0 : tablero->getFilas() - 1;
+					if (pieza->getPos().x == filaPromo) {
+						int filas = tablero->getFilas();
+						int columnas = tablero->getColumnas();
+						int variante = (filas == 5 && columnas == 4) ? 1 : 2;
+						char seleccion = (variante == 1) ? 'd' : 't'; // Silverman -> Reina, Demi -> Torre
+						tablero->promocionarPieza(*pieza, seleccion, variante);
+						std::cout << "[IA Adaptativa] Promoción automática realizada a "
+							<< ((seleccion == 'd') ? "Reina" : "Torre") << std::endl;
+					}
+				}
+			}
+		}
+	}
+
+	return exito;
+}*/
+
+/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
+	ClassPieza::Color turno = reglas.getColorTurno();
+
+	struct EvaluacionEstrategia {
+		TipoIA tipo;
+		int score;
+	};
+
+	std::vector<EvaluacionEstrategia> evaluaciones;
+
+	// Evaluar cada estrategia
+	int scoreAgresivo = evaluarMovimientoAgresivo(tablero, reglas);
+	int scoreDefensivo = evaluarMovimientoDefensivo(tablero, reglas);
+	int scoreTactico = evaluarMovimientoTactico(tablero, reglas);
+
+	evaluaciones.push_back({ TipoIA::Agresiva, scoreAgresivo });
+	evaluaciones.push_back({ TipoIA::Defensiva, scoreDefensivo });
+	evaluaciones.push_back({ TipoIA::Tactica, scoreTactico });
+
+	// Historial para evitar repeticiones
+	static std::deque<TipoIA> historial;
+	const int maxHistorial = 5;
+
+	for (auto& eval : evaluaciones) {
+		if (std::find(historial.begin(), historial.end(), eval.tipo) != historial.end()) {
+			eval.score += 10; // Penalización por repetición
+		}
+	}
+
+	// Elegir la mejor estrategia
+	auto mejor = std::min_element(evaluaciones.begin(), evaluaciones.end(),
+      [](const EvaluacionEstrategia& a, const EvaluacionEstrategia& b) {
+	   return a.score < b.score;
+		});
+
+	// Guardar en historial
+	historial.push_back(mejor->tipo);
+	if (historial.size() > maxHistorial) historial.pop_front();
+
+	std::cout << "[IA Adaptativa] Evaluaciones -> "
+		<< "Agresiva: " << scoreAgresivo << ", "
+		<< "Defensiva: " << scoreDefensivo << ", "
+		<< "Táctica: " << scoreTactico << std::endl;
+
+	switch (mejor->tipo) {
+	case TipoIA::Agresiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Agresivo" << std::endl;
+		return movimientoAgresivo(tablero, reglas);
+	case TipoIA::Defensiva:
+		std::cout << "[IA Adaptativa] Modo elegido: Defensivo" << std::endl;
+		return movimientoDefensivo(tablero, reglas);
+	case TipoIA::Tactica:
+		std::cout << "[IA Adaptativa] Modo elegido: Táctico" << std::endl;
+		return movimientoTactico(tablero, reglas);
+	default:
+		std::cout << "[IA Adaptativa] Modo elegido: Aleatorio (fallback)" << std::endl;
+		return movimientoAleatorio(tablero, reglas);
+	}
+}*/
+
+/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 
 	struct EvaluacionEstrategia {
@@ -1143,145 +2574,40 @@ bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
 	}
 }*/
 
-
-
-// IA adaptativa segunda versión
-
-/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
+int IA::evaluarMovimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
-	int materialPropio = 0;
-	int materialEnemigo = 0;
-	int piezasAmenazadas = 0;
-	int piezasDefendidas = 0;
-	int controlCentro = 0;
-
-	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int{
-		switch (tipo) {
-			case ClassPieza::Pieza_t::Peon: return 1;
-			case ClassPieza::Pieza_t::Caballo: return 3;
-			case ClassPieza::Pieza_t::Alfil: return 3;
-			case ClassPieza::Pieza_t::Torre: return 5;
-			case ClassPieza::Pieza_t::Reina: return 9;
-			default: return 0;
-		}
-	};
-
-	auto esCentro = [](const Vector2D& pos, int filas, int columnas)  {
-		return (pos.x >= filas / 3 && pos.x <= 2 * filas / 3) &&
-			   (pos.y >= columnas / 3 && pos.y <= 2 * columnas / 3);
-	};
+	int mejorScore = 1000; // Valor alto por defecto
 
 	for (int i = 0; i < tablero->getFilas(); ++i) {
 		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			Vector2D pos(i, j);
-			ClassPieza* pieza = tablero->getPieza(pos);
-			if (!pieza) continue;
+			Vector2D origen(i, j);
+			ClassPieza* pieza = tablero->getPieza(origen);
+			if (pieza && pieza->getColor() == turno) {
+				auto movimientos = pieza->obtenerMovimientosPosibles(*tablero);
+				for (const auto& destino : movimientos) {
+					if (!ValidadorDeMovimientos::esMovimientoLegal(*tablero, origen, destino, turno))
+						continue;
 
-			int valor = valorPieza(pieza->getTipo());
+					ClassPieza* objetivo = tablero->getPieza(destino);
 
-			if (pieza->getColor() == turno) {
-				materialPropio += valor;
-
-				if (reglas.PosAmenzada(pos, *tablero, pieza)) {
-					piezasAmenazadas++;
-				}
-
-				// Verificar si está defendida por otra pieza propia
-				for (int x = 0; x < tablero->getFilas(); ++x) {
-					for (int y = 0; y < tablero->getColumnas(); ++y) {
-						Vector2D defensor(x, y);
-						ClassPieza* aliada = tablero->getPieza(defensor);
-						if (aliada && aliada->getColor() == turno && defensor != pos) {
-							auto movs = aliada->obtenerMovimientosPosibles(*tablero);
-							if (std::find(movs.begin(), movs.end(), pos) != movs.end()) {
-								piezasDefendidas++;
-							}
-						}
+					if (objetivo && objetivo->getColor() != turno) {
+						// Capturar pieza enemiga
+						int valor = objetivo->getTipo() == ClassPieza::Pieza_t::Rey ? 100 : 10;
+						mejorScore = std::min(mejorScore, -valor);
+					}
+					else if (pieza->getTipo() == ClassPieza::Pieza_t::Rey) {
+						// Mover el rey a una casilla segura
+						mejorScore = std::min(mejorScore, 5);
 					}
 				}
-
-				if (esCentro(pos, tablero->getFilas(), tablero->getColumnas())) {
-					controlCentro++;
-				}
-
-			}
-			else {
-				materialEnemigo += valor;
 			}
 		}
 	}
 
-	bool enJaque = reglas.hayJaque(*tablero, turno);
-	int diferenciaMaterial = materialPropio - materialEnemigo;
+	return mejorScore;
+}
 
-	std::cout << "[IA Adaptativa] Material: " << diferenciaMaterial
-		<< " | Amenazadas: " << piezasAmenazadas
-		<< " | Defendidas: " << piezasDefendidas
-		<< " | Centro: " << controlCentro
-		<< " | En jaque: " << (enJaque ? "Sí" : "No") << std::endl;
-
-	// Decisión basada en evaluación
-	if (enJaque || piezasAmenazadas > piezasDefendidas || diferenciaMaterial > 3) {
-		std::cout << "[IA Adaptativa] Modo: Defensivo\n";
-		return movimientoDefensivo(tablero, reglas);
-	}
-	else if (diferenciaMaterial < -3 || controlCentro < 2) {
-		std::cout << "[IA Adaptativa] Modo: Agresivo\n";
-		return movimientoAgresivo(tablero, reglas);
-	}
-	else {
-		std::cout << "[IA Adaptativa] Modo: Táctico\n";
-		return movimientoTactico(tablero, reglas);
-	}
-}*/
-
-// IA adaptativa primera versión
-
-/*bool IA::movimientoAdaptativo(ClassTablero* tablero, ClassReglas& reglas) {
-	ClassPieza::Color turno = reglas.getColorTurno();
-	int materialPropio = 0;
-	int materialEnemigo = 0;
-
-	auto valorPieza = [](ClassPieza::Pieza_t tipo) -> int{
-		switch (tipo) {
-			case ClassPieza::Pieza_t::Peon: return 1;
-			case ClassPieza::Pieza_t::Caballo: return 3;
-			case ClassPieza::Pieza_t::Alfil: return 3;
-			case ClassPieza::Pieza_t::Torre: return 5;
-			case ClassPieza::Pieza_t::Reina: return 9;
-			default: return 0;
-		}
-	};
-
-	for (int i = 0; i < tablero->getFilas(); ++i) {
-		for (int j = 0; j < tablero->getColumnas(); ++j) {
-			ClassPieza* pieza = tablero->getPieza({ i, j });
-			if (pieza) {
-				int valor = valorPieza(pieza->getTipo());
-				if (pieza->getColor() == turno)
-					materialPropio += valor;
-				else
-					materialEnemigo += valor;
-			}
-		}
-	}
-
-	bool enJaque = reglas.hayJaque(*tablero, turno);
-	int diferencia = materialPropio - materialEnemigo;
-
-	if (enJaque || diferencia > 3) {
-		std::cout << "[IA Adaptativa] Modo: Defensivo\n";
-		return movimientoDefensivo(tablero, reglas);
-	}
-	else if (diferencia < -3) {
-		std::cout << "[IA Adaptativa] Modo: Agresivo\n";
-		return movimientoAgresivo(tablero, reglas);
-	}
-	else {
-		std::cout << "[IA Adaptativa] Modo: Táctico\n";
-		return movimientoTactico(tablero, reglas);
-	}
-}*/
+/*
 int IA::evaluarMovimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 	int mejorScore = 1000; // Valor alto por defecto
@@ -1305,7 +2631,7 @@ int IA::evaluarMovimientoAgresivo(ClassTablero* tablero, ClassReglas& reglas) {
 	}
 
 	return mejorScore;
-}
+}*/
 int IA::evaluarMovimientoDefensivo(ClassTablero* tablero, ClassReglas& reglas) {
 	ClassPieza::Color turno = reglas.getColorTurno();
 	int score = 0;
@@ -1385,5 +2711,19 @@ for (int i = 0; i < tablero->getFilas(); ++i) {
 }
 
 return mejorScore;
+}
+bool IA::capturaPropiaVentajosa(ClassTablero* tablero, ClassReglas& reglas, const Vector2D& origen, const Vector2D& destino) {
+	ClassPieza* pieza = tablero->getPieza(origen);
+	ClassPieza* objetivo = tablero->getPieza(destino);
+
+	if (!pieza || !objetivo || pieza->getColor() != objetivo->getColor())
+		return false;
+
+	// Simular el movimiento
+	ClassTablero copia = *tablero;
+	copia.moverPieza(origen, destino);
+
+	ClassReglas reglasTemp;
+	return !reglasTemp.hayJaque(copia, pieza->getColor()); // Si elimina el jaque, es ventajoso
 }
 

@@ -66,6 +66,21 @@
     <ClCompile Include="src\IA.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+<<<<<<< Updated upstream
+=======
+    <ClCompile Include="src\Coordinador.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MENU.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\endfin.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="src\historialmovimientos.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+>>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Reina.h">
@@ -116,5 +131,20 @@
     <ClInclude Include="src\IA.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+<<<<<<< Updated upstream
+=======
+    <ClInclude Include="src\Coordinador.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MENU.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\endfin.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="src\historialmovimientos.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+>>>>>>> Stashed changes
   </ItemGroup>
 </Project>

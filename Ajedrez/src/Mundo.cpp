@@ -384,6 +384,7 @@ void ClassMundo::reset() {
 	reglas.turno_ = 1;
 	hayReyAhogadoAzul = 0;
 	hayReyAhogadoRojo = 0;
+	//hayempate = 0;
 }
 
 void ClassMundo::mensajePromo() {
