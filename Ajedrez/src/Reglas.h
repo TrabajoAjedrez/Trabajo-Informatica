@@ -11,14 +11,12 @@ class ClassReglas
 protected:
 	Vector2D ShapeSilverman = { 4,5 };
 	Vector2D ShapeDemi = { 4,8 };
-	//int tiempo_restante = 0;
     int tiempo_restante_azules=0;
 	int tiempo_restante_rojas = 0;
 public:
 
 	bool turno_ = 1; //será 1 si le toca a las azules, 0 si le toca a las rojas
 	
-	//obtener shape segun las reglas de Demi y de Silverman
 	Vector2D devolver_forma(const int& Variante);
 
 	void set_turno();
@@ -41,20 +39,17 @@ public:
 	bool PosAmenzada(  Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza); 
 
 	//PROMOCION
-	bool get_Promocion(const ClassPieza& pieza, int var);//identifica si la pieza esta en posicion de promocion
-
+	bool get_Promocion(const ClassPieza& pieza, int var);
 
 	//FUNCIONES DE TEMPORIZADORES
-
 	void actualiza_tiempo();  // Solo decrementa el tiempo
 	void inicia_temporizador(int segundos);//inicia en cada turno
 	int get_tiempo_restante_rojas() const;
 	int get_tiempo_restante_azules() const;
-
-	//Empate por solo dos reyes
-	bool empateReyes(const ClassTablero& tablero) const;
-
 	//pasar el tiempo a string
 	string tiempo_string_rojas();
 	string tiempo_string_azules();
+
+	//Empate por solo dos reyes
+	bool empateReyes(const ClassTablero& tablero) const;
 };

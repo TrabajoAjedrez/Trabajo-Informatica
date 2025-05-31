@@ -16,16 +16,14 @@ ClassTablero::ClassTablero(const ClassTablero& otro) {
 
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-            if (otro.tablero[i][j]) {
+            if (otro.tablero[i][j])
                 tablero[i][j] = otro.tablero[i][j]->clonar();
-            }
         }
     }
 }
 
 void ClassTablero::dibuja( int TipoTablero) {
  
-	// Colores para las casillas (pueden personalizarse)
     glPushMatrix();
 
     if (TipoTablero == 1)
@@ -33,32 +31,21 @@ void ClassTablero::dibuja( int TipoTablero) {
     else
         setPosicion(2, -2, 0);
 
-        glTranslatef(posX, posY, posZ); // Trasladar el tablero a la posición deseada
-        // Bucle para dibujar cada casilla del tablero
-        float tamCasilla = ClassCasilla::getTamCasilla();
-        for (int i = 0; i < filas_; i++) {
-            for (int j = 0; j < columnas_; j++) {
-                int filaVisual = getFilas() - 1 - i; //Para que el resaltado se dibuje donde debe
+    glTranslatef(posX, posY, posZ); // Trasladar el tablero a la posición deseada
+    // Bucle para dibujar cada casilla del tablero
+    float tamCasilla = ClassCasilla::getTamCasilla();
+    for (int i = 0; i < filas_; i++) {
+        for (int j = 0; j < columnas_; j++) {
+            int filaVisual = getFilas() - 1 - i; //Para que el resaltado se dibuje donde debe
 
-                float x = j * tamCasilla;
-                float z = filaVisual * tamCasilla;
-                casillasVisuales[i][j].dibujar(x, z);
-            }
+            float x = j * tamCasilla;
+            float z = filaVisual * tamCasilla;
+            casillasVisuales[i][j].dibujar(x, z);
         }
-
-	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
+    }
+    
     UbicaPieza();
-    // Dibujar borde del tablero
-    /*
-    glColor3f(0.1f, 0.1f, 0.1f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINE_LOOP);
-    glVertex3f(0, 0.01f, 0);
-    glVertex3f(filas_ * tamCasilla, 0.01f, 0);
-    glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
-    glVertex3f(0, 0.01f, filas_ * tamCasilla);
-    glEnd();
-    */
+  
     glPopMatrix();
 }
 
@@ -73,10 +60,6 @@ void ClassTablero::setPosicion(float x, float y, float z) {
 void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
-
-            //float x = (columnas_ - j);
-           // float z = (filas_ - i);
-
             float x = j+1;
             float z = (filas_-i);
 
@@ -139,6 +122,7 @@ void ClassTablero::AnimaPiezas() {
         }
     }
 }
+
 void ClassTablero::ImprimirEnPantalla() {
     for (int i = 0; i < filas_; i++) {
         for (int j = 0; j < columnas_; j++) {
@@ -147,10 +131,11 @@ void ClassTablero::ImprimirEnPantalla() {
         cout << endl;
     }
 }
-// Metodos para comprobar posiciones
+
 bool ClassTablero::esPosicionValida(const Vector2D& pos) const {
 	return pos.x >= 0 && pos.x < filas_ && pos.y >= 0 && pos.y < columnas_; // Comprobar si la posición está dentro de los límites del tablero
 }
+
 bool ClassTablero::estaOcupada(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return false;
     return tablero[pos.x][pos.y] != nullptr;
@@ -160,6 +145,7 @@ ClassPieza* ClassTablero::getPieza(const Vector2D& pos) const {
     if (!esPosicionValida(pos)) return nullptr;
     return tablero[pos.x][pos.y];
 }
+
 bool ClassTablero::estaDentro(const Vector2D& casilla) const {
     int fila = casilla.x;
     int col = casilla.y;
@@ -175,7 +161,6 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (!pieza)
         return false;
 
-
     std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
     if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {
         std::cout << "Movimiento inválido para esta pieza." << std::endl;
@@ -188,7 +173,7 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
         return false;
     }
 
-    //la pieza que voy a comer
+ 
     ClassPieza* pieza_des = getPieza(destino);
     if (pieza_des) {
         delete pieza_des;
@@ -235,11 +220,9 @@ void ClassTablero::limpiarResaltados() {
             cas.setResaltada(false);
 }
 
-
-//dibujar la exclamación:
+//dibujar la exclamacion
 void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote) {
     float tamCasilla = ClassCasilla::getTamCasilla();
-
 
     // Obtener desplazamiento del tablero
     float offsetX = posX;
@@ -247,7 +230,6 @@ void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza
 
     float x = offsetX + posRey.y * tamCasilla + tamCasilla / 2.0f;
     float y = offsetZ + (filas_ - 1 - posRey.x) * tamCasilla + tamCasilla / 2.0f;
-
 
     float rebote = 0.1f * sin(tiempoRebote * 3.0f); // rebote animado con función seno
 
@@ -273,7 +255,6 @@ bool ClassTablero::esPiezaCapturable(const Vector2D& pos, ClassPieza::Color colo
 
 //nueva pieza por promocion
 void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int var) {
-    // char seleccion;
     Vector2D posPromo = pieza.getPos();
     ClassPieza::Color colPromo = pieza.getColor();
 
@@ -281,10 +262,8 @@ void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int
     delete tablero[posPromo.x][posPromo.y];
     tablero[posPromo.x][posPromo.y] = nullptr;
 
-
     //crear la nueva pieza
     ClassPieza* nuevaPieza = nullptr;
-
     switch (seleccion) {
     case 'd':
         if (var == 2)
@@ -315,10 +294,9 @@ void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int
     }
 
     tablero[posPromo.x][posPromo.y] = nuevaPieza;
-
 }
 
-//destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
+//destructor
 ClassTablero::~ClassTablero() {
     clear();  // puede hacerlo directamente por clear no hay que limpiarlas una a una
 }

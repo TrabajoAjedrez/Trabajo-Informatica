@@ -39,7 +39,6 @@ void ClassReglas::actualiza_tiempo() {
 		if (tiempo_restante_rojas > 0)
 			tiempo_restante_rojas--;
 	}
-
 }
 
 void ClassReglas::set_turno() {//cambio de turno
@@ -74,9 +73,10 @@ Vector2D ClassReglas::buscarRey(const ClassTablero& tablero, ClassPieza::Color c
     }
     return { -1, -1 };
 }
+
 bool ClassReglas::hayJaque(const ClassTablero& tablero, ClassPieza::Color colorRey) {
   
-    Vector2D posRey = buscarRey(tablero, colorRey); //buscamos rey
+    Vector2D posRey = buscarRey(tablero, colorRey); 
 
     if (posRey.x == -1) return false; // Rey no encontrado
 
@@ -84,17 +84,16 @@ bool ClassReglas::hayJaque(const ClassTablero& tablero, ClassPieza::Color colorR
     for (int i = 0; i < tablero.getFilas(); ++i) {
         for (int j = 0; j < tablero.getColumnas(); ++j) {
             ClassPieza* pieza = tablero.getPieza({ i, j });
+
             if (pieza && pieza->getColor() != colorRey) {
                 auto movimientos = pieza->obtenerMovimientosPosibles(tablero);
                 for (const auto& mov : movimientos) {
-                    if (mov == posRey) {
+                    if (mov == posRey)
                         return true;
-                    }
                 }
             }
         }
     }
-
     return false;
 }
 
@@ -111,13 +110,14 @@ bool ClassReglas::hayJaqueMate(const ClassTablero& tablero, ClassPieza::Color co
     int Nmovs = movsRey.size();
 
     if (hayJaque(tablero,colorRey) == true && Nmovs <= 0) {
-        cout << "JAQUE MATE!! GANAN" << (colorRey == ClassPieza::Color::AZUL ? "ROJO" : "AZUL") << "!" << endl;
+        cout << "JAQUE MATE!! GANAN " << (colorRey == ClassPieza::Color::AZUL ? "ROJO" : "AZUL") << "!" << endl;
         ETSIDI::play("sonidos/victoria.wav");
         return true;
     }
     else
         return false;
 }
+
 std::optional<std::pair<Vector2D, ClassPieza::Color>> ClassReglas::getReyEnJaque(const ClassTablero& tablero) {
     if (hayJaque(tablero, ClassPieza::Color::AZUL)) {
         return std::make_pair(buscarRey(tablero, ClassPieza::Color::AZUL), ClassPieza::Color::AZUL);
@@ -127,7 +127,6 @@ std::optional<std::pair<Vector2D, ClassPieza::Color>> ClassReglas::getReyEnJaque
     }
     return std::nullopt;
 }
-
 
 bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza) {
     vector<Vector2D> movimientos;
@@ -246,12 +245,10 @@ bool ClassReglas::empateReyes(const ClassTablero& tablero) const {
 		for (int j = 0; j < tablero.getColumnas(); ++j) {
 			ClassPieza* pieza = tablero.getPieza({ i, j });
 			if (pieza && pieza->getTipo() != ClassPieza::Pieza_t::Rey) {
-				if (pieza->getColor() == ClassPieza::Color::AZUL) {
+				if (pieza->getColor() == ClassPieza::Color::AZUL)
 					piezasAzules++;
-				}
-				else if (pieza->getColor() == ClassPieza::Color::ROJO) {
+				else if (pieza->getColor() == ClassPieza::Color::ROJO)
 					piezasRojas++;
-				}
 			}
 		}
 	}

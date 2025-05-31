@@ -12,41 +12,15 @@ ClassReglas reglas;
 static ClassMundo* mundoPtr = nullptr;
 
 IA miIA(IA::elegirEstrategiaAleatoria()); 
-// Para probar una en concreto, puedes usar:
-// IA miIA(IA::TipoIA::Agresiva); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Defensiva); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Tactica); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Aleatoria); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Adaptativa); // O cualquier otro tipo de IA
-
-
-
-
-
-int ClassMundo::PreguntarVariante() {
-	int var = 1; //al fin y al cabo el enum es de enteros
-	std::cout << "Selecciona la variante de ajedrez:\n";
-	std::cout << "1. Silverman\n";	
-	std::cout << "2. Demichess\n";
-	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
-
-	return var;
-}
 
 void ClassMundo::tecla(unsigned char key) {
-	if (key == 'r') {
+	if (key == 'r')
 		reset();
-
-	}
 
 	if (hay_promo && (key == 'd' || key == 't' || key == 'c') || key == 'a') {
 		ObjTablero->promocionarPieza(*piezaPromo, key, static_cast<int>(var_));
 		hay_promo = false;
 	}
-}
-
-void ClassMundo::tecla_especial(unsigned char key) {
-
 }
 
 void ClassMundo::parpadeoExclamacion(int value) {
@@ -57,21 +31,14 @@ void ClassMundo::parpadeoExclamacion(int value) {
 	}
 }
 
-
-
 void ClassMundo::inicializa()
 {
 
 	mundoPtr = this; 
 	
 	// Inicializa el tablero según la variante seleccionada
-	// Inicializa el tablero según la variante seleccionada
-	//int var = PreguntarVariante();
 	int var = TipoTablero;
-
 	var_ = static_cast<Variante>(var);
-
-	//std::cout << var_ << endl;
 
 	auto dimensiones = reglas.devolver_forma(var_);
 
@@ -85,7 +52,6 @@ void ClassMundo::inicializa()
 		std::cout << "Turno de las rojas" << std::endl;
 	}
 
-
 	// Inicializa la posicion de la camara, segun el tablero
 	x_ojo = ObjTablero->getFilas() / 2;
 	y_ojo = ObjTablero->getColumnas() / 2;
@@ -95,10 +61,8 @@ void ClassMundo::inicializa()
 	// Imprimimos el tablero por pantalla
 	ObjTablero->ImprimirEnPantalla();
 
-	//runAllTests();
-
 	//temporizador
-	reglas.inicia_temporizador(100000); // Por ejemplo, 8 segundos
+	reglas.inicia_temporizador(5400); // 90 minutos para cada jugador
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 	glutTimerFunc(500, ClassMundo::parpadeoExclamacion, 0);
 
@@ -120,28 +84,6 @@ void ClassMundo::onTimer(int value) {
 			(!turno && reglas.get_tiempo_restante_rojas() > 0)) {
 			glutTimerFunc(1000, ClassMundo::onTimer, 0);
 		}
-		/*
-        bool turno = reglas.get_turno();
-		if (!turno) { // Turno de las rojas
-			iaRoja.ejecutarMovimiento(mundoPtr->ObjTablero, mundoPtr->reglas);
-		}
-
-		if ((turno && mundoPtr->reglas.get_tiempo_restante_azules() > 0) ||
-			(!turno && mundoPtr->reglas.get_tiempo_restante_rojas() > 0)) {
-			glutTimerFunc(1000, ClassMundo::onTimer, 0);
-		}
-
-		if (turno == 0) {
-			if (reglas.get_tiempo_restante_rojas() > 0) {
-				glutTimerFunc(1000, ClassMundo::onTimer, 0);
-			}
-		}
-		if (turno == 1) {
-			if (reglas.get_tiempo_restante_azules() > 0) {
-				glutTimerFunc(1000, ClassMundo::onTimer, 0);
-			}
-		}
-		*/
 	}
 	glutPostRedisplay();
 }
@@ -158,12 +100,10 @@ void ClassMundo::rotarOjo() {
 	z_ojo = dist * sin(ang);
 }
 
-
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
 	ObjTablero->AnimaPiezas();
 	tiempoRebote += 0.05f;
-
 }
 
 void ClassMundo::dibuja() {
@@ -264,28 +204,9 @@ void ClassMundo::dibuja() {
 		glDisable(GL_TEXTURE_2D);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-	//creo los string para mostrar en pantalla
-	//recurro a la funcion de reglas en la que paso el tiempo a string
-	//string textoTiempo;
 	string textoRojas = "Tiempo rojas: " + reglas.tiempo_string_rojas();
 	string textoAzules = "Tiempo azules: " + reglas.tiempo_string_azules();
-	/*if(reglas.get_turno() == 0)
-		textoTiempo 
-	else if(reglas.get_turno()==1)
-		textoTiempo ;*/
-
+	
 	imprime_tiempo(textoRojas.c_str(),5);//c_str para de string a char*
 	imprime_tiempo(textoAzules.c_str(), 4);
 
@@ -318,12 +239,10 @@ int ClassMundo::getFilas() const {
 
 int ClassMundo::getColumnas() const {
 	return ObjTablero ? ObjTablero->getColumnas() : 0;
-
 }
 
 void ClassMundo::actualizaTurno() {
 	reglas.set_turno();
-
 	std::string textoTurno = reglas.get_turno() ? "AZUL" : "ROJO";
 	std::cout << "Turno del jugador: " << textoTurno << std::endl;
 }
@@ -352,7 +271,6 @@ bool ClassMundo::verificaEstadoDelJuego() {
 	return hayJaqueMateAzul || hayJaqueMateRojo || hayempate;
 }
 
-
 void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& destino) {
 
 	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
@@ -362,17 +280,13 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 		return;
 	}
 
-
 	if (!intentaMover(origen, destino)) return;
-
 	if (verificaEstadoDelJuego()) return;
 
 	actualizaTurno();
 }
 
 bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
-
-
 	if (!ObjTablero) return false;
 	return ObjTablero->moverPieza(origen, destino);
 }
@@ -381,7 +295,6 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 
 	ClassPieza* pieza = ObjTablero->getPieza(clicada);
 
-	// TESTTTSS
 	if (pieza) {
 		std::string tipoTexto;
 		switch (pieza->getTipo()) {
@@ -429,11 +342,8 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		haySeleccionActiva = false;
 	}
 	
-
 		//promocion
-
 	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-
 	if (piezaFinal) {
 		if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
 			hay_promo = true;
@@ -441,10 +351,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		}
 	}
 	//llamo a la promocion en tecla
-
 }
-
-
 
 void ClassMundo::imprime_tiempo(const char* text, float y) {
 	bool turn = reglas.get_turno();
@@ -453,7 +360,7 @@ void ClassMundo::imprime_tiempo(const char* text, float y) {
 	else if(turn==1)
 		ETSIDI::setTextColor(0, 0, 1);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
-	float x;
+	float x; //dependiendo de la variante hace falta un valor u otro
 	if (var_ == 1)
 		x = 5;
 	else if (var_ == 2)
@@ -474,19 +381,23 @@ void ClassMundo::reset() {
 }
 
 void ClassMundo::mensajePromo() {
+	int posx;
 	ETSIDI::setTextColor(1, 1, 0);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
-	ETSIDI::printxy("PROMOCION", 5, 4);
-	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
-	ETSIDI::printxy("Elegir pieza:", 5, 3);
-	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
+	
 	if (var_ == 1) {
-		ETSIDI::printxy("  Dama:  d", 5, 2);
-		ETSIDI::printxy("  Torre: t", 5, 1);
+		posx = 5;
+		ETSIDI::printxy("  Dama:  d", posx, 1);
+		ETSIDI::printxy("  Torre: t", posx, 0);
 	}
 	if (var_ == 2) {
-		ETSIDI::printxy("  Alfil: a", 5, 2); 
-		ETSIDI::printxy("  Caballo: c", 5, 1);
-		ETSIDI::printxy("  Torre: t", 5, 0);
+		posx = 6;
+		ETSIDI::printxy("  Alfil: a", posx, 1); 
+		ETSIDI::printxy("  Caballo: c", posx, 0);
+		ETSIDI::printxy("  Torre: t", posx, -1);
 	}
+	ETSIDI::printxy("PROMOCION", posx, 3);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
+	ETSIDI::printxy("Elegir pieza:", posx, 2);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
 }

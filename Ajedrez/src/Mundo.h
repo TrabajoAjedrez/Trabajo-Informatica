@@ -60,9 +60,8 @@ protected:
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
 
-	//raton ratonObj; // crea instancia global del ratón
 	Vector2D  casillaSeleccionada;
-	bool haySeleccionActiva = false; //por que no son public?
+	bool haySeleccionActiva = false; 
 	bool hayJaqueAzul = false;
 	bool hayJaqueMateAzul = false;
 	bool hayJaqueRojo = false;
@@ -78,7 +77,7 @@ protected:
 
 
 public:
-	// Cosntructor, inicializa el puntero a null
+	// Constructor, inicializa el puntero a null
 	ClassMundo(double xo = 0, double yo = 0, double zo = 0, Variante var = Demi)
 		: ObjTablero(nullptr), x_ojo(xo), y_ojo(yo), z_ojo(zo), var_(var)
 	{}
@@ -87,9 +86,7 @@ public:
 		delete ObjTablero;
 	}
 
-	static int PreguntarVariante();
 	void tecla(unsigned char key);
-	void tecla_especial(unsigned char key);
 	void inicializa();
 	void rotarOjo();
 	void mueve();
@@ -102,15 +99,12 @@ public:
 
 	void mensajePromo();
 
-
-
 	//funciones de tiempo
 	static void onTimer(int value); //para convertir el puntero en metodo
 	void temporizador();
 	void imprime_tiempo(const char* text,float y);
-	// Se podria mejorar
+
 	void seleccionarCasilla(const Vector2D& clicada);
-	//raton& getRaton() { return ratonObj; }
 
 	int getFilas() const;
 	int getColumnas() const;

@@ -9,7 +9,7 @@
 
 class Coordinador {
 public:
-    enum EstadoJuego { MENU, JUEGO /*, PAUSA, GAMEOVER, ... */ };
+    enum EstadoJuego { MENU, JUEGO };
     EstadoJuego estado;
     ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
     int TipoJuego;
@@ -20,26 +20,13 @@ public:
 
 
 
-    Coordinador();              // <-- Constructor
-    ~Coordinador();             // <-- Destructor
+    Coordinador();  // <-- Constructor
+    ~Coordinador(); // Destructor
 
 
-    void tecla_especial(unsigned char key);
+  //  void tecla_especial(unsigned char key);
     void tecla(unsigned char key);
     void mueve();
     void dibuja();
 
 };
-//Coordinador.h
-
-
-
-
-
-
-
-
-
-
-
-
