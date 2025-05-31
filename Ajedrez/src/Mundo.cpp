@@ -434,6 +434,7 @@ void ClassMundo::reset() {
 	hayReyAhogadoRojo = 0;
 	finTiempoAzul = 0;
 	finTiempoRojo = 0;
+	hayempate = 0;
 }
 
 void ClassMundo::mensajePromo() {
