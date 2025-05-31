@@ -83,8 +83,18 @@ void Coordinador::tecla(unsigned char key) {
 		
 		break;
 	case GAMEOVER:
+		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
+		estado = MENU;
+		if (ObjMundo != nullptr) {
+			ObjMundo->reset();
+		}
+		//Resetaer las opciones del menu
+		menu.TipoJuego = 0;
+		menu.Lugar = 0;
+		menu.TipoTablero = 0;
+
+		break;
 	case YOUWIN:
-	//case EMPATE: //Habria que añadirlo
 		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
 		estado = MENU;
 		if (ObjMundo != nullptr) {
@@ -97,7 +107,6 @@ void Coordinador::tecla(unsigned char key) {
 
 		break;
 	case TABLAS:
-		//case EMPATE: //Habria que añadirlo
 		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
 		estado = MENU;
 		if (ObjMundo != nullptr) {
@@ -131,6 +140,14 @@ void Coordinador::mueve()
 		}
 		if (ObjMundo->getHayEmpate() == 1) {
 			estado = TABLAS;
+		}
+		if (ObjMundo->getfinTiempoAzul() == 1) {
+			estado = GAMEOVER; //si se acaba el tiempo de las azules, game over
+			ETSIDI::play("sonidos/derrota.wav");
+		}
+		if (ObjMundo->getfinTiempoRojo() == 1) {
+			estado = YOUWIN; //si se acaba el tiempo de las rojas, you win
+			ETSIDI::play("sonidos/victoria.wav");
 		}
 	}
 	else

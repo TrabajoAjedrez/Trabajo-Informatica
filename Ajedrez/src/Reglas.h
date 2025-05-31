@@ -54,9 +54,13 @@ public:
 	void inicia_temporizador(int segundos);//inicia en cada turno
 	int get_tiempo_restante_rojas() const;
 	int get_tiempo_restante_azules() const;
+	bool finTiempoAzul();
+	bool finTiempoRojo();
+
 
 	//Empate por solo dos reyes
 	bool empateReyes(const ClassTablero& tablero) const;
+
 
 	//pasar el tiempo a string
 	string tiempo_string_rojas();

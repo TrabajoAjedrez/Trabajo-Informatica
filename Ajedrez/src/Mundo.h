@@ -46,6 +46,8 @@ protected:
 	bool hayReyAhogadoAzul = false;
 	bool hayReyAhogadoRojo = false;
 	bool hayempate = false;  //el empte puede ser por rey ahogado o que solo queden los reyes
+	bool finTiempoAzul = false;
+	bool finTiempoRojo = false;
 
 	float tiempoRebote = 0.0f;
 	bool visibleExclamacion = true;
@@ -80,6 +82,8 @@ public:
 	bool getHayJaqueMateAzul() { return hayJaqueMateAzul; }
 	bool getHayJaqueMateRojo() { return hayJaqueMateRojo; }
 	bool getHayEmpate() { return hayempate; }
+	bool getfinTiempoAzul() { return finTiempoAzul; }
+	bool getfinTiempoRojo() { return finTiempoRojo; }
 
 	//funciones de tiempo
 	static void onTimer(int value); //para convertir el puntero en metodo

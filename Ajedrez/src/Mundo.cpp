@@ -74,7 +74,7 @@ void ClassMundo::inicializa()
 
 
 	//temporizador
-	reglas.inicia_temporizador(5400); // 90 minutos por jugador
+	reglas.inicia_temporizador(600); // 10 minutos por jugador
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 	glutTimerFunc(500, ClassMundo::parpadeoExclamacion, 0);
 
@@ -106,6 +106,10 @@ void ClassMundo::temporizador() {
 }
 
 void ClassMundo::mueve() {
+	//el tiempo se tiene que checkear constantemente
+	finTiempoAzul = reglas.finTiempoAzul();
+	finTiempoRojo = reglas.finTiempoRojo();
+
 	// Se llama al tablero para que animar las piezas
 	ObjTablero->AnimaPiezas();
 	tiempoRebote += 0.05f;
@@ -268,6 +272,8 @@ bool ClassMundo::verificaEstadoDelJuego() {
 	hayReyAhogadoAzul = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::AZUL, reglas.turno_);
 	hayReyAhogadoRojo = reglas.hayReyAhogado(*ObjTablero, ClassPieza::Color::ROJO, reglas.turno_);
 
+
+
 	if (hayReyAhogadoAzul || hayReyAhogadoRojo || reglas.empateReyes(*ObjTablero)) {
 		std::cout << "Tablas!.\n";
 		ETSIDI::play("sonidos/tablas.wav");
@@ -275,7 +281,9 @@ bool ClassMundo::verificaEstadoDelJuego() {
 	}
 	if (hayJaqueMateAzul) std::cout << "Mate al azul\n";
 	if (hayJaqueMateRojo) std::cout << "Mate al rojo\n";
-
+	
+	if (finTiempoAzul) cout << "Tiempo agotado para las azules!\n";
+	if (finTiempoRojo) cout << "Tiempo agotado para las rojas!\n";
 	return hayJaqueMateAzul || hayJaqueMateRojo || hayempate;
 }
 
@@ -424,6 +432,8 @@ void ClassMundo::reset() {
 	reglas.turno_ = 1;
 	hayReyAhogadoAzul = 0;
 	hayReyAhogadoRojo = 0;
+	finTiempoAzul = 0;
+	finTiempoRojo = 0;
 }
 
 void ClassMundo::mensajePromo() {

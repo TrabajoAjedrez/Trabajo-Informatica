@@ -275,3 +275,14 @@ bool ClassReglas::empateReyes(const ClassTablero& tablero) const {
 	else
 		return false;
 }
+
+bool ClassReglas::finTiempoAzul() {
+	if (tiempo_restante_azules <= 0) {
+		return true;
+	}
+}
+bool ClassReglas::finTiempoRojo() {
+    if (tiempo_restante_rojas <= 0) {
+        return true;
+    }
+}
