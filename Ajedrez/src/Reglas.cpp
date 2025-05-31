@@ -129,35 +129,48 @@ std::optional<std::pair<Vector2D, ClassPieza::Color>> ClassReglas::getReyEnJaque
 }
 
 
-bool ClassReglas::PosAmenzada( Vector2D pos, const ClassTablero& tablero, ClassPieza* Pieza) {
-    vector<Vector2D> movimientos;
+bool ClassReglas::PosAmenzada(Vector2D pos, const ClassTablero& tablero, ClassPieza* piezaEvaluada) {
     for (int i = 0; i < tablero.getFilas(); ++i) {
         for (int j = 0; j < tablero.getColumnas(); ++j) {
-            ClassPieza* pieza2 = tablero.getPieza({ i, j });
-            if (pieza2 && pieza2->getColor() != Pieza->getColor() && pieza2->getTipo() != Pieza->getTipo()&& pieza2->getTipo()!=ClassPieza::Peon) { // evitamos el rey y el peon
-                 movimientos = pieza2->obtenerMovimientosPosibles(tablero);
-             
-            }
-            else if (pieza2 && pieza2->getTipo() == Pieza->getTipo() && pieza2->getColor() != Pieza->getColor()) {
-            movimientos = { {i+ 1, j-1}, {i+1, j+0}, {i+1, j+1}, {i+0, j-1}, {i+0, j+1}, {i-1,j-1}, {i-1,j+ 0}, {i-1, j+1} }; // el rey tambien amenaza pero no podemos llamar a sus movposibles
-            }
-            else if (pieza2 && pieza2->getTipo() == ClassPieza::Peon && pieza2->getColor() != Pieza->getColor()) {
-                if(pieza2->getColor()==ClassPieza::Color::ROJO)
-                movimientos = { {i +1, j -1}, {i + 1, j + 1} }; //el peon solo come en diagonal sus movsPosibles son tods no solo los de comer
-                else if (pieza2->getColor() == ClassPieza::Color::AZUL)
-                    movimientos = { {i - 1, j - 1}, {i - 1, j + 1} }; 
+            ClassPieza* pieza = tablero.getPieza({ i, j });
+            if (!pieza || pieza->getColor() == piezaEvaluada->getColor())
+                continue;
 
-            }
-            for (const auto& mov : movimientos) {
-                if (tablero.estaDentro(mov) && mov == pos) {
+            vector<Vector2D> movimientos;
 
-                    return true;
+            // Amenaza de peones (solo diagonales)
+            if (pieza->getTipo() == ClassPieza::Peon) {
+                if (pieza->getColor() == ClassPieza::Color::ROJO)
+                    movimientos = { {i + 1, j - 1}, {i + 1, j + 1} };
+                else
+                    movimientos = { {i - 1, j - 1}, {i - 1, j + 1} };
+            }
+
+            // Amenaza de rey (casillas adyacentes)
+            else if (pieza->getTipo() == ClassPieza::Rey) {
+                for (int dx = -1; dx <= 1; ++dx) {
+                    for (int dy = -1; dy <= 1; ++dy) {
+                        if (dx != 0 || dy != 0)
+                            movimientos.push_back({ i + dx, j + dy });
+                    }
                 }
+            }
+
+            // Resto de piezas: usar sus movimientos posibles
+            else {
+                movimientos = pieza->obtenerMovimientosPosibles(tablero);
+            }
+
+            // Verificamos si alguna amenaza la posición
+            for (const auto& mov : movimientos) {
+                if (tablero.estaDentro(mov) && mov == pos)
+                    return true;
             }
         }
     }
     return false;
 }
+
 
 bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color colorRey, int turno) {
 
@@ -171,10 +184,10 @@ bool ClassReglas::hayReyAhogado(const ClassTablero& tablero, ClassPieza::Color c
 
     bool esturno = false; //el rey ahogado tiene que ser una vez haya movido el oponente
 
-    if (colorRey == ClassPieza::Color::AZUL && turno == 0)
+    if ((colorRey == ClassPieza::Color::AZUL && turno == 0) ||
+        (colorRey == ClassPieza::Color::ROJO && turno == 1)) {
         esturno = true;
-    if (colorRey == ClassPieza::Color::ROJO && turno == 1)
-        esturno = true;
+    }
 
     for (int i = 0; i < tablero.getFilas(); ++i) {
         for (int j = 0; j < tablero.getColumnas(); ++j) {
