@@ -37,6 +37,7 @@ public:
 		TipoTablero = a;
 	}
 
+
 	int getTipoJuego()
 	{
 		return(TipoJuego);
@@ -97,14 +98,15 @@ public:
 
 	bool getHayJaqueMateAzul() { return hayJaqueMateAzul; }
 	bool getHayJaqueMateRojo() { return hayJaqueMateRojo; }
+	bool getHayEmpate() { return hayempate; }
 
 	//funciones de tiempo
-	static void onTimer(int value); 
+	static void onTimer(int value); //para convertir el puntero en metodo
 	void temporizador();
 	void imprime_tiempo(const char* text,float y);
-
+	// Se podria mejorar
 	void seleccionarCasilla(const Vector2D& clicada);
-
+	//raton& getRaton() { return ratonObj; }
 
 	int getFilas() const;
 	int getColumnas() const;

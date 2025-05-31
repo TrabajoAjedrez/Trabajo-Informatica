@@ -18,6 +18,8 @@ Coordinador::Coordinador()
 {
 	ObjMundo = new ClassMundo(); // Reserva memoria para el mundo de juego
 	// Aquí puedes inicializar más cosas si necesitas
+
+
 }
 
 // Destructor
@@ -32,11 +34,12 @@ void Coordinador::dibuja()
 		gluLookAt(0, 7.5, 30, // posicion del ojo
 			0.0, 7.5, 0.0, // hacia que punto mira (0,7.5,0)
 			0.0, 1.0, 0.0); // definimos hacia arriba (eje Y)
-
 		estado;
-
-
 		menu.dibujarMenu();
+		if (!sonido) { //asegurarnos que la musica solo se reproduce al arrancar el juego
+			ETSIDI::play("sonidos/menu.wav");
+			sonido = true;
+		}
 		break;
 	case JUEGO:
 		ObjMundo->dibuja();
@@ -56,6 +59,14 @@ void Coordinador::dibuja()
 
 		ENDFIN.dibujarYOUWIN();
 		break;
+
+	case TABLAS:
+		gluLookAt(0, 7.5, 30, // posicion del ojo
+			0.0, 7.5, 0.0, // hacia que punto mira (0,7.5,0)
+			0.0, 1.0, 0.0); // definimos hacia arriba (eje Y)
+
+		ENDFIN.dibujarTABLAS();
+		break;
 	}
 
 }
@@ -72,6 +83,19 @@ void Coordinador::tecla(unsigned char key) {
 	case GAMEOVER:
 	case YOUWIN:
 	//case EMPATE: //Habria que añadirlo
+		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
+		estado = MENU;
+		if (ObjMundo != nullptr) {
+			ObjMundo->reset();
+		}
+		//Resetaer las opciones del menu
+		menu.TipoJuego = 0;
+		menu.Lugar = 0;
+		menu.TipoTablero = 0;
+
+		break;
+	case TABLAS:
+		//case EMPATE: //Habria que añadirlo
 		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
 		estado = MENU;
 		if (ObjMundo != nullptr) {
@@ -101,7 +125,12 @@ void Coordinador::mueve()
 			estado = GAMEOVER;
 		}
 		if (ObjMundo->getHayJaqueMateRojo() == 1) {
-			estado = YOUWIN;
+			estado = YOUWIN;	
+		}
+		if (ObjMundo->getHayEmpate() == 1) {
+			estado = TABLAS;
 		}
 	}
+	else
+		menu.mueve();
 }

@@ -2,6 +2,7 @@
 #include "freeglut.h"
 #include "raton.h"
 #include "Coordinador.h"
+#include"ETSIDI.h"
 
 raton ratonObj; // crea instancia global del ratón
 Coordinador* coordinador = nullptr; 
@@ -56,6 +57,7 @@ int main(int argc, char* argv[])
 						//jugador vs jugador
 						std::cout << "jugador vs jugador" << std::endl;
 						coordinador->menu.setTipoJuego(1);
+						ETSIDI::play("sonidos/click.wav");
 
 					}
 					if (normalizedX >= 0.57 && normalizedX <= 0.915 && normalizedY <= 0.28333 && normalizedY >= 0.2)
@@ -63,36 +65,42 @@ int main(int argc, char* argv[])
 						//jugador vs IA
 						std::cout << "jugador vs IA" << std::endl;
 						coordinador->menu.setTipoJuego(2);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.1225 && normalizedX <= 0.32375 && normalizedY <= 0.51667 && normalizedY >= 0.43)
 					{
 						//castillo
 						std::cout << "castillo" << std::endl;
 						coordinador->menu.setLugar(1);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.43125 && normalizedX <= 0.6025 && normalizedY <= 0.52833 && normalizedY >= 0.43)
 					{
 						//mazmorra
 						std::cout << "mazmorra" << std::endl;
 						coordinador->menu.setLugar(2);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.70625 && normalizedX <= 0.87875 && normalizedY <= 0.52833 && normalizedY >= 0.43)
 					{
 						//campo
 						std::cout << "campo" << std::endl;
 						coordinador->menu.setLugar(3);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.12125 && normalizedX <= 0.46125 && normalizedY <= 0.745 && normalizedY >= 0.65833)
 					{
 						//silverman
 						std::cout << "silverman" << std::endl;
 						coordinador->menu.setTipoTablero(1);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.56625 && normalizedX <= 0.91125 && normalizedY <= 0.745 && normalizedY >= 0.65833)
 					{
 						//demichess
 						std::cout << "demichess" << std::endl;
 						coordinador->menu.setTipoTablero(2);
+						ETSIDI::play("sonidos/click.wav");
 					}
 					if (normalizedX >= 0.3275 && normalizedX <= 0.67 && normalizedY <= 0.931667 && normalizedY >= 0.843333)
 					{

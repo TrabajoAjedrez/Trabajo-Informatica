@@ -8,8 +8,9 @@
 #include <vector>
 
 class Coordinador {
+    bool sonido = false;
 public:
-    enum EstadoJuego { MENU, JUEGO, GAMEOVER, YOUWIN };
+    enum EstadoJuego { MENU, JUEGO, GAMEOVER, YOUWIN, TABLAS };
     EstadoJuego estado;
     ClassMundo* ObjMundo = nullptr; //Puntero a la clase que contiene el mundo
     int TipoJuego;
@@ -29,3 +30,16 @@ public:
     void dibuja();
 
 };
+//Coordinador.h
+
+
+
+
+
+
+
+
+
+
+
+

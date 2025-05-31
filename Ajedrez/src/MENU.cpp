@@ -8,6 +8,8 @@
 #include "Menu.h"
 #include <vector>
 
+
+
 void drawButton3D(float x1, float y1, float x2, float y2, float z, float r, float g, float b) {
     glColor3f(r, g, b);
     glBegin(GL_QUADS);
@@ -60,8 +62,12 @@ void drawButtonWithText(float x1, float y1, float x2, float y2, float z, float r
 
 void Menu::dibujarMenu() {
 
-    draw3DText("Chess Quest", 0.5f, 17.0f, 0.0f, 0.009f, 1.0f, 1.0f, 1.0f);
+    glPushMatrix();
+    glTranslatef(-1.0f, 14.5f, 0.0f); 
+	spritelogo.draw(); //dibujamos el logo
+	glPopMatrix();
 
+    fondo(); //fondo estático
 
 
     draw3DText("Tipo de juego:", -10.0f, 15.0f, 0.0f, 0.005f, 1.0f, 1.0f, 1.0f);
@@ -125,10 +131,33 @@ void Menu::dibujarMenu() {
 
 
     drawButtonWithText(-10.0f - 1.0f + 6.0f, -2.0f, 0.0f - 1.0f + 6.0f, 0.0f, 0.0f, 0.0f, 0.65f, 0.0f, "Jugar", 1.0f, 1.0f, 1.0f);
-
+    
+    glPushMatrix();
+    glTranslatef(-7, 0, 1);
+    spriteReinaA.draw();
+	glPopMatrix();
+    glPushMatrix();
+    glTranslatef(7, 0, 1);
+    spriteReyR.flip(1,0);
+    spriteReyR.draw();
+    glPopMatrix();
 
 }
 
+void Menu::fondo(){
+    glPushMatrix();
+	glDisable(GL_LIGHTING);
+    glColor3f(0.0, 0.67, 0.9);
+	glBegin(GL_POLYGON);
+    glVertex3f(-30.0f, 30, -5.0f);
+    glVertex3f(30.0f, 30, -5.0f);
+    glVertex3f(30.0f, -30, -5.0f);
+    glVertex3f(-30.0f, -30, -5.0f);
+	glEnd();
+	glEnable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
+    glPopMatrix();
+}
 
 
 //glutMouseFunc(OnMouseClickMenu);
