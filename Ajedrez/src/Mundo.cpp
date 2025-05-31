@@ -12,6 +12,8 @@ ClassReglas reglas;
 static ClassMundo* mundoPtr = nullptr;
 
 IA miIA(IA::elegirEstrategiaAleatoria()); 
+//IA miIA(TipoIA::Agresiva); // Para pruebas, puedes cambiar a Defensiva, Táctica, Aleatoria o Adaptativa
+
 
 
 void ClassMundo::tecla(unsigned char key) {
