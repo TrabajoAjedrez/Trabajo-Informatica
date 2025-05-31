@@ -17,7 +17,8 @@ private:
 
     std::vector<std::vector<ClassCasilla>> casillasVisuales;
 
-
+    Vector2D casillaObjetivoEnPasante_ = { -1, -1 }; // Casilla a la que se movería el peón
+    ClassPieza::Color colorPeonVulnerableEnPasante_; // Color del peón que avanzó dos casillas
 
 public:
     // Constructor: tamaño del tablero y tamaño de cada casilla
@@ -48,8 +49,6 @@ public:
     void dibuja(int TipoTablero);
     // Establece la posición del tablero
     void setPosicion(float x, float y, float z);
-    // Dibuja una casilla en la posicion (x,z)
-    void dibujarCasilla(float x, float z, bool esClara);
     // Ubica las piezas en el tablero
     void UbicaPieza();
     // Coloca las piezas en el tablero
@@ -84,6 +83,12 @@ public:
 
     //creacion de piezas en promocion
     void promocionarPieza(const ClassPieza& pieza,char seleccion, int var);
+
+
+    Vector2D getCasillaObjetivoEnPasante() const { return casillaObjetivoEnPasante_; }
+    ClassPieza::Color getColorPeonVulnerableEnPasante() const { return colorPeonVulnerableEnPasante_; }
+    void setCasillaEnPasante(const Vector2D& casilla, ClassPieza::Color colorPeonVulnerable);
+    void limpiarCasillaEnPasante();
 
     //DESTRUCTOR
     ~ClassTablero();

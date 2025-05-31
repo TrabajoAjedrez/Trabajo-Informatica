@@ -175,10 +175,26 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (!pieza)
         return false;
 
+    bool esCapturaAlPaso = false;
+    Vector2D posPeonCapturadoAlPaso = { -1, -1 };
+
+    // Comprobar si es una captura al paso
+    if (pieza->getTipo() == ClassPieza::Peon && destino == casillaObjetivoEnPasante_ && !estaOcupada(destino) && colorPeonVulnerableEnPasante_ != pieza->getColor()) {
+
+        esCapturaAlPaso = true;
+        // Determinar la posición del peón que está siendo capturado al paso.
+        // Está en la misma columna que `destino`, pero en la fila de `origen`.
+        if (pieza->getColor() == ClassPieza::Color::ROJO) { // Peón ROJO captura (se mueve hacia filas mayores)
+            posPeonCapturadoAlPaso = Vector2D(destino.x - 1, destino.y); // El peón capturado está una fila "detrás" del destino del captor.
+        }
+        else { // Peón AZUL captura (se mueve hacia filas menores)
+            posPeonCapturadoAlPaso = Vector2D(destino.x + 1, destino.y); // El peón capturado está una fila "detrás" del destino del captor.
+        }
+    }
 
     std::vector<Vector2D> movs = pieza->obtenerMovimientosPosibles(*this);
     if (std::find(movs.begin(), movs.end(), destino) == movs.end()) {
-        std::cout << "Movimiento inválido para esta pieza." << std::endl;
+        std::cout << "Movimiento invalido para esta pieza." << std::endl;
         return false;
     }
 
@@ -188,11 +204,26 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
         return false;
     }
 
-    //la pieza que voy a comer
-    ClassPieza* pieza_des = getPieza(destino);
-    if (pieza_des) {
-        delete pieza_des;
-        cout << "pieza comida" << endl;
+    // Si fue captura al paso, eliminar el peón capturado de su posición
+    if (esCapturaAlPaso) {
+        if (esPosicionValida(posPeonCapturadoAlPaso) && getPieza(posPeonCapturadoAlPaso) && getPieza(posPeonCapturadoAlPaso)->getColor() == colorPeonVulnerableEnPasante_) {
+            std::cout << "¡Captura al paso! Peon en (" << posPeonCapturadoAlPaso.x << ", " << posPeonCapturadoAlPaso.y << ") eliminado." << std::endl;
+            delete tablero[posPeonCapturadoAlPaso.x][posPeonCapturadoAlPaso.y];
+            tablero[posPeonCapturadoAlPaso.x][posPeonCapturadoAlPaso.y] = nullptr;
+        }
+        else {
+            // Esto es un estado de error, indica un problema en la lógica previa.
+            std::cerr << "Error en captura al paso: El peon vulnerable no se encontro o no coincide en ("
+                << posPeonCapturadoAlPaso.x << ", " << posPeonCapturadoAlPaso.y << ")." << std::endl;
+        }
+    }
+    else {
+        //la pieza que voy a comer
+        ClassPieza* pieza_des = getPieza(destino);
+        if (pieza_des) {
+            delete pieza_des;
+            cout << "pieza comida" << endl;
+        }
     }
 
     tablero[destino.x][destino.y] = pieza;
@@ -201,7 +232,7 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
 
     std::cout << "Pieza movida de (" << origen.x << ", " << origen.y
         << ") a (" << destino.x << ", " << destino.y << ")" << std::endl;
- 
+
     return true;
 }
 
@@ -213,7 +244,6 @@ void ClassTablero::clear() {
             tablero[i][j] = nullptr;
         }
     }
-
 }
 
 void ClassTablero::reset() {
@@ -316,6 +346,16 @@ void ClassTablero::promocionarPieza(const ClassPieza& pieza, char seleccion, int
 
     tablero[posPromo.x][posPromo.y] = nuevaPieza;
 
+}
+
+void ClassTablero::setCasillaEnPasante(const Vector2D& casilla, ClassPieza::Color colorPeonVulnerable) {
+    casillaObjetivoEnPasante_ = casilla;
+    colorPeonVulnerableEnPasante_ = colorPeonVulnerable;
+}
+
+void ClassTablero::limpiarCasillaEnPasante() {
+    casillaObjetivoEnPasante_ = { -1, -1 };
+    // si casillaObjetivoEnPasante_ es {-1,-1} indica que no hay captura al paso posible.
 }
 
 //destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?

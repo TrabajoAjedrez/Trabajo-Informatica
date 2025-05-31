@@ -51,6 +51,44 @@ vector<Vector2D> ClassPeon::obtenerMovimientosPosibles(const ClassTablero& table
 		movimientos.push_back(diagonalDerecha);
 	}
 
+	// Lógica para Captura al Paso
+	int filaParaEnPasante;
+	if (color == ClassPieza::Color::ROJO) { // Peones ROJOS
+		filaParaEnPasante = 4;
+	}
+	else { // Peones AZULES
+		if (tablero.getFilas() == 8) filaParaEnPasante = 3;
+		else if (tablero.getFilas() == 5) filaParaEnPasante = 0;
+		else filaParaEnPasante = -1; // Valor inválido, no debería ocurrir si las variantes están bien definidas.
+	}
+
+	if (filaActual == filaParaEnPasante) {
+		// Verificar columna izquierda para posible captura al paso
+		Vector2D posibleVictimaIzqPos(filaActual, columnaActual - 1); // Posición de la pieza enemiga que saltó
+		Vector2D casillaDestinoEnPassantIzq(filaActual + direccion, columnaActual - 1); // A dónde iría nuestro peón
+
+		if (tablero.getCasillaObjetivoEnPasante() == casillaDestinoEnPassantIzq &&
+			tablero.getColorPeonVulnerableEnPasante() != this->color) {
+
+			// Verificamos que realmente haya un peón enemigo en la posición que correspondería
+			ClassPieza* victima = tablero.getPieza(posibleVictimaIzqPos);
+			if (victima && victima->getTipo() == ClassPieza::Peon && victima->getColor() == tablero.getColorPeonVulnerableEnPasante()) {
+				movimientos.push_back(casillaDestinoEnPassantIzq);
+			}
+		}
+		// Verificar columna derecha para posible captura al paso
+		Vector2D posibleVictimaDerPos(filaActual, columnaActual + 1); // Posición de la pieza enemiga que saltó
+		Vector2D casillaDestinoEnPassantDer(filaActual + direccion, columnaActual + 1); // A dónde iría nuestro peón
+
+		if (tablero.getCasillaObjetivoEnPasante() == casillaDestinoEnPassantDer &&
+			tablero.getColorPeonVulnerableEnPasante() != this->color) {
+			ClassPieza* victima = tablero.getPieza(posibleVictimaDerPos);
+			if (victima && victima->getTipo() == ClassPieza::Peon && victima->getColor() == tablero.getColorPeonVulnerableEnPasante()) {
+				movimientos.push_back(casillaDestinoEnPassantDer);
+			}
+		}
+	}
+
 	return movimientos;
 }
 

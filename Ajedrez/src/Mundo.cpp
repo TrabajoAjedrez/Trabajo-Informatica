@@ -352,8 +352,8 @@ bool ClassMundo::verificaEstadoDelJuego() {
 	return hayJaqueMateAzul || hayJaqueMateRojo || hayempate;
 }
 
-
 void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& destino) {
+
 
 	ClassPieza::Color turnoActual = reglas.get_turno() ? ClassPieza::Color::AZUL : ClassPieza::Color::ROJO;
 
@@ -362,8 +362,37 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 		return;
 	}
 
+	ClassPieza* piezaEnOrigen = ObjTablero->getPieza(origen);
+	bool eraPeon = piezaEnOrigen && piezaEnOrigen->getTipo() == ClassPieza::Peon;
+	ClassPieza::Color colorPiezaMovida = ClassPieza::Color::AZUL; // Valor por defecto
+	if (piezaEnOrigen) { // Asegurarse que la pieza existe antes de obtener su color
+		colorPiezaMovida = piezaEnOrigen->getColor();
+	}
 
-	if (!intentaMover(origen, destino)) return;
+	if (!intentaMover(origen, destino)) {
+		haySeleccionActiva = false; 
+		ObjTablero->limpiarResaltados();
+		return;
+	}
+
+	ObjTablero->limpiarCasillaEnPasante();
+
+	// Si el movimiento fue exitoso, verificamos si fue un peón moviendo dos casillas.
+	if (eraPeon) { // Usamos la información guardada de 'eraPeon'.
+		int diffFilas = destino.x - origen.x; // Diferencia con signo.
+		if (abs(diffFilas) == 2) { // Movió dos casillas.
+			Vector2D casillaSaltada;
+			if (colorPiezaMovida == ClassPieza::Color::ROJO) { // ROJO mueve en dirección positiva de filas.
+				casillaSaltada = Vector2D(origen.x + 1, origen.y);
+			}
+			else { // AZUL mueve en dirección negativa de filas.
+				casillaSaltada = Vector2D(origen.x - 1, origen.y);
+			}
+			ObjTablero->setCasillaEnPasante(casillaSaltada, colorPiezaMovida);
+			std::cout << "Captura al paso posible en (" << casillaSaltada.x << "," << casillaSaltada.y << ") contra el peon "
+				<< (colorPiezaMovida == ClassPieza::Color::ROJO ? "ROJO" : "AZUL") << "." << std::endl;
+		}
+	}
 
 	if (verificaEstadoDelJuego()) return;
 
