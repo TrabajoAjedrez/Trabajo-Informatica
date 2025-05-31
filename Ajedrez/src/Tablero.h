@@ -8,8 +8,8 @@
 
 class ClassTablero {
 private:
-    int filas_; // Numero de filas del tablero
-    int columnas_; // Numero de columnas del tablero
+    size_t filas_; // Numero de filas del tablero
+    size_t columnas_; // Numero de columnas del tablero
 	std::vector<std::vector<ClassPieza*>> tablero; // Tablero de piezas
 
     //float tamCasilla;       // Tamaño de cada casilla
@@ -35,13 +35,14 @@ public:
                 casillasVisuales[i][j] = ClassCasilla(clara);
             }
         }
+        colorPeonVulnerableEnPasante_ = ClassPieza::Color::AZUL;
     }
     
     ClassTablero(const ClassTablero& otro); // Constructor copia
 
 	// Métodos para obtener información del tablero
-	int getFilas() const { return filas_; }
-	int getColumnas() const { return columnas_; }
+	size_t getFilas() const { return filas_; }
+	size_t getColumnas() const { return columnas_; }
     float getPosX() const { return posX; }
     float getPosZ() const { return posZ; }
 
