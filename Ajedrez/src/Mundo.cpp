@@ -19,19 +19,15 @@ IA miIA(IA::elegirEstrategiaAleatoria());
 // IA miIA(IA::TipoIA::Aleatoria); // O cualquier otro tipo de IA
 // IA miIA(IA::TipoIA::Adaptativa); // O cualquier otro tipo de IA
 
-
-
-
-
-int ClassMundo::PreguntarVariante() {
-	int var = 1; //al fin y al cabo el enum es de enteros
-	std::cout << "Selecciona la variante de ajedrez:\n";
-	std::cout << "1. Silverman\n";	
-	std::cout << "2. Demichess\n";
-	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
-
-	return var;
-}
+//int ClassMundo::PreguntarVariante() {
+//	int var = 1; //al fin y al cabo el enum es de enteros
+//	std::cout << "Selecciona la variante de ajedrez:\n";
+//	std::cout << "1. Silverman\n";	
+//	std::cout << "2. Demichess\n";
+//	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
+//
+//	return var;
+//}
 
 void ClassMundo::tecla(unsigned char key) {
 	if (key == 'r') {
@@ -56,8 +52,6 @@ void ClassMundo::parpadeoExclamacion(int value) {
 		glutTimerFunc(300, ClassMundo::parpadeoExclamacion, 0);
 	}
 }
-
-
 
 void ClassMundo::inicializa()
 {
@@ -263,19 +257,6 @@ void ClassMundo::dibuja() {
 		glEnable(GL_LIGHTING);
 		glDisable(GL_TEXTURE_2D);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 	//creo los string para mostrar en pantalla
 	//recurro a la funcion de reglas en la que paso el tiempo a string
 	//string textoTiempo;

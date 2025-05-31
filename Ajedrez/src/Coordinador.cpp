@@ -25,9 +25,6 @@ Coordinador::~Coordinador() {
 	delete ObjMundo;  // Libera la memoria
 }
 
-
-
-
 void Coordinador::dibuja()
 {
 	switch (estado) {
@@ -66,36 +63,34 @@ void Coordinador::dibuja()
 void Coordinador::tecla(unsigned char key) {
 	switch (estado) {
 	case MENU:
-		/*
-		if (key == 'e' || key == 'E') {   // <--- Aquí era la condición
-			estado = JUEGO;               // Cambia el estado a JUEGO
-			ObjMundo->inicializa();       // Inicializa el mundo/tablero
-		}
-		*/
 		break;
 	case JUEGO:
-		/*
-		ObjMundo->tecla(key); 
-		if (key == 'e' || key == 'E') {   // <--- Aquí era la condición
-			estado = GAMEOVER;               // Cambia el estado a JUEGO
-			      // Inicializa el mundo/tablero
+		if (ObjMundo != nullptr) {
+			ObjMundo->tecla(key); // Pasa las teclas al mundo para acciones en el juego
 		}
-		*/
 		break;
-		
-		
-		
-	}
-}
+	case GAMEOVER:
+	case YOUWIN:
+	//case EMPATE: //Habria que añadirlo
+		std::cout << "Tecla '" << key << "' presionada en pantalla de fin de partida. Volviendo al MENU..." << std::endl;
+		estado = MENU;
+		if (ObjMundo != nullptr) {
+			ObjMundo->reset();
+		}
+		//Resetaera las opciones del menu
+		menu.TipoJuego = 0;
+		menu.Lugar = 0;
+		menu.TipoTablero = 0;
 
+		break;
+	}
+	glutPostRedisplay();
+}
 
 void Coordinador::tecla_especial(unsigned char key)
 {
 	if (estado == JUEGO)ObjMundo->tecla_especial(key);
 }
-
-
-//ClassReglas reglas;
 
 void Coordinador::mueve()
 {
@@ -110,7 +105,7 @@ void Coordinador::mueve()
 		}
 	}
 }
-//Coordinador.cpp
+
 
 
 

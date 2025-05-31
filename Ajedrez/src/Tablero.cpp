@@ -145,9 +145,6 @@ void ClassTablero::UbicaPieza() {
     for (int i = 0; i < filas_; ++i) {
         for (int j = 0; j < columnas_; ++j) {
 
-            //float x = (columnas_ - j);
-           // float z = (filas_ - i);
-
             float x = j+1;
             float z = (filas_-i);
 
