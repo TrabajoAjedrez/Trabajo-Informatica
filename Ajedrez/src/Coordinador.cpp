@@ -78,7 +78,9 @@ void Coordinador::tecla(unsigned char key) {
 	case JUEGO:
 		if (ObjMundo != nullptr) {
 			ObjMundo->tecla(key); // Pasa las teclas al mundo para acciones en el juego
+			
 		}
+		
 		break;
 	case GAMEOVER:
 	case YOUWIN:

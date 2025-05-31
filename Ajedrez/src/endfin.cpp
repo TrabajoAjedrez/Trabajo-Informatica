@@ -77,8 +77,8 @@ void endfin::dibujarGAMEOVER() {
     glDisable(GL_TEXTURE_2D);
     */
     //drawButtonWithText2(-10.0f + 10.0f + 2.0f, 2.0f, 0.0f - 1.0f, 14.0f, 0.0f, 0.0f, 1.0f, 0.0f, "GAME OVER", 1.0f, 1.0f, 1.0f);
-    float AwX = -7.0f;
-    float AwY = 0.0f;
+    float AwX = -14.55f;
+    float AwY = -5.0f;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/derrota.png").id);
@@ -86,20 +86,19 @@ void endfin::dibujarGAMEOVER() {
     glBegin(GL_POLYGON);
     glColor3f(1, 1, 1);
     glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
-    glTexCoord2d(1, 1);  glVertex2d(14 + AwX, 0 + AwY);
-    glTexCoord2d(1, 0);  glVertex2d(14 + AwX, 14 + AwY);
-    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 14 + AwY);
+    glTexCoord2d(1, 1);  glVertex2d(29.1 + AwX, 0 + AwY);
+    glTexCoord2d(1, 0);  glVertex2d(29.1 + AwX, 24 + AwY);
+    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 24 + AwY);
     glEnd();
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
-
     
 }
 void endfin::dibujarYOUWIN() {
 
     //drawButtonWithText2(-10.0f + 10.0f + 2.0f, 2.0f, 0.0f - 1.0f, 14.0f, 0.0f, 0.0f, 1.0f, 0.0f, "GAME OVER", 1.0f, 1.0f, 1.0f);
-    float AwX = -7.0f;
-    float AwY = 0.0f;
+    float AwX = -14.55f;
+    float AwY = -5.0f;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/victoria.png").id);
@@ -107,9 +106,9 @@ void endfin::dibujarYOUWIN() {
     glBegin(GL_POLYGON);
     glColor3f(1, 1, 1);
     glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
-    glTexCoord2d(1, 1);  glVertex2d(14 + AwX, 0 + AwY);
-    glTexCoord2d(1, 0);  glVertex2d(14 + AwX, 14 + AwY);
-    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 14 + AwY);
+    glTexCoord2d(1, 1);  glVertex2d(29.1 + AwX, 0 + AwY);
+    glTexCoord2d(1, 0);  glVertex2d(29.1 + AwX, 24 + AwY);
+    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 24 + AwY);
     glEnd();
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
@@ -120,8 +119,8 @@ void endfin::dibujarYOUWIN() {
 void endfin::dibujarTABLAS() {
 
     //drawButtonWithText2(-10.0f + 10.0f + 2.0f, 2.0f, 0.0f - 1.0f, 14.0f, 0.0f, 0.0f, 1.0f, 0.0f, "GAME OVER", 1.0f, 1.0f, 1.0f);
-    float AwX = -7.0f;
-    float AwY = 0.0f;
+    float AwX = -14.55f;
+    float AwY = -5.0f;
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/tablas.png").id);
@@ -129,12 +128,13 @@ void endfin::dibujarTABLAS() {
     glBegin(GL_POLYGON);
     glColor3f(1, 1, 1);
     glTexCoord2d(0, 1);  glVertex2d(0 + AwX, 0 + AwY);
-    glTexCoord2d(1, 1);  glVertex2d(14 + AwX, 0 + AwY);
-    glTexCoord2d(1, 0);  glVertex2d(14 + AwX, 14 + AwY);
-    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 14 + AwY);
+    glTexCoord2d(1, 1);  glVertex2d(29.1 + AwX, 0 + AwY);
+    glTexCoord2d(1, 0);  glVertex2d(29.1 + AwX, 24 + AwY);
+    glTexCoord2d(0, 0);  glVertex2d(0 + AwX, 24 + AwY);
     glEnd();
     glEnable(GL_LIGHTING);
     glDisable(GL_TEXTURE_2D);
+
 
 
 }
