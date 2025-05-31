@@ -250,8 +250,6 @@ bool ClassTablero::moverPieza(const Vector2D& origen, const Vector2D& destino) {
     if (pieza->getTipo() == ClassPieza::Peon && destino == casillaObjetivoEnPasante_ && !estaOcupada(destino) && colorPeonVulnerableEnPasante_ != pieza->getColor()) {
 
         esCapturaAlPaso = true;
-        // Determinar la posición del peón que está siendo capturado al paso.
-        // Está en la misma columna que `destino`, pero en la fila de `origen`.
         if (pieza->getColor() == ClassPieza::Color::ROJO) { // Peón ROJO captura (se mueve hacia filas mayores)
             posPeonCapturadoAlPaso = Vector2D(destino.x - 1, destino.y); // El peón capturado está una fila "detrás" del destino del captor.
         }
@@ -333,13 +331,9 @@ void ClassTablero::limpiarResaltados() {
             cas.setResaltada(false);
 }
 
-
-//dibujar la exclamación:
 void ClassTablero::dibujarExclamacionSobreRey(const Vector2D& posRey, ClassPieza::Color color, float tiempoRebote) {
     float tamCasilla = ClassCasilla::getTamCasilla();
 
-
-    // Obtener desplazamiento del tablero
     float offsetX = posX;
     float offsetZ = posZ;
 
@@ -426,7 +420,7 @@ void ClassTablero::limpiarCasillaEnPasante() {
     // si casillaObjetivoEnPasante_ es {-1,-1} indica que no hay captura al paso posible.
 }
 
-//destructor. Tablero crea piezas y tablero las destruye (que poetico) --quien ha puesto esto?
+//destructor. 
 ClassTablero::~ClassTablero() {
     clear();  // puede hacerlo directamente por clear no hay que limpiarlas una a una
 }

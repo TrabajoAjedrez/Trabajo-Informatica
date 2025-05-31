@@ -97,21 +97,11 @@ void Coordinador::mueve()
 	if (estado == JUEGO)
 	{
 		ObjMundo->mueve();
-		if (ObjMundo->getHayJaqueMateAzul()  == 1) {
+		if (ObjMundo->getHayJaqueMateAzul() == 1) {
 			estado = GAMEOVER;
 		}
-		if(ObjMundo->getHayJaqueMateRojo() == 1) {
+		if (ObjMundo->getHayJaqueMateRojo() == 1) {
 			estado = YOUWIN;
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-

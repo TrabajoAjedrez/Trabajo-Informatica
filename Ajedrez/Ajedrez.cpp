@@ -4,13 +4,11 @@
 #include "Coordinador.h"
 
 raton ratonObj; // crea instancia global del ratón
-Coordinador* coordinador = nullptr; // ¡OJO! Sin puntero, salvo que necesites control dinámico
-//los callback, funciones que seran llamadas automaticamente por la glut
-//cuando sucedan eventos
-//NO HACE FALTA LLAMARLAS EXPLICITAMENTE
-void OnDraw(void); //esta funcion sera llamada para dibujar
-void OnTimer(int value); //esta funcion sera llamada cuando transcurra una temporizacion
-void OnKeyboardDown(unsigned char key, int x, int y); //cuando se pulse una tecla	
+Coordinador* coordinador = nullptr; 
+
+void OnDraw(void); 
+void OnTimer(int value); 
+void OnKeyboardDown(unsigned char key, int x, int y); 
 
 void OnMouseClick(int button, int state, int x, int y) {
 	if (coordinador->ObjMundo) {
@@ -19,10 +17,6 @@ void OnMouseClick(int button, int state, int x, int y) {
 		ratonObj.mouse(button, state, x, y, filas, columnas, coordinador->ObjMundo);
 	}
 }
-// Sirve Verificar las coordenadas del ratón
-//void OnMouseClickR(int button, int state, int x, int y) {
-//	ratonObj.click(button, state, x, y, ObjMundo);  // imprime coordenadas normalizadas
-//}
 
 int main(int argc, char* argv[])
 {

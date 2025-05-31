@@ -12,22 +12,7 @@ ClassReglas reglas;
 static ClassMundo* mundoPtr = nullptr;
 
 IA miIA(IA::elegirEstrategiaAleatoria()); 
-// Para probar una en concreto, puedes usar:
-// IA miIA(IA::TipoIA::Agresiva); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Defensiva); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Tactica); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Aleatoria); // O cualquier otro tipo de IA
-// IA miIA(IA::TipoIA::Adaptativa); // O cualquier otro tipo de IA
 
-//int ClassMundo::PreguntarVariante() {
-//	int var = 1; //al fin y al cabo el enum es de enteros
-//	std::cout << "Selecciona la variante de ajedrez:\n";
-//	std::cout << "1. Silverman\n";	
-//	std::cout << "2. Demichess\n";
-//	std::cin >> var; //sera 1 o 2, hasta que tengamos la interfaz
-//
-//	return var;
-//}
 
 void ClassMundo::tecla(unsigned char key) {
 	if (key == 'r') {
@@ -58,14 +43,10 @@ void ClassMundo::inicializa()
 
 	mundoPtr = this; 
 	
-	// Inicializa el tablero según la variante seleccionada
-	// Inicializa el tablero según la variante seleccionada
-	//int var = PreguntarVariante();
+	
 	int var = TipoTablero;
 
 	var_ = static_cast<Variante>(var);
-
-	//std::cout << var_ << endl;
 
 	auto dimensiones = reglas.devolver_forma(var_);
 
@@ -257,15 +238,9 @@ void ClassMundo::dibuja() {
 		glEnable(GL_LIGHTING);
 		glDisable(GL_TEXTURE_2D);
 	}
-	//creo los string para mostrar en pantalla
-	//recurro a la funcion de reglas en la que paso el tiempo a string
-	//string textoTiempo;
+
 	string textoRojas = "Tiempo rojas: " + reglas.tiempo_string_rojas();
 	string textoAzules = "Tiempo azules: " + reglas.tiempo_string_azules();
-	/*if(reglas.get_turno() == 0)
-		textoTiempo 
-	else if(reglas.get_turno()==1)
-		textoTiempo ;*/
 
 	imprime_tiempo(textoRojas.c_str(),5);//c_str para de string a char*
 	imprime_tiempo(textoAzules.c_str(), 4);
