@@ -4,6 +4,7 @@
 ClassRey::ClassRey(Color color, Vector2D posicion)
 	: ClassPieza(Pieza_t::Rey, color, posicion)
 {
+	reglas = nullptr;
 	sprite.setCenter(1, 1);
 	sprite.setSize(1, 1);
 	sprite2.setCenter(1, 1);
