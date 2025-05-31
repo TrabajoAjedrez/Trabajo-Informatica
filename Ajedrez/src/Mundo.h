@@ -24,32 +24,14 @@ public:
 	int TipoTablero;
 
 
-	void setTipoJuego(int a)
-	{
-		TipoJuego = a;
-	}
-	void setLugar(int a)
-	{
-		Lugar = a;
-	}
-	void setTipoTablero(int a)
-	{
-		TipoTablero = a;
-	}
+	void setTipoJuego(int a){	TipoJuego = a;}
+	void setLugar(int a) { Lugar = a; }
+	void setTipoTablero(int a){	TipoTablero = a;}
 
 
-	int getTipoJuego()
-	{
-		return(TipoJuego);
-	}
-	int getLugar()
-	{
-		return(Lugar);
-	}
-	int getTipoTablero()
-	{
-		return(TipoTablero);
-	}
+	int getTipoJuego(){return(TipoJuego);}
+	int getLugar(){return(Lugar);}
+	int getTipoTablero(){return(TipoTablero);}
 protected:
 
 	ClassTablero* ObjTablero; //Puntero a la clase que contiene el tablero
@@ -80,15 +62,13 @@ public:
 	~ClassMundo() {
 		delete ObjTablero;
 	}
-
-	static int PreguntarVariante();
 	void tecla(unsigned char key);
 	void tecla_especial(unsigned char key);
 	void inicializa();
-	void rotarOjo();
 	void mueve();
 	void dibuja();
-
+	
+	//relativo a miovimiento
 	void procesaMovimiento(const Vector2D& origen, const Vector2D& destino);
 	bool intentaMover(const Vector2D& origen, const Vector2D& destino);
 	bool verificaEstadoDelJuego();
@@ -96,6 +76,7 @@ public:
 
 	void mensajePromo();
 
+	//flags
 	bool getHayJaqueMateAzul() { return hayJaqueMateAzul; }
 	bool getHayJaqueMateRojo() { return hayJaqueMateRojo; }
 	bool getHayEmpate() { return hayempate; }

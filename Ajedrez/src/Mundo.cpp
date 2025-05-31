@@ -12,9 +12,6 @@ ClassReglas reglas;
 static ClassMundo* mundoPtr = nullptr;
 
 IA miIA(IA::elegirEstrategiaAleatoria()); 
-//IA miIA(TipoIA::Agresiva); // Para pruebas, puedes cambiar a Defensiva, Táctica, Aleatoria o Adaptativa
-
-
 
 void ClassMundo::tecla(unsigned char key) {
 	if (key == 'r') {
@@ -107,15 +104,6 @@ void ClassMundo::onTimer(int value) {
 void ClassMundo::temporizador() {
 	reglas.actualiza_tiempo();
 }
-
-void ClassMundo::rotarOjo() {
-	double dist = sqrt(x_ojo * x_ojo + z_ojo * z_ojo);
-	double ang = atan2(z_ojo, x_ojo);
-	ang += 0.01;
-	x_ojo = dist * cos(ang);
-	z_ojo = dist * sin(ang);
-}
-
 
 void ClassMundo::mueve() {
 	// Se llama al tablero para que animar las piezas
@@ -399,15 +387,6 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 		}
 	}
 	else {
-		// Validar que la pieza seleccionada aún pertenece al turno actual
-		ClassPieza* piezaSeleccionada = ObjTablero->getPieza(casillaSeleccionada);
-		if (!piezaSeleccionada || piezaSeleccionada->getColor() != turnoActual) {
-			std::cout << "No puedes mover esa pieza, no es tu turno.\n";
-			haySeleccionActiva = false;
-			ObjTablero->limpiarResaltados();
-			return;
-		}
-
 		ObjTablero->limpiarResaltados();
 		procesaMovimiento(casillaSeleccionada, clicada);
 		haySeleccionActiva = false;
