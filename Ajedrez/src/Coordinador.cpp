@@ -77,7 +77,7 @@ void Coordinador::tecla(unsigned char key) {
 		if (ObjMundo != nullptr) {
 			ObjMundo->reset();
 		}
-		//Resetaera las opciones del menu
+		//Resetaer las opciones del menu
 		menu.TipoJuego = 0;
 		menu.Lugar = 0;
 		menu.TipoTablero = 0;
