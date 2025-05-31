@@ -17,6 +17,7 @@ public:
 	double z_ojo;
 	Variante var_;
 	bool hay_promo = false;
+	bool esperandoPromocion = false;
 	ClassPieza* piezaPromo = nullptr;
 	int TipoJuego;
 	int Lugar;

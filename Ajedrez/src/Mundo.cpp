@@ -23,6 +23,9 @@ void ClassMundo::tecla(unsigned char key) {
 	if (hay_promo && (key == 'd' || key == 't' || key == 'c') || key == 'a') {
 		ObjTablero->promocionarPieza(*piezaPromo, key, static_cast<int>(var_));
 		hay_promo = false;
+		esperandoPromocion = false; 
+		actualizaTurno();           
+		verificaEstadoDelJuego();
 	}
 }
 
@@ -317,19 +320,31 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 			Vector2D casillaSaltada;
 			if (colorPiezaMovida == ClassPieza::Color::ROJO) { // ROJO mueve en dirección positiva de filas.
 				casillaSaltada = Vector2D(origen.x + 1, origen.y);
-			}
+				}
 			else { // AZUL mueve en dirección negativa de filas.
 				casillaSaltada = Vector2D(origen.x - 1, origen.y);
-			}
+				}
 			ObjTablero->setCasillaEnPasante(casillaSaltada, colorPiezaMovida);
 			std::cout << "Captura al paso posible en (" << casillaSaltada.x << "," << casillaSaltada.y << ") contra el peon "
 				<< (colorPiezaMovida == ClassPieza::Color::ROJO ? "ROJO" : "AZUL") << "." << std::endl;
+			}
 		}
-	}
+
+		//promocion
+
+		ClassPieza* piezaEnDestino = ObjTablero->getPieza(destino);
+		if (piezaEnDestino && reglas.get_Promocion(*piezaEnDestino, static_cast<int>(var_))) {
+			esperandoPromocion = true;
+			hay_promo = true;
+			piezaPromo = piezaEnDestino;
+			return;
+		}
+		//llamo a la promocion en tecla
 
 	if (verificaEstadoDelJuego()) return;
 
-	actualizaTurno();
+	if (!esperandoPromocion)
+		actualizaTurno();
 }
 
 bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
@@ -342,6 +357,11 @@ bool ClassMundo::intentaMover(const Vector2D& origen, const Vector2D& destino) {
 void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 
 	ClassPieza* pieza = ObjTablero->getPieza(clicada);
+
+	if (hay_promo || esperandoPromocion) {
+		std::cout << "Debes promocionar antes de seguir jugando.\n";
+		return;
+	}
 
 	// TESTTTSS
 	if (pieza) {
@@ -392,17 +412,7 @@ void ClassMundo::seleccionarCasilla(const Vector2D& clicada) {
 	}
 	
 
-		//promocion
-
-	ClassPieza* piezaFinal = ObjTablero->getPieza(clicada);
-
-	if (piezaFinal) {
-		if (reglas.get_Promocion(*piezaFinal, static_cast<int>(var_))) {
-			hay_promo = true;
-			piezaPromo = piezaFinal;
-		}
-	}
-	//llamo a la promocion en tecla
+		
 
 }
 
