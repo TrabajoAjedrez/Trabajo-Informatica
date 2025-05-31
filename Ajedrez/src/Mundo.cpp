@@ -70,10 +70,9 @@ void ClassMundo::inicializa()
 	// Imprimimos el tablero por pantalla
 	ObjTablero->ImprimirEnPantalla();
 
-	//runAllTests();
 
 	//temporizador
-	reglas.inicia_temporizador(100000); // Por ejemplo, 8 segundos
+	reglas.inicia_temporizador(5400); // 90 minutos por jugador
 	glutTimerFunc(1000, ClassMundo::onTimer, 0); // Arranca el temporizador
 	glutTimerFunc(500, ClassMundo::parpadeoExclamacion, 0);
 
@@ -95,28 +94,7 @@ void ClassMundo::onTimer(int value) {
 			(!turno && reglas.get_tiempo_restante_rojas() > 0)) {
 			glutTimerFunc(1000, ClassMundo::onTimer, 0);
 		}
-		/*
-        bool turno = reglas.get_turno();
-		if (!turno) { // Turno de las rojas
-			iaRoja.ejecutarMovimiento(mundoPtr->ObjTablero, mundoPtr->reglas);
-		}
-
-		if ((turno && mundoPtr->reglas.get_tiempo_restante_azules() > 0) ||
-			(!turno && mundoPtr->reglas.get_tiempo_restante_rojas() > 0)) {
-			glutTimerFunc(1000, ClassMundo::onTimer, 0);
-		}
-
-		if (turno == 0) {
-			if (reglas.get_tiempo_restante_rojas() > 0) {
-				glutTimerFunc(1000, ClassMundo::onTimer, 0);
-			}
-		}
-		if (turno == 1) {
-			if (reglas.get_tiempo_restante_azules() > 0) {
-				glutTimerFunc(1000, ClassMundo::onTimer, 0);
-			}
-		}
-		*/
+		
 	}
 	glutPostRedisplay();
 }
@@ -333,8 +311,7 @@ void ClassMundo::procesaMovimiento(const Vector2D& origen, const Vector2D& desti
 
 	ObjTablero->limpiarCasillaEnPasante();
 
-	// Si el movimiento fue exitoso, verificamos si fue un peón moviendo dos casillas.
-	if (eraPeon) { // Usamos la información guardada de 'eraPeon'.
+		if (eraPeon) { // Usamos la información guardada de 'eraPeon'.
 		int diffFilas = destino.x - origen.x; // Diferencia con signo.
 		if (abs(diffFilas) == 2) { // Movió dos casillas.
 			Vector2D casillaSaltada;
@@ -461,17 +438,20 @@ void ClassMundo::reset() {
 void ClassMundo::mensajePromo() {
 	ETSIDI::setTextColor(1, 1, 0);
 	ETSIDI::setFont("fuentes/Bitwise.ttf", 16);
-	ETSIDI::printxy("PROMOCION", 5, 4);
-	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
-	ETSIDI::printxy("Elegir pieza:", 5, 3);
-	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
+	int x;//distinto para cada variante
 	if (var_ == 1) {
-		ETSIDI::printxy("  Dama:  d", 5, 2);
-		ETSIDI::printxy("  Torre: t", 5, 1);
+		x = 5;
+		ETSIDI::printxy("  Dama:  d", x, 1);
+		ETSIDI::printxy("  Torre: t", x, 0);
 	}
 	if (var_ == 2) {
-		ETSIDI::printxy("  Alfil: a", 5, 2); 
-		ETSIDI::printxy("  Caballo: c", 5, 1);
-		ETSIDI::printxy("  Torre: t", 5, 0);
+		x = 7;
+		ETSIDI::printxy("  Alfil: a", x, 1); 
+		ETSIDI::printxy("  Caballo: c", x, 0);
+		ETSIDI::printxy("  Torre: t", x, -1);
 	}
+	ETSIDI::printxy("PROMOCION", x, 3);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 15);
+	ETSIDI::printxy("Elegir pieza:", x, 2);
+	ETSIDI::setFont("fuentes/Bitwise.ttf", 14);
 }

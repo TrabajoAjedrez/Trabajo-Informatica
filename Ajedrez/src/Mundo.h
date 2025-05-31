@@ -9,11 +9,7 @@
 
 
 class ClassMundo {
-/*private:
-	ClassTablero tablero;
-	ClassReglas reglas;
-	IA ia;
-	*/
+
 public:
 	enum Variante { Silverman4x5, Demi };
 	double x_ojo;
@@ -39,11 +35,6 @@ public:
 	{
 		TipoTablero = a;
 	}
-
-
-
-
-
 
 	int getTipoJuego()
 	{
@@ -107,12 +98,12 @@ public:
 	bool getHayJaqueMateRojo() { return hayJaqueMateRojo; }
 
 	//funciones de tiempo
-	static void onTimer(int value); //para convertir el puntero en metodo
+	static void onTimer(int value); 
 	void temporizador();
 	void imprime_tiempo(const char* text,float y);
-	// Se podria mejorar
+
 	void seleccionarCasilla(const Vector2D& clicada);
-	//raton& getRaton() { return ratonObj; }
+
 
 	int getFilas() const;
 	int getColumnas() const;

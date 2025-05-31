@@ -3,17 +3,7 @@
 #include "freeglut.h" // Para GLUT
 #include "Mundo.h"
 
-//void raton::click(int button, int state, int x, int y, ClassMundo* mundo) {
-//    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-//        int windowWidth = glutGet(GLUT_WINDOW_WIDTH);
-//        int windowHeight = glutGet(GLUT_WINDOW_HEIGHT);
-//
-//        float normalizedX = (float)x / windowWidth;
-//        float normalizedY = (float)y / windowHeight;
-//
-//        std::cout << "Coordenadas raton normalizadas: (" << normalizedX << ", " << normalizedY << ")" << std::endl;
-//    }
-//}
+
 
 Vector2D raton::mouse(int button, int state, int x, int y, int filas, int columnas, ClassMundo* mundo) const {
 

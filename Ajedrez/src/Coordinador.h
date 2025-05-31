@@ -29,16 +29,3 @@ public:
     void dibuja();
 
 };
-//Coordinador.h
-
-
-
-
-
-
-
-
-
-
-
-
