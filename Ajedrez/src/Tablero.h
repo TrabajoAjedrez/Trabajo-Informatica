@@ -47,6 +47,7 @@ public:
 
     // Dibuja el tablero
     void dibuja(int TipoTablero);
+    void dibujaBordeMedieval(float anchoCasillas, float altoCasillas, float grosorDelBorde, float zOffsetMarco);
     // Establece la posición del tablero
     void setPosicion(float x, float y, float z);
     // Ubica las piezas en el tablero

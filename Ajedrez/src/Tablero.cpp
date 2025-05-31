@@ -48,18 +48,89 @@ void ClassTablero::dibuja( int TipoTablero) {
 
 	// Luego de dibujar el tablero, dibujamos y ubicamos el dibujo de las piezas ¡¡Unicamente en el espacio 2D del tablero, pero no en la matriz!!
     UbicaPieza();
-    // Dibujar borde del tablero
-    /*
-    glColor3f(0.1f, 0.1f, 0.1f);
-    glLineWidth(2.0f);
-    glBegin(GL_LINE_LOOP);
-    glVertex3f(0, 0.01f, 0);
-    glVertex3f(filas_ * tamCasilla, 0.01f, 0);
-    glVertex3f(filas_ * tamCasilla, 0.01f, filas_ * tamCasilla);
-    glVertex3f(0, 0.01f, filas_ * tamCasilla);
+
+    float anchoTotalDeCasillas = columnas_ * tamCasilla;
+    float altoTotalDeCasillas = filas_ * tamCasilla;
+    float grosorDelBordeEstilo = tamCasilla * 0.4f;
+    float zOffsetParaMarco = 0.005f; 
+
+    dibujaBordeMedieval(anchoTotalDeCasillas, altoTotalDeCasillas, grosorDelBordeEstilo, 0.01f);
+
+    glPopMatrix(); 
+}
+
+void ClassTablero::dibujaBordeMedieval(float anchoCasillas, float altoCasillas, float grosorDelBorde, float zOffsetMarco) {
+    // Colores
+    GLfloat colorMarco[] = { 0.4f, 0.25f, 0.15f, 1.0f }; // Marrón oscuro para el marco principal
+    GLfloat colorLineasBorde[] = { 0.0f, 0.0f, 0.0f, 1.0f }; // Negro para las líneas de delimitación
+
+    // Coordenadas del área de las casillas (el marco irá alrededor de esto)
+    float minX_casillas = 0.0f;
+    float maxX_casillas = anchoCasillas;
+    float minY_casillas = 0.0f;
+    float maxY_casillas = altoCasillas;
+
+    float zMarco = zOffsetMarco;
+    float zLineas = zMarco - 0.002f; // Ligeramente por delante del marco para asegurar visibilidad
+
+    glDisable(GL_LIGHTING); // Para colores planos y consistentes
+
+    // 1. Dibujar el Marco Marrón
+    glColor3fv(colorMarco);
+
+    // Marco Inferior
+    glBegin(GL_QUADS);
+    glVertex3f(minX_casillas - grosorDelBorde, minY_casillas - grosorDelBorde, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, minY_casillas - grosorDelBorde, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, minY_casillas, zMarco);
+    glVertex3f(minX_casillas - grosorDelBorde, minY_casillas, zMarco);
     glEnd();
-    */
-    glPopMatrix();
+
+    // Marco Superior
+    glBegin(GL_QUADS);
+    glVertex3f(minX_casillas - grosorDelBorde, maxY_casillas, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, maxY_casillas, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, maxY_casillas + grosorDelBorde, zMarco);
+    glVertex3f(minX_casillas - grosorDelBorde, maxY_casillas + grosorDelBorde, zMarco);
+    glEnd();
+
+    // Marco Izquierdo
+    glBegin(GL_QUADS);
+    glVertex3f(minX_casillas - grosorDelBorde, minY_casillas, zMarco);
+    glVertex3f(minX_casillas, minY_casillas, zMarco);
+    glVertex3f(minX_casillas, maxY_casillas, zMarco);
+    glVertex3f(minX_casillas - grosorDelBorde, maxY_casillas, zMarco);
+    glEnd();
+
+    // Marco Derecho
+    glBegin(GL_QUADS);
+    glVertex3f(maxX_casillas, minY_casillas, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, minY_casillas, zMarco);
+    glVertex3f(maxX_casillas + grosorDelBorde, maxY_casillas, zMarco);
+    glVertex3f(maxX_casillas, maxY_casillas, zMarco);
+    glEnd();
+
+    // 2. Dibujar las Líneas Negras de Delimitación
+    glColor3fv(colorLineasBorde);
+    glLineWidth(5.0f); 
+
+    // Línea Exterior
+    glBegin(GL_LINE_LOOP);
+    glVertex3f(minX_casillas - grosorDelBorde, minY_casillas - grosorDelBorde, zLineas);
+    glVertex3f(maxX_casillas + grosorDelBorde, minY_casillas - grosorDelBorde, zLineas);
+    glVertex3f(maxX_casillas + grosorDelBorde, maxY_casillas + grosorDelBorde, zLineas);
+    glVertex3f(minX_casillas - grosorDelBorde, maxY_casillas + grosorDelBorde, zLineas);
+    glEnd();
+
+    // Línea Interior 
+    glBegin(GL_LINE_LOOP);
+    glVertex3f(minX_casillas, minY_casillas, zLineas);
+    glVertex3f(maxX_casillas, minY_casillas, zLineas);
+    glVertex3f(maxX_casillas, maxY_casillas, zLineas);
+    glVertex3f(minX_casillas, maxY_casillas, zLineas);
+    glEnd();
+
+    glEnable(GL_LIGHTING);
 }
 
 // Establece la posición del tablero en el espacio
